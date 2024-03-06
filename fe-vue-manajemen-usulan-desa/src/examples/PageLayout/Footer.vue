@@ -2,7 +2,7 @@
   <!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
   <footer class="py-5 footer">
     <div class="container">
-      <div class="row">
+      <!-- <div class="row">
         <div class="mx-auto mb-4 text-center col-lg-8">
           <a
             href="javascript:;"
@@ -84,11 +84,11 @@
             <span class="text-lg fab fa-github"></span>
           </a>
         </div>
-      </div>
+      </div> -->
       <div class="row">
         <div class="mx-auto mt-1 text-center col-8">
           <p class="mb-0 text-secondary">
-            Copyright © {{ new Date().getFullYear() }} Soft by Creative Tim.
+            Copyright © {{ new Date().getFullYear() }} by <b>MENPRO KIRI</b>.
           </p>
         </div>
       </div>

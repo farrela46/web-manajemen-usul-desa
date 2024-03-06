@@ -18,12 +18,11 @@ const store = useStore();
               href="https://www.creative-tim.com"
               class="font-weight-bold"
               target="_blank"
-              >Creative Tim</a
+              >MENPRO KIRI</a
             >
-            for a better web.
           </div>
         </div>
-        <div class="col-lg-6">
+        <!-- <div class="col-lg-6">
           <ul
             class="nav nav-footer justify-content-center justify-content-lg-end"
           >
@@ -60,7 +59,7 @@ const store = useStore();
               >
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </div>
   </footer>

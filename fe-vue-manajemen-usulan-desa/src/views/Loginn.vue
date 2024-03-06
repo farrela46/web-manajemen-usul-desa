@@ -46,9 +46,9 @@ onBeforeUnmount(() => {
       <div class="container-fluid h-100">
         <div class="row h-100 justify-content-center align-items-center">
           <div class="col-auto text-left mb-5">
-            <h1 class="text-white mb-2 mt-2">Register</h1>
+            <h1 class="text-white mb-2 mt-2">Login</h1>
             <p class="text-lead text-white">
-              Silahkan membuat akun terlebih dahulu untuk mengakses <br> Website Manajemen Usul Pesan!
+              Silahkan login terlebih dahulu untuk mengakses <br> Website Manajemen Usul Pesan!
             </p>
           </div>
         </div>
@@ -59,11 +59,10 @@ onBeforeUnmount(() => {
         <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
           <div class="card z-index-0 shadow">
             <div class="card-header text-center pt-4">
-              <h5>Register</h5>
+              <h5>Login</h5>
             </div>
             <div class="card-body">
               <form role="form">
-                <argon-input id="name" type="text" placeholder="Name" aria-label="Name" />
                 <argon-input id="email" type="email" placeholder="Email" aria-label="Email" />
                 <argon-input id="password" type="password" placeholder="Password" aria-label="Password" />
                 <argon-checkbox checked>
@@ -76,8 +75,8 @@ onBeforeUnmount(() => {
                   <argon-button fullWidth color="dark" variant="gradient" class="my-4 mb-2">Sign up</argon-button>
                 </div>
                 <p class="text-sm mt-3 mb-0">
-                  Sudah punya akun?
-                  <router-link to="/login" class="text-dark font-weight-bolder">Login</router-link>
+                  Tidak punya akun?
+                  <router-link to="/signup" class="text-dark font-weight-bolder">Register</router-link>
                 </p>
               </form>
             </div>

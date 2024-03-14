@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
           <div class="col-auto text-center m-2">
             <h2 class="text-dark mb-4 mt-5 pb-5">Website Usul Desa Telkom Surabaya</h2>
             <div class="row">
-              <div class="col-md-6  d-flex align-items-center">
+              <div class="col-md-6">
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                   <div class="carousel-inner">
                     <div v-for="(image, index) in images" :key="index"
@@ -357,7 +357,7 @@ onBeforeUnmount(() => {
 
 .carousel-indicators {
   position: static;
-  margin-right: 20%;
+  margin-right: 30%;
   margin-bottom: 100px;
 }
 
@@ -393,7 +393,7 @@ onBeforeUnmount(() => {
   
 .carousel-indicators {
   position: static;
-  margin-right: 10%;
+  margin-right: 20%;
   margin-bottom: 100px;
 }
 

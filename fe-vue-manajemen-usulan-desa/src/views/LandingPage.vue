@@ -226,7 +226,9 @@ onBeforeUnmount(() => {
                     <p style="font-size: 18px;">Dengan ide masyarakat tentu membantu pertumbuhan Desa Telkom Surabaya
                       menjadi Desa yang maju dan lebih baik. Perangkat desa akan mendengarkan idemu dan berusaha merealisasikannya
                     </p>
-                    <button type="button" class="btn btn-sm mb-0 mt-3 bg-gradient-success">Usulkan Sekarang!</button>
+                    <router-link to="/login">
+                      <button type="button" class="btn btn-sm mb-0 mt-3 bg-gradient-success">Usulkan Sekarang!</button>
+                    </router-link>
                   </div>
                 </div>
               </div>

@@ -23,6 +23,7 @@
     "@kyvg/vue3-notification": "^3.2.0",
     "@mdi/font": "^7.4.47",
     "@popperjs/core": "2.11.8",
+    "axios": "^1.6.8",
     "bootstrap": "5.3.3",
     "chart.js": "4.4.1",
     "core-js": "3.36.0",

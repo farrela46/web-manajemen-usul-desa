@@ -56,6 +56,6 @@ export default {
 
 <style>
 .bg-langit {
-  background-color: #42BADB;
+  background-color: #ff6d62;
 }
 </style>

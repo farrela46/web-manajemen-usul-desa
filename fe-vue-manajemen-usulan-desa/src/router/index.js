@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LandingPage from "../views/LandingPage.vue";
-import Dashboard from "../views/Dashboard.vue";
+
+//USER
+import UserDashboard from "../views/user/Dashboard.vue";
+
 import Tables from "../views/Tables.vue";
 import Billing from "../views/Billing.vue";
-import VirtualReality from "../views/VirtualReality.vue";
 import RTL from "../views/Rtl.vue";
 import Profile from "../views/Profile.vue";
 import Signup from "../views/Signup.vue";
@@ -31,11 +33,18 @@ const routes = [
     name: "Login",
     component: Login,
   },
+
+
+  //ADMIN
+
+  //USER
   {
-    path: "/dashboard-default",
+    path: "/dashboard",
     name: "Dashboard",
-    component: Dashboard,
+    component: UserDashboard,
   },
+
+  //TEMP
   {
     path: "/tables",
     name: "Tables",
@@ -46,11 +55,7 @@ const routes = [
     name: "Billing",
     component: Billing,
   },
-  {
-    path: "/virtual-reality",
-    name: "Virtual Reality",
-    component: VirtualReality,
-  },
+
   {
     path: "/rtl-page",
     name: "RTL",
@@ -65,11 +70,6 @@ const routes = [
     path: "/signin",
     name: "Signin",
     component: Signin,
-  },
-  {
-    path: "/signup",
-    name: "Signup",
-    component: Signup,
   },
 ];
 

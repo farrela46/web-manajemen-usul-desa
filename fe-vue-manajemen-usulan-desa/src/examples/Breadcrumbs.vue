@@ -27,15 +27,7 @@ defineProps({
     >
       <li class="text-sm breadcrumb-item">
         <a
-          v-if="isRTL"
-          class="opacity-5 ps-2"
-          href="#"
-          :class="isNavFixed ? 'text-dark' : 'text-white'"
-          >لوحات القيادة</a
-        >
-        <a
-          v-else
-          :class="isNavFixed ? 'text-dark' : 'text-white'"
+          :class="'text-dark'"
           class="opacity-8"
           href="#"
           >Pages</a
@@ -43,7 +35,7 @@ defineProps({
       </li>
       <li
         class="text-sm breadcrumb-item active"
-        :class="isNavFixed ? 'text-dark' : 'text-white'"
+        :class="'text-dark'"
         aria-current="page"
       >
         {{ currentPage }}
@@ -51,7 +43,7 @@ defineProps({
     </ol>
     <h6
       class="mb-0 font-weight-bolder"
-      :class="isNavFixed ? 'text-dark' : 'text-white'"
+      :class="'text-dark'"
     >
       {{ currentDirectory }}
     </h6>

@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class UserController extends Controller
 {
     public function register(Request $request)
     {
@@ -16,22 +16,33 @@ class AuthController extends Controller
             'username' => 'required'
         ]);
 
-        $created = User::create([
+        $user = User::create([
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
             'username' => $request->username,
-            'role' => 'User'
+            'role' => 'user' // Default role set to 'user'
         ]);
 
-        if ($created) {
-            return response()->json([
-                'message' => 'Successfuly register!'
-            ], 201);
-        } else {
+        if (!$user) {
             return response()->json([
                 'message' => 'Server error'
             ], 500);
         }
+
+        // Attempt to authenticate user after successful registration
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Server error during login'
+            ], 500);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'role' => $user->role,
+            'username' => $user->username,
+        ], 201);
     }
 
     public function login(Request $request)

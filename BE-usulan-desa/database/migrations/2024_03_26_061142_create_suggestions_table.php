@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('suggestions', function (Blueprint $table) {
             $table->id();
             $table->integer('userID')->references('users.id');
-            $table->string('Suggestion');
+            $table->string('suggestion');
             $table->integer('status')->nullable();
+            $table->date('date');
             $table->timestamps();
         });
     }

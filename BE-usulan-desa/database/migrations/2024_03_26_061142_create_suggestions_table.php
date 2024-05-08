@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('suggestions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('userID');
-            $table->foreign('userID')->references('id')->on('users');
+            $table->integer('userID')->references('users.id');
             $table->string('Suggestion');
-            $table->integer('up_vote')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
         });

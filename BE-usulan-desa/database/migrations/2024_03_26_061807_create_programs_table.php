@@ -15,13 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->date('date');
-            $table->integer('status')->nullable();
-            $table->integer('target');
-            $table->unsignedBigInteger('suggestionID');
-            $table->foreign('suggestionID')->references('id')->on('suggestions');
-            $table->unsignedBigInteger('userID');
-            $table->foreign('userID')->references('id')->on('users');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('status');
+            $table->string('target');
+            $table->integer('userID')->references('users.id');
+            $table->integer('suggestionID')->references('suggestions.id');
             $table->timestamps();
         });
     }

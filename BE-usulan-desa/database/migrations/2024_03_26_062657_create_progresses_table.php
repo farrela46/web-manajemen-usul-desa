@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('progresses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('programID');
-            $table->foreign('programID')->references('id')->on('programs');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->integer('programID')->references('programs.id');
             $table->timestamps();
         });
     }

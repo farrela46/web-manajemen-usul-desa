@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->string('comment');
-            $table->unsignedBigInteger('suggestionID');
-            $table->foreign('suggestionID')->references('id')->on('suggestions');
-            $table->unsignedBigInteger('userID');
-            $table->foreign('userID')->references('id')->on('users');
+            $table->integer('suggestionID')->references('suggestions.id');
+            $table->integer('userID')->references('users.id');
             $table->timestamps();
         });
     }

@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('progress_pictures', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('progressID');
-            $table->foreign('progressID')->references('id')->on('progresses');
             $table->string('path');
+            $table->integer('progressID')->references('progresses.id');
             $table->timestamps();
         });
     }

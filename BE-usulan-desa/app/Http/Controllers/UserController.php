@@ -20,7 +20,8 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'username' => $request->username,
-            'role' => 'user' // Default role set to 'user'
+            'role' => 'user',
+            'status'=> 'unverified'
         ]);
 
         if (!$user) {
@@ -42,6 +43,7 @@ class UserController extends Controller
             'token_type' => 'Bearer',
             'role' => $user->role,
             'username' => $user->username,
+            'status' => $user->status,
         ], 201);
     }
 
@@ -60,6 +62,7 @@ class UserController extends Controller
             'token_type' => 'Bearer',
             'role' => $user->role,
             'username' => $user->username,
+            'status' => $user->status,
         ]);
     }
 
@@ -70,5 +73,19 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Successfully logged out!'
         ], 200);
+    }
+
+    public function verified(Request $request, $id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['error' => 'User not found.'], 404);
+        }
+        
+        $user->update([
+            'status' => 'verified'
+        ]);
+
+        return response()->json(['message' => 'Successfully verified User'], 200);
     }
 }

@@ -14,9 +14,14 @@ export default {
     return {
       showMenu: false,
       showMenuUser: false,
-      userName: '',
+      user: {
+        userName: 'Farl',
+        nik: '3818788920002'
+      },
       hasAccessToken: false,
       isLogin: false,
+      isVerified: true,
+
     };
   },
   mounted() {
@@ -68,6 +73,9 @@ export default {
         }
       }
     },
+    goHelp() {
+      this.$router.push('/help')
+    },
     goProfile() {
       this.$router.push('/profile')
     },
@@ -109,10 +117,9 @@ export default {
             </a>
           </li>
           <li class="nav-item dropdown d-flex align-items-center" :class="'ps-2 pe-2'">
-            <a  href="#" class="p-0 nav-link text-black" :class="[showMenu ? 'show' : '']"
-              id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" @click="showMenu = !showMenu"
-              @blur="closeMenu">
-              <i class="cursor-pointer fa fa-user"></i>&nbsp;<b> DummY </b>
+            <a href="#" class="p-0 nav-link text-black" :class="[showMenu ? 'show' : '']" id="dropdownMenuButton"
+              data-bs-toggle="dropdown" aria-expanded="false" @click="showMenu = !showMenu" @blur="closeMenu">
+              <i class="cursor-pointer fa fa-user"></i>&nbsp;<b> {{ user.userName }} </b>
             </a>
             <!-- <router-link v-else class="nav-link me-2" to="/login">
                   <button class="btn btn-light"> Login </button>
@@ -124,6 +131,22 @@ export default {
             </router-link> -->
             <ul class="px-2 py-3 dropdown-menu dropdown-menu-end me-sm-n4" :class="showMenu ? 'show' : ''"
               aria-labelledby="dropdownMenuButton">
+              <li class="mb-2">
+                <a class=" border-radius-md d-flex justify-content-center p-2">
+                  <v-chip v-if="isVerified" class="ma-2" color="success" variant="outlined">
+                    <v-icon icon="mdi-check" start></v-icon>
+                    Akun Terverifikasi
+                  </v-chip>
+                  <v-chip v-else class="ma-2" color="danger" variant="outlined">
+                    <v-icon icon="mdi-close" start></v-icon>
+                    Akun Tidak Terverifikasi
+                  </v-chip>
+
+                </a>
+                <p class=" border-radius-md d-flex justify-content-center text-black">
+                  NIK : {{ user.nik }}
+                </p>
+              </li>
               <li class="mb-2">
                 <a class="dropdown-item border-radius-md" @click="goProfile">
                   <div class="py-1 d-flex">
@@ -137,6 +160,24 @@ export default {
                     <div class="d-flex flex-column ml-4 justify-content-center">
                       <h6 class="mb-1 text-sm font-weight-normal">
                         My Profile
+                      </h6>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li class="mb-2">
+                <a class="dropdown-item border-radius-md" @click="goHelp">
+                  <div class="py-1 d-flex">
+                    <div class="my-auto mx-3">
+                      <span style="font-size: 1rem;">
+                        <span style="color: black;">
+                          <i class="fas fa-info-circle"></i>
+                        </span>
+                      </span>
+                    </div>
+                    <div class="d-flex flex-column ml-4 justify-content-center">
+                      <h6 class="mb-1 text-sm font-weight-normal">
+                        Perlu Bantuan?
                       </h6>
                     </div>
                   </div>

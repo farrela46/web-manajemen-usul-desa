@@ -23,7 +23,12 @@ export default {
           href: '/dashboard',
         },
         {
-          title: '',
+          title: 'Usulan',
+          disabled: false,
+          href: '/usulan',
+        }
+        {
+          title: 'Usulan Diskusi',
           disabled: true,
           href: '/',
         }

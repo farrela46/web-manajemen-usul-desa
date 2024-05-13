@@ -56,6 +56,8 @@ export default {
 
 <style>
 .bg-langit {
+  /* background-image: url(../../assets/img/telyusu.jpg); */
   background-color: #ff6d62;
+  /* background-size: cover; */
 }
 </style>

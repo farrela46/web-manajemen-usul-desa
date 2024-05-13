@@ -3,6 +3,7 @@ import LandingPage from "../views/LandingPage.vue";
 
 //USER
 import UserDashboard from "../views/user/Dashboard.vue";
+import UserUsulan from "../views/user/Usulan.vue";
 
 import Tables from "../views/Tables.vue";
 import Billing from "../views/Billing.vue";
@@ -42,6 +43,11 @@ const routes = [
     path: "/dashboard",
     name: "Dashboard",
     component: UserDashboard,
+  },
+  {
+    path: "/usulan",
+    name: "Usulan Warga",
+    component: UserUsulan,
   },
 
   //TEMP

@@ -35,7 +35,8 @@ export default {
   },
   methods: {
     async onSubmit() {
-      this.loading = true;
+      // this.loading = true;
+      this.$router.push('/dashboard');
       try {
         console.log("test")
         const response = await axios.post(`${BASE_URL}/auth/login`, {

@@ -3,11 +3,9 @@
 import axios from "axios";
 import BASE_URL from '@/api/config-api';
 // import AuthorsTable from "@/views/components/AuthorsTable.vue";
-import ArgonButton from "@/components/ArgonButton.vue";
 
 export default {
   components: {
-    ArgonButton
   },
   data() {
     return {
@@ -19,9 +17,6 @@ export default {
 
   },
   methods: {
-    goUsulan() {
-      this.$router.push('/usulan');
-    },
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
@@ -58,43 +53,41 @@ export default {
       <div class="container">
         <div class="row">
           <div class="col-12">
-            <div class="card px-4" style="border-radius: 10px; 
-            /* background-color: #E9F5E9; */
-            ">
+            <div class="card px-4">
               <div class="row mt-2 mb-2" style="border-bottom: 1px solid black;">
-                <div class="d-flex align-items-center mt-2" style="border-bottom: 1px solid black;">
-                  Menu
-                </div>
-                <div class="row">
-                  <div class="col-md-6 d-flex align-items-center">
-                    <v-col cols="auto">
-                      <h3>List Usulan Warga</h3>
-                      <argon-button size="lg" @click="goUsulan"
-                        style="height: 130px; border-radius: 30px; background-color: #4D2C5E; font-size: 25px;"><i
-                          class="fas fa-users fa-lg" style="font-size: 25px;"></i> LIST USULAN WARGA</argon-button>
-                    </v-col>
+                <div class="d-flex align-items-center mt-2">
+                  <div class="avatar avatar-sm position-relative me-2">
+                    <img :src="require('@/assets/img/team-1.jpg')" alt="profile_image"
+                      class="shadow-sm w-100 border-radius-lg" />
                   </div>
-                  <div class="col-md-6 d-flex align-items-center justify-content-center">
-                    <a><strong> Partisipasi dan tanggapi macam-macam Usulan berisi ide yang diberikan oleh masyarakat
-                        berdasarkan permasalahan yang ada, vote dan tambah ide anda untuk berpatisipasi</strong>
-                    </a>
+                  <div class="mt-2">
+                    <a class="text-black">Xavier Herlambang</a>
+                    <a class="ms-3 text-black" style="font-size: 12px;">99 hours ago</a>
                   </div>
                 </div>
-                <hr style="font-weight: bold;">
-                <div class="row">
-                  <div class="col-md-6 d-flex align-items-center">
-                    <v-col cols="auto">
-                      <h3>List Progress Warga</h3>
-                      <argon-button size="lg"
-                        style="height: 130px; border-radius: 30px; background-color: #4D2C5E; font-size: 25px;"><i
-                          class="fas fa-users fa-lg" style="font-size: 25px;"></i> PROGRAM KERJA DESA</argon-button>
-                    </v-col>
-                  </div>
-                  <div class="col-md-6 d-flex align-items-center justify-content-center">
-                    <a><strong> Partisipasi dan tanggapi macam-macam Usulan berisi ide yang diberikan oleh masyarakat
-                        berdasarkan permasalahan yang ada, vote dan tambah ide anda untuk berpatisipasi</strong>
-                    </a>
-                  </div>
+                <h4>Judul</h4>
+                <div class="row mt-2">
+                  <P>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis rem dolorem necessitatibus
+                    omnis quasi fugit dolore aspernatur, rerum voluptates voluptatem deleniti consequatur soluta
+                    veritatis excepturi quia in temporibus odio eum. Labore aspernatur, id asperiores veritatis a
+                    adipisci voluptate voluptas, quibusdam aperiam, tempora incidunt dolore! Voluptate sequi iste totam
+                    modi animi.
+                  </P>
+                </div>
+                <div class="row mb-2">
+                  <v-chip style="width: 70px; cursor: pointer;">
+                    <v-icon icon="mdi-arrow-up-bold-outline" start></v-icon>
+                    12
+                  </v-chip>
+                  <v-chip style="width: auto; margin-left: 5px; cursor: pointer;">
+                    <v-icon icon="mdi-arrow-down-bold-outline" start></v-icon>
+                    12
+                  </v-chip>
+                  <v-chip style="width: auto; margin-left: 5px; cursor: pointer;">
+                    <v-icon icon="mdi-comment-multiple-outline" start></v-icon>
+                    123
+                  </v-chip>
                 </div>
               </div>
             </div>

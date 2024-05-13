@@ -4,15 +4,29 @@ import axios from "axios";
 import BASE_URL from '@/api/config-api';
 // import AuthorsTable from "@/views/components/AuthorsTable.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
+import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
 
 export default {
   components: {
-    ArgonButton
+    ArgonButton,
+    Breadcrumbs
   },
   data() {
     return {
       products: [],
       overlay: false,
+      breadcrumbsItems: [
+        {
+          title: 'Home',
+          disabled: false,
+          href: '/dashboard',
+        },
+        {
+          title: '',
+          disabled: true,
+          href: '/',
+        }
+      ],
     };
   },
   mounted() {
@@ -56,6 +70,7 @@ export default {
         <v-progress-circular color="primary" size="96" indeterminate></v-progress-circular>
       </v-overlay>
       <div class="container">
+        <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
         <div class="row">
           <div class="col-12">
             <div class="card px-4" style="border-radius: 10px; 
@@ -101,7 +116,6 @@ export default {
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>

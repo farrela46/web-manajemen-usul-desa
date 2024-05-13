@@ -1,16 +1,28 @@
 <script>
-// import { useRoute } from "vue-router";
 import axios from "axios";
 import BASE_URL from '@/api/config-api';
-// import AuthorsTable from "@/views/components/AuthorsTable.vue";
+import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
 
 export default {
   components: {
+    Breadcrumbs
   },
   data() {
     return {
       products: [],
       overlay: false,
+      breadcrumbsItems: [
+        {
+          title: 'Home',
+          disabled: false,
+          href: '/dashboard',
+        },
+        {
+          title: 'Usulan',
+          disabled: true,
+          href: '/',
+        }
+      ],
     };
   },
   mounted() {
@@ -51,6 +63,7 @@ export default {
         <v-progress-circular color="primary" size="96" indeterminate></v-progress-circular>
       </v-overlay>
       <div class="container">
+        <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
         <div class="row">
           <div class="col-12">
             <div class="card px-4">

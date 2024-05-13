@@ -1,13 +1,16 @@
 <script>
+// import { useRoute } from "vue-router";
 import axios from "axios";
 import BASE_URL from '@/api/config-api';
+// import ArgonButton from "@/components/ArgonButton.vue";
 import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
-import ArgonButton from "@/components/ArgonButton.vue";
+import ArgonInput from "@/components/ArgonInput.vue";
 
 export default {
   components: {
+    // ArgonButton,
     Breadcrumbs,
-    ArgonButton
+    ArgonInput
   },
   data() {
     return {
@@ -20,12 +23,19 @@ export default {
           href: '/dashboard',
         },
         {
-          title: 'Usulan',
+          title: '',
           disabled: true,
           href: '/',
         }
       ],
-      usulan: [
+      usulan: {
+        id: 1,
+        nama: 'Saleh Von Forst',
+        date: '15 Hours Ago',
+        subject: 'Ruang tebuka untuk mandi',
+        text: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis rem dolorem necessitatibus omnis quasi fugit dolore aspernatur, rerum voluptates voluptatem deleniti consequatur soluta veritatis excepturi quia in temporibus odio eum. Labore aspernatur, id asperiores veritatis a adipisci voluptate voluptas, quibusdam aperiam, tempora incidunt dolore! Voluptate sequi iste totam modi animi.'
+      },
+      komentar: [
         {
           id: 1,
           nama: 'Saleh Von Forst',
@@ -54,6 +64,9 @@ export default {
 
   },
   methods: {
+    goUsulan() {
+      this.$router.push('/usulan');
+    },
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
@@ -91,14 +104,14 @@ export default {
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
         <div class="row">
           <div class="col-12">
-            <div class="card px-4">
+            <div class="card px-4" style="border-radius: 10px; 
+            /* background-color: #E9F5E9; */
+            ">
               <div class="row mt-2 mb-2">
-                <div class="d-flex align-items-center mt-2 mb-2">
-                  <argon-button size="sm" @click="goUsulan"> <i class="fas fa-plus mx-2"></i> Tambah
-                    Usulan</argon-button>
+                <div class="d-flex align-items-center mt-2" style="border-bottom: 1px solid black;">
+                  Menu
                 </div>
-                <hr>
-                <router-link :to="'/usulan/' + item.id" v-for="item in usulan" :key="item.id" style="color: black">
+                <div class="row">
                   <div class="row mt-2">
                     <div class="col-12">
                       <div class="card px-4">
@@ -109,13 +122,13 @@ export default {
                                 class="shadow-sm w-100 border-radius-lg" />
                             </div>
                             <div class="mt-2">
-                              <a class="text-black">{{ item.nama }}</a>
-                              <a class="ms-3 text-black" style="font-size: 12px;">{{ item.date }}</a>
+                              <a class="text-black">{{ usulan.nama }}</a>
+                              <a class="ms-3 text-black" style="font-size: 12px;">{{ usulan.date }}</a>
                             </div>
                           </div>
-                          <h4>{{ item.subject }}</h4>
+                          <h4>{{ usulan.subject }}</h4>
                           <div class="row mt-2">
-                            <p class="text-black">{{ item.text }}</p>
+                            <p class="text-black">{{ usulan.text }}</p>
                           </div>
                           <div class="row mb-2">
                             <v-chip style="width: 70px; cursor: pointer;">
@@ -135,40 +148,63 @@ export default {
                       </div>
                     </div>
                   </div>
-                </router-link>
+                  <div class="row mt-2">
+                    <div class="col-12">
+                      <div class="card px-4">
+                        <div class="row">
+                          <div class="col-md-12 d-flex justify-content-center">
+                            <a class="py-2"><i class="far fa-comments fa-lg"></i> <strong>KOMENTAR &
+                                DISKUSI</strong></a>
+                          </div>
+                        </div>
+                        <div class="container">
+
+                          <div class="row" v-for="item in komentar" :key="item.id">
+                            <div class="d-flex align-items-center mt-2">
+                              <div class="avatar avatar-sm position-relative me-2">
+                                <img :src="require('@/assets/img/team-1.jpg')" alt="profile_image"
+                                  class="shadow-sm w-100 border-radius-lg" />
+                              </div>
+                              <div class="mt-2">
+                                <a class="text-black">{{ item.nama }}</a>
+                                <a class="ms-3 text-black" style="font-size: 12px;">{{ item.date }}</a>
+                              </div>
+                            </div>
+                            <h4>{{ item.subject }}</h4>
+                            <div class="row mt-2">
+                              <p class="text-black">{{ item.text }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <div class="col-12">
+                      <div class="card px-4">
+                        <div class="row py-2">
+                          <div class="col-md-12">
+                            <div class="d-flex align-items-center mt-2">
+                              <div class="avatar avatar-lg position-relative me-2">
+                                <img :src="require('@/assets/img/team-1.jpg')" alt="profile_image"
+                                  class="shadow-sm w-100 border-radius-lg" />
+                              </div>
+                              <div class="mt-2 w-100">
+                                <argon-input placeholder="Tambahkan Komentar . . ." icon="far fa-comments fa-lg" iconDir="left" size=lg />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
-<style >
-.user-select-none {
-  user-select: none;
-}
-
-a {
-  text-decoration: none;
-  color: black;
-}
-
-.router-link {
-  text-decoration: none; /* Remove default underline */
-  color: black; 
-}
-
-.router-link:hover {
-  color: black;
-}
-
-.router-link p {
-  margin: 0; /* Remove default margin */
-}
-
-.router-link p:hover {
-  color: inherit; /* Inherit parent color on hover for <p> */
-}
-</style>
+<style></style>

@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suggestions_up_votes', function (Blueprint $table) {
+        Schema::create('suggestions_votes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('userID');
-            $table->foreign('userID')->references('id')->on('users');
-            $table->unsignedBigInteger('suggestionID');
-            $table->foreign('suggestionID')->references('id')->on('suggestions');
+            $table->integer('userID')->references('users.id');
+            $table->integer('suggestionID')->references('suggestions.id');
             $table->timestamps();
         });
     }

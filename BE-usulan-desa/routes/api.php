@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SuggestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -23,4 +24,13 @@ Route::prefix('/auth')->group(function () {
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+    Route::get('/verified/{id}', [UserController::class, 'verified'])->middleware('auth:sanctum', 'role:admin');
+});
+
+Route::prefix('/suggestion')->group(function () {
+    Route::post('/add', [SuggestionController::class, 'store'])->middleware(['auth:sanctum', 'role:user']);
+    Route::get('/get', [SuggestionController::class, 'index']);
+    Route::get('/{id}', [SuggestionController::class, 'getOne']);
+    Route::post('/update/{id}', [SuggestionController::class, 'update']);
+    Route::delete('/delete/{id}', [SuggestionController::class, 'destroy']);
 });

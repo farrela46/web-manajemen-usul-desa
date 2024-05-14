@@ -11,14 +11,20 @@ class SuggestionController extends Controller
 {
     public function store(Request $request)
     {
-        $userID = auth()->user()->id;
+        $user = auth()->user();
+
+        if ($user->status !== 'verified') {
+            return response()->json([
+                'message' => 'Akun kamu belum di verifikasi oleh admin'
+            ], 403);
+        }
 
         $validatedData = $request->validate([
             'suggestion' => 'required|string',
         ]);
 
         $suggestion = Suggestion::create([
-            'userID' => $userID,
+            'userID' => $user->id,
             'suggestion' => $validatedData['suggestion'],
             'date' => Carbon::now(),
         ]);
@@ -38,7 +44,34 @@ class SuggestionController extends Controller
     public function getOne($id)
     {
         try {
-            $suggestion = DB::select('SELECT a.username as nama, b.suggestion as saran, b.updated_at AS tanggal FROM suggestions as b LEFT JOIN users as a on a.id = b.userID WHERE b.id=?;', [$id]);
+            $suggestion = DB::select('
+            SELECT 
+                a.nama as nama, 
+                b.suggestion as saran, 
+                b.updated_at as tanggal,
+                IFNULL(u.upvotes, 0) as upvote, 
+                IFNULL(d.downvotes, 0) as downvote, 
+                IFNULL(c.comments, 0) as comment
+            FROM suggestions as b
+            LEFT JOIN users as a ON a.id = b.userID
+            LEFT JOIN (
+                SELECT suggestionID, COUNT(*) as upvotes 
+                FROM suggestions_votes 
+                WHERE type = "upvote" 
+                GROUP BY suggestionID
+            ) as u ON u.suggestionID = b.id
+            LEFT JOIN (
+                SELECT suggestionID, COUNT(*) as downvotes 
+                FROM suggestions_votes 
+                WHERE type = "downvote" 
+                GROUP BY suggestionID
+            ) as d ON d.suggestionID = b.id
+            LEFT JOIN (
+                SELECT suggestionID, COUNT(*) as comments 
+                FROM comments 
+                GROUP BY suggestionID
+            ) as c ON c.suggestionID = b.id
+            WHERE b.id = ?;', [$id]);
 
             if (!$suggestion) {
                 return response()->json(['status' => 'error', 'message' => 'Suggestion not found.'], 404);
@@ -55,13 +88,21 @@ class SuggestionController extends Controller
         try {
             $suggestions = DB::table('suggestions as b')
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
-                ->select('a.username as nama', 'b.suggestion as saran', 'b.updated_at AS tanggal')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
+                ->select(
+                    'a.nama as nama',
+                    'b.suggestion as saran',
+                    'b.updated_at as tanggal',
+                    DB::raw('IFNULL(u.upvotes, 0) as upvote'),
+                    DB::raw('IFNULL(d.downvotes, 0) as downvote'),
+                    DB::raw('IFNULL(c.comments, 0) as comment')
+                )
                 ->paginate(10);
             return response()->json(['status' => 'success', 'data' => $suggestions], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
-
-
 }

@@ -13,15 +13,17 @@ class UserController extends Controller
         $request->validate([
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
-            'username' => 'required'
+            'nama' => 'required|string',
+            'NIK' => 'required|integer|unique:users,NIK'
         ]);
 
         $user = User::create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'username' => $request->username,
+            'nama' => $request->nama,
+            'NIK' => $request->NIK,
             'role' => 'user',
-            'status'=> 'unverified'
+            'status' => 'unverified'
         ]);
 
         if (!$user) {
@@ -43,6 +45,7 @@ class UserController extends Controller
             'token_type' => 'Bearer',
             'role' => $user->role,
             'username' => $user->username,
+            'NIK' => $user->NIK,
             'status' => $user->status,
         ], 201);
     }
@@ -61,7 +64,8 @@ class UserController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'role' => $user->role,
-            'username' => $user->username,
+            'nama' => $user->nama,
+            'NIK' => $user->NIK,
             'status' => $user->status,
         ]);
     }
@@ -81,7 +85,7 @@ class UserController extends Controller
         if (!$user) {
             return response()->json(['error' => 'User not found.'], 404);
         }
-        
+
         $user->update([
             'status' => 'verified'
         ]);

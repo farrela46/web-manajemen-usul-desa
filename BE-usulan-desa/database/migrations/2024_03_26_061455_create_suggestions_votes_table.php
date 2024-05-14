@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('suggestions_votes', function (Blueprint $table) {
             $table->id();
+            $table->enum('type', ['upvote', 'downvote']);
             $table->integer('userID')->references('users.id');
             $table->integer('suggestionID')->references('suggestions.id');
             $table->timestamps();

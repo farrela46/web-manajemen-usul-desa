@@ -26,7 +26,7 @@ export default {
           title: 'Usulan',
           disabled: false,
           href: '/usulan',
-        }
+        },
         {
           title: 'Usulan Diskusi',
           disabled: true,

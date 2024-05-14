@@ -6,6 +6,9 @@ import UserDashboard from "../views/user/Dashboard.vue";
 import UserUsulan from "../views/user/Usulan.vue";
 import UserUsulanDiskusi from "../views/user/UsulanDiskusi.vue";
 
+//ADMIN
+import AdminDashboard from "../views/admin/Dashboard.vue";
+
 import Tables from "../views/Tables.vue";
 import Billing from "../views/Billing.vue";
 import RTL from "../views/Rtl.vue";
@@ -38,6 +41,11 @@ const routes = [
 
 
   //ADMIN
+  {
+    path: "/admin/dashboard",
+    name: "Admin Dashboard",
+    component: AdminDashboard,
+  },
 
   //USER
   {

@@ -80,6 +80,7 @@ export default {
       this.$router.push('/profile')
     },
     async onLogout() {
+      this.$router.push('/home');
       try {
         await axios.post(`${BASE_URL}/logout`, {}, {
           headers: {

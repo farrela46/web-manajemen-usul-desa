@@ -79,8 +79,8 @@ export default {
 
     setupPage() {
       this.store.state.hideConfigButton = true;
-      this.store.state.showNavbar = true;
-      this.store.state.showSidenav = true;
+      this.store.state.showNavbar = false;
+      this.store.state.showSidenav = false;
       this.store.state.showFooter = false;
       this.body.classList.remove("bg-gray-100");
     },

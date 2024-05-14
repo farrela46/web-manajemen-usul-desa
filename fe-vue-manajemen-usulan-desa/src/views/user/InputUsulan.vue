@@ -29,7 +29,12 @@ export default {
           href: '/dashboard',
         },
         {
-          title: '',
+          title: 'Usulan',
+          disabled: false,
+          href: '/usulan',
+        },
+        {
+          title: 'Input Usulan',
           disabled: true,
           href: '/',
         }
@@ -43,7 +48,7 @@ export default {
     setupPage() {
       this.store.state.hideConfigButton = true;
       this.store.state.showNavbar = true;
-      this.store.state.showSidenav = true;
+      this.store.state.showSidenav = false;
       this.store.state.showFooter = false;
       this.body.classList.remove("bg-gray-100");
     },
@@ -95,14 +100,32 @@ export default {
         <div class="row">
           <div class="col-12">
             <div class="card px-4" style="border-radius: 10px; 
-            /* background-color: #E9F5E9; */
+            background-color: #E9F5E9;
             ">
-              <div class="row mt-2 mb-2" style="border-bottom: 1px solid black;">
-                <div class="d-flex align-items-center mt-2" style="border-bottom: 1px solid black;">
-                  Menu
-                </div>
-                <div class="row">
-
+              <div class="row mt-2 mb-2">
+                <div class="row  mt-2">
+                  <div class="col-12">
+                    <div class="card p-4">
+                      <div class="row">
+                        <h2>Tambah Usulan Baru</h2>
+                        <a>Bagikan konsep inovatif Anda dengan kami dan kerja sama untuk membawa ide Anda menjadi
+                          kenyataan dan
+                          dapat dilihat oleh kepala desa</a>
+                      </div>
+                      <div class="row">
+                        <div class="form-floating">
+                          <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                            style="height: 300px"></textarea>
+                          <label for="floatingTextarea2">Input Usulan</label>
+                        </div>
+                      </div>
+                      <div class="row mt-2 text-end">
+                        <div class="col">
+                          <argon-button size="sm" color="info" variant="gradient" @click="goUsulan">Post</argon-button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -112,7 +135,4 @@ export default {
     </div>
   </div>
 </template>
-<style>
-
-
-</style>
+<style></style>

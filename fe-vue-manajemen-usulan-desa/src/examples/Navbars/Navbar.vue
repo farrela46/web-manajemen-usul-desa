@@ -100,7 +100,7 @@ export default {
 </script>
 
 <template>
-  <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-md" v-bind="$attrs"
+  <nav class="navbar navbar-main navbar-expand-lg blur px-0 mx-4 shadow-none border-radius-md" v-bind="$attrs"
     id="navbarBlur" data-scroll="true">
     <div class="px-3 py-1 container-fluid">
       <breadcrumbs :current-page="currentRouteName" :current-directory="currentDirectory" />

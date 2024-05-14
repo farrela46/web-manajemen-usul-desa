@@ -22,7 +22,7 @@ export default {
     return {
       isRTL: false,
       layout: null,
-      sidebarType: null,
+      
       darkMode: false,
       userRole: null
     };
@@ -35,16 +35,16 @@ export default {
   <div v-show="layout === 'default'" class="min-height-300 position-absolute w-100"
     :class="`${darkMode ? 'bg-transparent' : 'bg-langit'}`" />
 
-  <aside class="my-3 overflow-auto border-0 sidenav navbar navbar-vertical navbar-expand-xs border-radius-md" :class="`${isRTL ? 'me-3 rotate-caret fixed-end' : 'fixed-start ms-3'}    
+  <aside class=" overflow-auto border-0 sidenav navbar navbar-vertical navbar-expand-xs bg-navbar" :class="`${isRTL ? 'me-3 rotate-caret fixed-end' : 'fixed-start'}    
       ${layout === 'landing' ? 'bg-transparent shadow-none' : ' '
-      } ${sidebarType}`" id="sidenav-main">
+      }`" id="sidenav-main">
     <div class="sidenav-header">
       <i class="top-0 p-3 cursor-pointer fas fa-times text-secondary opacity-5 position-absolute end-0 d-none d-xl-none"
         aria-hidden="true" id="iconSidenav"></i>
 
       <router-link class="m-0 navbar-brand" to="/">
         <img :src="require('@/assets/img/telyu.png')" class="navbar-brand-img h-100" alt="main_logo" />
-        <span class="ms-2 font-weight-bold me-2">Dinovasi</span>
+        <span class="ms-2 font-weight-bold me-2 text-white">Dinovasi</span>
       </router-link>
 
     </div>
@@ -59,5 +59,9 @@ export default {
   /* background-image: url(../../assets/img/telyusu.jpg); */
   background-color: #ff6d62;
   /* background-size: cover; */
+}
+
+.bg-navbar {
+  background-color: #28293E;
 }
 </style>

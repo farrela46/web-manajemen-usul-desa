@@ -9,6 +9,14 @@ export default {
     Breadcrumbs,
     ArgonButton
   },
+  created() {
+    this.store = this.$store;
+    this.body = document.getElementsByTagName("body")[0];
+    this.setupPage();
+  },
+  beforeUnmount() {
+    this.restorePage();
+  },
   data() {
     return {
       products: [],
@@ -30,7 +38,7 @@ export default {
           id: 1,
           nama: 'Saleh Von Forst',
           date: '15 Hours Ago',
-          subject: 'Ruang tebuka untuk mandi',
+          subject: 'Ruang tebuka untuk bernapas',
           text: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis rem dolorem necessitatibus omnis quasi fugit dolore aspernatur, rerum voluptates voluptatem deleniti consequatur soluta veritatis excepturi quia in temporibus odio eum. Labore aspernatur, id asperiores veritatis a adipisci voluptate voluptas, quibusdam aperiam, tempora incidunt dolore! Voluptate sequi iste totam modi animi.'
         },
         {
@@ -54,6 +62,23 @@ export default {
 
   },
   methods: {
+    goUsulan() {
+      this.$router.push('/usulan/input')
+    },
+    setupPage() {
+      this.store.state.hideConfigButton = true;
+      this.store.state.showNavbar = true;
+      this.store.state.showSidenav = false;
+      this.store.state.showFooter = false;
+      this.body.classList.remove("bg-gray-100");
+    },
+    restorePage() {
+      this.store.state.hideConfigButton = false;
+      this.store.state.showNavbar = true;
+      this.store.state.showSidenav = true;
+      this.store.state.showFooter = true;
+      this.body.classList.add("bg-gray-100");
+    },
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
@@ -91,7 +116,7 @@ export default {
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
         <div class="row">
           <div class="col-12">
-            <div class="card px-4">
+            <div class="card px-4" style="background-color: #E9F5E9;">
               <div class="row mt-2 mb-2">
                 <div class="d-flex align-items-center mt-2 mb-2">
                   <argon-button size="sm" @click="goUsulan"> <i class="fas fa-plus mx-2"></i> Tambah
@@ -113,7 +138,7 @@ export default {
                               <a class="ms-3 text-black" style="font-size: 12px;">{{ item.date }}</a>
                             </div>
                           </div>
-                          <h4>{{ item.subject }}</h4>
+                          <h4 class="mt-2">{{ item.subject }}</h4>
                           <div class="row mt-2">
                             <p class="text-black">{{ item.text }}</p>
                           </div>
@@ -145,7 +170,7 @@ export default {
     </div>
   </div>
 </template>
-<style >
+<style>
 .user-select-none {
   user-select: none;
 }
@@ -156,8 +181,9 @@ a {
 }
 
 .router-link {
-  text-decoration: none; /* Remove default underline */
-  color: black; 
+  text-decoration: none;
+  /* Remove default underline */
+  color: black;
 }
 
 .router-link:hover {
@@ -165,10 +191,12 @@ a {
 }
 
 .router-link p {
-  margin: 0; /* Remove default margin */
+  margin: 0;
+  /* Remove default margin */
 }
 
 .router-link p:hover {
-  color: inherit; /* Inherit parent color on hover for <p> */
+  color: inherit;
+  /* Inherit parent color on hover for <p> */
 }
 </style>

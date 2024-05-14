@@ -3,22 +3,30 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Comment;
 use App\Models\Suggestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SuggestionController extends Controller
 {
     public function store(Request $request)
     {
-        $userID = auth()->user()->id;
+        $user = auth()->user();
+
+        if ($user->status !== 'verified') {
+            return response()->json([
+                'message' => 'Akun kamu belum di verifikasi oleh admin'
+            ], 403);
+        }
 
         $validatedData = $request->validate([
             'suggestion' => 'required|string',
         ]);
 
         $suggestion = Suggestion::create([
-            'userID' => $userID,
+            'userID' => $user->id,
             'suggestion' => $validatedData['suggestion'],
             'date' => Carbon::now(),
         ]);
@@ -38,13 +46,28 @@ class SuggestionController extends Controller
     public function getOne($id)
     {
         try {
-            $suggestion = DB::select('SELECT a.username as nama, b.suggestion as saran, b.updated_at AS tanggal FROM suggestions as b LEFT JOIN users as a on a.id = b.userID WHERE b.id=?;', [$id]);
+            // Query untuk mengambil semua komentar terkait dengan usulan
+            $comments = DB::table('comments as c')
+                ->select('c.comment', 'c.created_at as tanggal_komen', 'u.nama as nama_komen')
+                ->leftJoin('users as u', 'u.id', '=', 'c.userID')
+                ->where('c.suggestionID', $id)
+                ->orderBy('c.created_at', 'ASC')
+                ->get();
+
+            // Query untuk mengambil data usulan beserta jumlah upvote dan downvote
+            $suggestion = DB::table('suggestions as b')
+                ->select('a.nama as nama', 'b.suggestion as saran', 'b.updated_at as tanggal', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'))
+                ->leftJoin('users as a', 'a.id', '=', 'b.userID')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
+                ->where('b.id', $id)
+                ->first();
 
             if (!$suggestion) {
                 return response()->json(['status' => 'error', 'message' => 'Suggestion not found.'], 404);
             }
 
-            return response()->json(['status' => 'success', 'data' => $suggestion], 200);
+            return response()->json(['status' => 'success', 'suggestion' => $suggestion, 'comments' => $comments], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
@@ -55,7 +78,17 @@ class SuggestionController extends Controller
         try {
             $suggestions = DB::table('suggestions as b')
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
-                ->select('a.username as nama', 'b.suggestion as saran', 'b.updated_at AS tanggal')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
+                ->select(
+                    'a.nama as nama',
+                    'b.suggestion as saran',
+                    'b.updated_at as tanggal',
+                    DB::raw('IFNULL(u.upvotes, 0) as upvote'),
+                    DB::raw('IFNULL(d.downvotes, 0) as downvote'),
+                    DB::raw('IFNULL(c.comments, 0) as comment')
+                )
                 ->paginate(10);
             return response()->json(['status' => 'success', 'data' => $suggestions], 200);
         } catch (\Exception $e) {
@@ -63,5 +96,24 @@ class SuggestionController extends Controller
         }
     }
 
+    public function addComment(Request $request, $suggestionId)
+    {
+        try {
+            // Validasi input
+            $request->validate([
+                'comment' => 'required|string'
+            ]);
 
+            // Buat komentar baru
+            $comment = new Comment();
+            $comment->comment = $request->comment;
+            $comment->suggestionID = $suggestionId;
+            $comment->userID = Auth::id();
+            $comment->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Comment added successfully'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
 }

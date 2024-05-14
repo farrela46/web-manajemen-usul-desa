@@ -13,15 +13,17 @@ class UserController extends Controller
         $request->validate([
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
-            'username' => 'required'
+            'nama' => 'required|string',
+            'NIK' => 'required|integer|unique:users,NIK'
         ]);
 
         $user = User::create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'username' => $request->username,
+            'nama' => $request->nama,
+            'NIK' => $request->NIK,
             'role' => 'user',
-            'status'=> 'unverified'
+            'status' => 'unverified'
         ]);
 
         if (!$user) {
@@ -43,6 +45,7 @@ class UserController extends Controller
             'token_type' => 'Bearer',
             'role' => $user->role,
             'username' => $user->username,
+            'NIK' => $user->NIK,
             'status' => $user->status,
         ], 201);
     }
@@ -51,7 +54,7 @@ class UserController extends Controller
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
-                'message' => 'Invalid login details'
+                'message' => 'Email atau Password salah'
             ], 401);
         }
         $user = User::where('email', $request['email'])->firstOrFail();
@@ -61,31 +64,36 @@ class UserController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'role' => $user->role,
-            'username' => $user->username,
+            'nama' => $user->nama,
+            'NIK' => $user->NIK,
             'status' => $user->status,
         ]);
     }
 
     function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        try {
+            $request->user()->currentAccessToken()->delete();
 
-        return response()->json([
-            'message' => 'Successfully logged out!'
-        ], 200);
+            return response()->json([
+                'message' => 'Logout berhasil!'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Gagal Logout.'], 500);
+        }
     }
 
     public function verified(Request $request, $id)
     {
         $user = User::find($id);
         if (!$user) {
-            return response()->json(['error' => 'User not found.'], 404);
+            return response()->json(['error' => 'User tidak dapat ditemukan.'], 404);
         }
-        
+
         $user->update([
             'status' => 'verified'
         ]);
 
-        return response()->json(['message' => 'Successfully verified User'], 200);
+        return response()->json(['message' => 'Berhasil memverifikasi User'], 200);
     }
 }

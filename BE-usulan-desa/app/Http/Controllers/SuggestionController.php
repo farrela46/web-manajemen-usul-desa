@@ -105,4 +105,16 @@ class SuggestionController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function logout(Request $request)
+    {
+        try {
+            // Hapus token autentikasi pengguna saat ini
+            $request->user()->currentAccessToken()->delete();
+
+            return response()->json(['status' => 'success', 'message' => 'Successfully logged out.'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Failed to log out.'], 500);
+        }
+    }
 }

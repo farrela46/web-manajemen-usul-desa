@@ -1,9 +1,5 @@
 <script>
-
-
 import MiniStatisticsCard from "@/examples/Cards/MiniStatisticsCard.vue";
-import GradientLineChart from "@/examples/Charts/GradientLineChart.vue";
-import Carousel from "../../views/components/Carousel.vue";
 
 
 
@@ -11,12 +7,92 @@ import Carousel from "../../views/components/Carousel.vue";
 export default {
   components: {
     MiniStatisticsCard,
-    GradientLineChart,
-    Carousel,
   },
   data() {
     return {
-
+      donut: {
+        options: {
+          theme: "light2",
+          animationEnabled: true,
+          title: {
+            text: "Persetujuan"
+          },
+          data: [{
+            type: "pie",
+            indexLabel: "{label} (#percent%)",
+            yValueFormatString: "#,##0",
+            toolTipContent: "<span style='\"'color: {color};'\"'>{label}</span> {y}(#percent%)",
+            dataPoints: [
+              { label: "Setuju", y: 130631, color: "#4DDA5B" },
+              { label: "Menolak", y: 28874, color: "#F85555" },
+            ]
+          }]
+        },
+        styleOptions: {
+          width: "100%",
+          height: "360px"
+        }
+      },
+      cards: [
+        {
+          title: "Total Usulan",
+          value: "130",
+          description: "Total Usulan Warga",
+          icon: {
+            component: "fas fa-vote-yea",
+            background: "bg-gradient-primary",
+            shape: "rounded-circle",
+          },
+        },
+        {
+          title: "Total Program",
+          value: "26",
+          description: "Total Program Dilaksanakan",
+          icon: {
+            component: "fas fa-th-list",
+            background: "bg-gradient-danger",
+            shape: "rounded-circle",
+          },
+        },
+        {
+          title: "Program Disetujui",
+          value: "3,462",
+          description: "Jumlah Program Disetujui",
+          icon: {
+            component: "fas fa-check",
+            background: "bg-gradient-success",
+            shape: "rounded-circle",
+          },
+        },
+        {
+          title: "Program Ditolak",
+          value: "103,430",
+          description: "Jumlah Program Ditolak",
+          icon: {
+            component: "fas fa-times",
+            background: "bg-gradient-danger",
+            shape: "rounded-circle",
+          },
+        },
+      ],
+      program: [
+        {
+          nama: 'Perbaikan Gapura',
+          progress: 'Pembacaan Doa'
+        },
+        {
+          nama: 'Pembuatan Jamban',
+          progress: 'Peletakan kayu pertama'
+        },
+        {
+          nama: 'Perbaikan Rumah Pak Romli',
+          progress: 'Pembersihan Lahan'
+        },
+        {
+          nama: 'Penangkapan Jamet',
+          progress: 'Pembacaan Ikrar Jamet'
+        }
+      ]
     };
   },
   created() {
@@ -51,71 +127,52 @@ export default {
     <div class="row">
       <div class="col-lg-12">
         <div class="row">
-          <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card title="Today's Money" value="$53,000" description="<span
-                class='text-sm font-weight-bolder text-success'
-                >+55%</span> since yesterday" :icon="{
-                  component: 'ni ni-money-coins',
-                  background: 'bg-gradient-primary',
-                  shape: 'rounded-circle',
-                }" />
+          <div class="col-lg-3 col-md-6 col-12" v-for="card in cards" :key="card.title">
+            <mini-statistics-card :title="card.title" :value="card.value" :description="card.description"
+              :icon="card.icon" />
           </div>
-          <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card title="Today's Users" value="2,300" description="<span
-                class='text-sm font-weight-bolder text-success'
-                >+3%</span> since last week" :icon="{
-                  component: 'ni ni-world',
-                  background: 'bg-gradient-danger',
-                  shape: 'rounded-circle',
-                }" />
-          </div>
-          <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card title="New Clients" value="+3,462" description="<span
-                class='text-sm font-weight-bolder text-danger'
-                >-2%</span> since last quarter" :icon="{
-                  component: 'ni ni-paper-diploma',
-                  background: 'bg-gradient-success',
-                  shape: 'rounded-circle',
-                }" />
-          </div>
-          <div class="col-lg-3 col-md-6 col-12">
-            <mini-statistics-card title="Sales" value="$103,430" description="<span
-                class='text-sm font-weight-bolder text-success'
-                >+5%</span> than last month" :icon="{
-                  component: 'ni ni-cart',
-                  background: 'bg-gradient-warning',
-                  shape: 'rounded-circle',
-                }" />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-7 mb-lg">
-            <!-- line chart -->
-            <div class="card z-index-2">
-              <gradient-line-chart id="chart-line" title="Sales Overview" description="<i class='fa fa-arrow-up text-success'></i>
-      <span class='font-weight-bold'>4% more</span> in 2021" :chart="{
-                  labels: [
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec',
-                  ],
-                  datasets: [
-                    {
-                      label: 'Mobile Apps',
-                      data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-                    },
-                  ],
-                }" />
+          <div class="col-lg-7 mt-2">
+            <div class="card h-100">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-center text-secondary text-sm font-weight-bolder opacity-7">
+                        No
+                      </th>
+                      <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                        Nama Program
+                      </th>
+                      <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7 ps-2">
+                        Progress
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(program, index) in program" :key="index">
+                      <td>
+                        <div class="px-2 py-1">
+                          <div class="d-flex justify-content-center">
+                            <h6 class="mb-0 text-md">{{ index + 1 }}</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="align-left text-start">
+                        <span class="text-secondary text-md font-weight-bold">{{ program.nama }}</span>
+                      </td>
+                      <td class="align-left text-start">
+                        <span class="text-secondary text-md font-weight-bold">{{ program.progress }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-          <div class="col-lg-5">
-            <carousel />
+          <div class="col-lg-5 mt-2">
+            <div class="card p-2" style="border-radius: 20px;">
+              <CanvasJSChart :options="donut.options" :styles="donut.styleOptions" />
+            </div>
           </div>
         </div>
       </div>

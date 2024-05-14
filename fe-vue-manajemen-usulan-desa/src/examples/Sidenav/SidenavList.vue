@@ -45,16 +45,36 @@ export default {
 };
 </script>
 <template>
-  <div class="collapse navbar-collapse w-auto h-auto h-100" id="sidenav-collapse-main">
-    <ul class="navbar-nav">
-      <li class="nav-item">
+  <div class="collapse navbar-collapse w-auto h-auto h-100 " style="color: white" id="sidenav-collapse-main">
+    <ul class="navbar-nav " >
+      <li class="nav-item" >
         <sidenav-item to="/dashboard" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Dashboard">
           <template v-slot:icon>
-            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+            <i class="fas fa-chart-pie text-white text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
-
+      <li class="nav-item" >
+        <sidenav-item to="/dashboard" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Usulan">
+          <template v-slot:icon>
+            <i class="ni ni-tv-2 text-white text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item" >
+        <sidenav-item to="/dashboard" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Program">
+          <template v-slot:icon>
+            <i class="ni ni-tv-2 text-white text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
+      <li class="nav-item" >
+        <sidenav-item to="/dashboard" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Verifikasi">
+          <template v-slot:icon>
+            <i class="far fa-check-circle text-white text-sm opacity-10"></i>
+          </template>
+        </sidenav-item>
+      </li>
     </ul>
   </div>
 </template>

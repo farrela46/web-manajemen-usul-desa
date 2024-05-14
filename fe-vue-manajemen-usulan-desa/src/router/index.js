@@ -4,6 +4,7 @@ import LandingPage from "../views/LandingPage.vue";
 //USER
 import UserDashboard from "../views/user/Dashboard.vue";
 import UserUsulan from "../views/user/Usulan.vue";
+import InputUsulan from "../views/user/InputUsulan.vue";
 import UserUsulanDiskusi from "../views/user/UsulanDiskusi.vue";
 
 //ADMIN
@@ -57,6 +58,11 @@ const routes = [
     path: "/usulan",
     name: "Usulan Warga",
     component: UserUsulan,
+  },
+  {
+    path: "/usulan/input",
+    name: "Input Usulan Warga",
+    component: InputUsulan,
   },
   {
     path: "/usulan/:id",

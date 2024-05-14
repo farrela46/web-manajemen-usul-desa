@@ -12,6 +12,14 @@ export default {
     Breadcrumbs,
     ArgonInput
   },
+  created() {
+    this.store = this.$store;
+    this.body = document.getElementsByTagName("body")[0];
+    this.setupPage();
+  },
+  beforeUnmount() {
+    this.restorePage();
+  },
   data() {
     return {
       products: [],
@@ -69,6 +77,20 @@ export default {
 
   },
   methods: {
+    setupPage() {
+      this.store.state.hideConfigButton = true;
+      this.store.state.showNavbar = true;
+      this.store.state.showSidenav = false;
+      this.store.state.showFooter = false;
+      this.body.classList.remove("bg-gray-100");
+    },
+    restorePage() {
+      this.store.state.hideConfigButton = false;
+      this.store.state.showNavbar = true;
+      this.store.state.showSidenav = true;
+      this.store.state.showFooter = true;
+      this.body.classList.add("bg-gray-100");
+    },
     goUsulan() {
       this.$router.push('/usulan');
     },
@@ -110,7 +132,7 @@ export default {
         <div class="row">
           <div class="col-12">
             <div class="card px-4" style="border-radius: 10px; 
-            /* background-color: #E9F5E9; */
+            background-color: #E9F5E9;
             ">
               <div class="row mt-2 mb-2">
                 <div class="d-flex align-items-center mt-2" style="border-bottom: 1px solid black;">

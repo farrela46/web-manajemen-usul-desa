@@ -30,7 +30,7 @@ defineProps({
     >
       <slot name="icon"></slot>
     </div>
-    <span class="nav-link-text" :class="isRTL ? ' me-1' : 'ms-1'">{{
+    <span class="nav-link-text text-white" :class="isRTL ? ' me-1' : 'ms-1'">{{
       navText
     }}</span>
   </router-link>

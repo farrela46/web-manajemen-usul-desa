@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Comment;
 use App\Models\Suggestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class SuggestionController extends Controller
 {
@@ -44,40 +46,28 @@ class SuggestionController extends Controller
     public function getOne($id)
     {
         try {
-            $suggestion = DB::select('
-            SELECT 
-                a.nama as nama, 
-                b.suggestion as saran, 
-                b.updated_at as tanggal,
-                IFNULL(u.upvotes, 0) as upvote, 
-                IFNULL(d.downvotes, 0) as downvote, 
-                IFNULL(c.comments, 0) as comment
-            FROM suggestions as b
-            LEFT JOIN users as a ON a.id = b.userID
-            LEFT JOIN (
-                SELECT suggestionID, COUNT(*) as upvotes 
-                FROM suggestions_votes 
-                WHERE type = "upvote" 
-                GROUP BY suggestionID
-            ) as u ON u.suggestionID = b.id
-            LEFT JOIN (
-                SELECT suggestionID, COUNT(*) as downvotes 
-                FROM suggestions_votes 
-                WHERE type = "downvote" 
-                GROUP BY suggestionID
-            ) as d ON d.suggestionID = b.id
-            LEFT JOIN (
-                SELECT suggestionID, COUNT(*) as comments 
-                FROM comments 
-                GROUP BY suggestionID
-            ) as c ON c.suggestionID = b.id
-            WHERE b.id = ?;', [$id]);
+            // Query untuk mengambil semua komentar terkait dengan usulan
+            $comments = DB::table('comments as c')
+                ->select('c.comment', 'c.created_at as tanggal_komen', 'u.nama as nama_komen')
+                ->leftJoin('users as u', 'u.id', '=', 'c.userID')
+                ->where('c.suggestionID', $id)
+                ->orderBy('c.created_at', 'ASC')
+                ->get();
+
+            // Query untuk mengambil data usulan beserta jumlah upvote dan downvote
+            $suggestion = DB::table('suggestions as b')
+                ->select('a.nama as nama', 'b.suggestion as saran', 'b.updated_at as tanggal', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'))
+                ->leftJoin('users as a', 'a.id', '=', 'b.userID')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
+                ->where('b.id', $id)
+                ->first();
 
             if (!$suggestion) {
                 return response()->json(['status' => 'error', 'message' => 'Suggestion not found.'], 404);
             }
 
-            return response()->json(['status' => 'success', 'data' => $suggestion], 200);
+            return response()->json(['status' => 'success', 'suggestion' => $suggestion, 'comments' => $comments], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
@@ -106,15 +96,24 @@ class SuggestionController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function addComment(Request $request, $suggestionId)
     {
         try {
-            // Hapus token autentikasi pengguna saat ini
-            $request->user()->currentAccessToken()->delete();
+            // Validasi input
+            $request->validate([
+                'comment' => 'required|string'
+            ]);
 
-            return response()->json(['status' => 'success', 'message' => 'Successfully logged out.'], 200);
+            // Buat komentar baru
+            $comment = new Comment();
+            $comment->comment = $request->comment;
+            $comment->suggestionID = $suggestionId;
+            $comment->userID = Auth::id();
+            $comment->save();
+
+            return response()->json(['status' => 'success', 'message' => 'Comment added successfully'], 201);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => 'Failed to log out.'], 500);
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
 }

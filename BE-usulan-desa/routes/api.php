@@ -34,4 +34,5 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:user'])->group(f
     Route::get('/{id}', [SuggestionController::class, 'getOne']);
     Route::post('/update/{id}', [SuggestionController::class, 'update']);
     Route::delete('/delete/{id}', [SuggestionController::class, 'destroy']);
+    Route::post('/{id}/comment', [SuggestionController::class, 'addComment']);
 });

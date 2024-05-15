@@ -92,7 +92,7 @@ defineProps({
             >
               {{ typeof title === "string" ? title : title.text }}
             </p>
-            <h5 :class="`mb-0 font-weight-bolder ${value.color}`">
+            <h1 :class="`mb-0 font-weight-bolder ${value.color}`">
               {{
                 (value && typeof value === "string") ||
                 (value && typeof value === "number")
@@ -107,13 +107,13 @@ defineProps({
               </span>
               <span
                 v-if="percentage && typeof percentage === 'object'"
-                :class="`text-sm font-weight-bolder text-${percentage.color}`"
+                :class="`text-xl font-weight-bolder text-${percentage.color}`"
               >
                 {{ percentage.value }}
               </span>
-            </h5>
+            </h1>
             <!--  eslint-disable-next-line vue/no-v-html -->
-            <p v-if="description" class="mt-2 mb-0" v-html="description"></p>
+            
           </div>
         </div>
       </div>

@@ -116,4 +116,106 @@ class SuggestionController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function Upvote($suggestionID)
+    {
+        try {
+            $userID = auth()->user()->id;
+
+            // Cek apakah pengguna sudah memberikan upvote atau downvote sebelumnya
+            $existingVote = DB::table('suggestions_votes')
+                ->where('suggestionID', $suggestionID)
+                ->where('userID', $userID)
+                ->first();
+
+            if ($existingVote) {
+                if ($existingVote->type === 'upvote') {
+                    return response()->json(['status' => 'error', 'message' => 'Kamu sudah upvote usulan ini.'], 400);
+                }
+
+                // Jika pengguna sudah memberikan downvote sebelumnya, update ke upvote
+                DB::table('suggestions_votes')
+                    ->where('suggestionID', $suggestionID)
+                    ->where('userID', $userID)
+                    ->update(['type' => 'upvote']);
+
+                return response()->json(['status' => 'success', 'message' => 'Vote berhasil diubah ke upvote.'], 200);
+            }
+
+            // Jika belum ada vote, tambahkan upvote baru
+            DB::table('suggestions_votes')->insert([
+                'suggestionID' => $suggestionID,
+                'userID' => $userID,
+                'type' => 'upvote',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            return response()->json(['status' => 'success', 'message' => 'Upvote berhasil.'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+    public function downvote($id)
+    {
+        try {
+            $userID = auth()->user()->id;
+
+            // Cek apakah pengguna sudah memberikan upvote atau downvote sebelumnya
+            $existingVote = DB::table('suggestions_votes')
+                ->where('suggestionID', $id)
+                ->where('userID', $userID)
+                ->first();
+
+            if ($existingVote) {
+                if ($existingVote->type === 'downvote') {
+                    return response()->json(['status' => 'error', 'message' => 'Kamu sudah downvote usulan ini.'], 400);
+                }
+
+                // Jika pengguna sudah memberikan upvote sebelumnya, update ke downvote
+                DB::table('suggestions_votes')
+                    ->where('suggestionID', $id)
+                    ->where('userID', $userID)
+                    ->update(['type' => 'downvote', 'updated_at' => now()]);
+
+                return response()->json(['status' => 'success', 'message' => 'Vote berhasil diubah ke downvote.'], 200);
+            }
+
+            // Jika belum ada vote, tambahkan downvote baru
+            DB::table('suggestions_votes')->insert([
+                'suggestionID' => $id,
+                'userID' => $userID,
+                'type' => 'downvote',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            return response()->json(['status' => 'success', 'message' => 'Downvote berhasil.'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+    public function rankSuggestion()
+    {
+        try {
+            $suggestions = DB::table('suggestions as b')
+                ->leftJoin('users as a', 'a.id', '=', 'b.userID')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
+                ->select(
+                    'a.nama as nama',
+                    'b.suggestion as saran',
+                    'b.updated_at as tanggal',
+                    DB::raw('IFNULL(u.upvotes, 0) as upvote'),
+                    DB::raw('IFNULL(d.downvotes, 0) as downvote'),
+                    DB::raw('IFNULL(c.comments, 0) as comment')
+                )
+                ->orderBy(DB::raw('IFNULL(u.upvotes, 0)'), 'desc')
+                ->paginate(10);
+            return response()->json(['status' => 'success', 'data' => $suggestions], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
 }

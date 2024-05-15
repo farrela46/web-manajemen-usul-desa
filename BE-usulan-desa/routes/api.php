@@ -31,8 +31,11 @@ Route::prefix('/auth')->group(function () {
 Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::post('/add', [SuggestionController::class, 'store']);
     Route::get('/get', [SuggestionController::class, 'index']);
-    Route::get('/{id}', [SuggestionController::class, 'getOne']);
+    Route::get('/rank', [SuggestionController::class, 'rankSuggestion']);
     Route::post('/update/{id}', [SuggestionController::class, 'update']);
     Route::delete('/delete/{id}', [SuggestionController::class, 'destroy']);
+    Route::get('/{id}', [SuggestionController::class, 'getOne']);
     Route::post('/{id}/comment', [SuggestionController::class, 'addComment']);
+    Route::get('/{id}/upvote', [SuggestionController::class, 'Upvote']);
+    Route::get('/{id}/downvote', [SuggestionController::class, 'Downvote']);
 });

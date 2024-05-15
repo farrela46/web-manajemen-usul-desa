@@ -4,6 +4,7 @@ import axios from "axios";
 import BASE_URL from '@/api/config-api';
 // import ArgonButton from "@/components/ArgonButton.vue";
 // import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
+import * as bootstrap from 'bootstrap';
 
 export default {
   components: {
@@ -22,6 +23,8 @@ export default {
     return {
       products: [],
       overlay: false,
+      showModal: false,
+      selectedUsulanId: null,
       breadcrumbsItems: [
         {
           title: 'Home',
@@ -83,6 +86,45 @@ export default {
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
+    },
+    openAcceptConfirmation(id) {
+      this.selectedUsulanId = id;
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('acceptConfirmationModal'))
+      modal.show();
+    },
+    closeModalAccept() {
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('acceptConfirmationModal'))
+      modal.hide();
+    },
+    confirmAccept() {
+      if (this.selectedUsulanId) {
+        this.AcceptUsulan(this.selectedUsulanId);
+        this.closeModalAccept();
+      }
+    },
+    openRejectConfirmation(id) {
+      this.selectedUsulanId = id;
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('rejectConfirmationModal'))
+      modal.show();
+    },
+    async AcceptUsulan(id) {
+      try {
+        const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
+        console.log(response)
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: 'User berhasil dihapus',
+          color: 'green'
+        });
+        this.getAllUser();
+      } catch (error) {
+        console.error(error);
+      }
     },
     async retrieveBuku() {
       try {
@@ -173,15 +215,20 @@ export default {
                           <td class="align-middle text-start">
                             <span class="text-black text-xs font-weight-bold">{{ item.downvote }}</span>
                           </td>
-                          <td class="align-middle">
-                            <span class="mx-3" style="font-size: 1rem; cursor: pointer;" @click="editUser(user.id)">
-                              <span style="color: green;">
+                          <td class="align-middle text-center">
+                            <span style="font-size: 1rem; cursor: pointer;" @click="editUser(user.id)">
+                              <span style="color: black;">
                                 <i class="fa fa-pencil-square-o"></i>
                               </span>
                             </span>
-                            <span style="font-size: 1rem; cursor: pointer;" @click="openDeleteConfirmation(user.id)">
-                              <span style="color: red;">
-                                <i class="fa fa-trash"></i>
+                            <span class="mx-3" style="font-size: 1rem; cursor: pointer;" @click="openAcceptConfirmation(item.id)">
+                              <span style="color:green;">
+                                <i class="fas fa-check-circle" ></i>
+                              </span>
+                            </span>
+                            <span style="font-size: 1rem; cursor: pointer;" @click="openRejectConfirmation(item.id)">
+                              <span style="color:red;">
+                                <i class="fas fa-times-circle" ></i>
                               </span>
                             </span>
                           </td>
@@ -191,6 +238,42 @@ export default {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="acceptConfirmationModal" tabindex="-1" aria-labelledby="usulanConfirmationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-black" id="deleteConfirmationModalLabel">Konfirmasi</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Setujui Usulan ini??
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-danger" @click="confirmAccept">Accept</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="rejectConfirmationModal" tabindex="-1" aria-labelledby="usulanConfirmationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title text-black" id="deleteConfirmationModalLabel">Konfirmasi Upvote</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Tolak Usulan ini??
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-danger" @click="confirmReject">Reject</button>
             </div>
           </div>
         </div>

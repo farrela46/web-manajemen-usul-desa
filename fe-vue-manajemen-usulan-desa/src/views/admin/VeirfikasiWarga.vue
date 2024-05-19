@@ -2,13 +2,13 @@
 // import { useRoute } from "vue-router";
 import axios from "axios";
 import BASE_URL from '@/api/config-api';
-// import ArgonButton from "@/components/ArgonButton.vue";
+import ArgonButton from "@/components/ArgonButton.vue";
 // import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
 import * as bootstrap from 'bootstrap';
 
 export default {
   components: {
-    // ArgonButton,
+    ArgonButton,
     // Breadcrumbs
   },
   created() {
@@ -24,6 +24,7 @@ export default {
       products: [],
       overlay: false,
       showModal: false,
+      dialog: false,
       selectedUsulanId: null,
       breadcrumbsItems: [
         {
@@ -39,26 +40,24 @@ export default {
       ],
       usulan: [
         {
-          usulan: 'Ruang tebuka untuk bernapas',
-          tanggal: '15-08-2024',
-          komentar: '49',
-          upvote: '19890',
-          downvote: '289'
+          id: 1,
+          nama: 'Max Verstappen',
+          tanggal_pendaftaran: '15-08-2024',
+          nik: '2818723772138',
         },
         {
-          usulan: 'Penyediaan Ruang untuk modifikasi',
-          tanggal: '15-08-2024',
-          komentar: '49',
-          upvote: '210239',
-          downvote: '289'
+          id: 2,
+          nama: 'Vivijay',
+          tanggal_pendaftaran: '14-08-2024',
+          nik: '2818723772138'
         },
         {
-          usulan: 'Pengusiran Fikri',
-          tanggal: '15-08-2024',
-          komentar: '49',
-          upvote: '81989999',
-          downvote: '0'
+          id: 3,
+          nama: 'Made Bagus',
+          tanggal_pendaftaran: '16-08-2024',
+          nik: '2818723772138',
         },
+
       ]
     };
   },
@@ -98,7 +97,7 @@ export default {
     },
     confirmAccept() {
       if (this.selectedUsulanId) {
-        this.AcceptUsulan(this.selectedUsulanId);
+        this.AcceptWarga(this.selectedUsulanId);
         this.closeModalAccept();
       }
     },
@@ -107,21 +106,52 @@ export default {
       let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('rejectConfirmationModal'))
       modal.show();
     },
-    async AcceptUsulan(id) {
+    closeModalReject() {
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('rejectConfirmationModal'))
+      modal.hide();
+    },
+    confirmReject() {
+      if (this.selectedUsulanId) {
+        this.RejectWarga(this.selectedUsulanId);
+        this.closeModalReject();
+      }
+    },
+    async AcceptWarga(id) {
       try {
-        const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-          },
-        });
-        console.log(response)
+        // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
+        //   headers: {
+        //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+        //   },
+        // });
+        console.log(id)
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'User berhasil dihapus',
+          text: 'Warga telah diverifikasi',
           color: 'green'
         });
-        this.getAllUser();
+        this.closeModalAccept();
+        this.dialog = true
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async RejectWarga(id) {
+      try {
+        // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
+        //   headers: {
+        //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+        //   },
+        // });
+        console.log(id)
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: 'Warga telah diverifikasi',
+          color: 'green'
+        });
+        this.closeModalReject();
+        this.dialog = true
       } catch (error) {
         console.error(error);
       }
@@ -171,24 +201,17 @@ export default {
                             No
                           </th>
                           <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                            Usulan
+                            Nama
                           </th>
                           <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                            Tanggal
+                            Tanggal Pendaftaran
                           </th>
                           <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                            Komentar
-                          </th>
-                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                            <v-icon icon="mdi-arrow-up-bold-outline" start></v-icon> Up Vote
-                          </th>
-                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                            <v-icon icon="mdi-arrow-down-bold-outline" start></v-icon> Down Vote
+                            NIK
                           </th>
                           <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Aksi
                           </th>
-                          <th class="text-secondary opacity-7"></th>
                         </tr>
                       </thead>
                       <tbody>
@@ -201,27 +224,24 @@ export default {
                             </div>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.usulan }}</span>
+                            <span class="text-black text-xs font-weight-bold">{{ item.nama }}</span>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.tanggal }}</span>
+                            <span class="text-black text-xs font-weight-bold">{{ item.tanggal_pendaftaran }}</span>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.komentar }}</span>
-                          </td>
-                          <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.upvote }}</span>
-                          </td>
-                          <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.downvote }}</span>
+                            <span class="text-black text-xs font-weight-bold">{{ item.nik }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <span style="font-size: 1rem; cursor: pointer;" @click="editUser(user.id)">
-                              <span style="color: black;">
-                                <i class="fa fa-pencil-square-o"></i>
-                              </span>
+                            <span class="p-2">
+                              <argon-button size="sm" @click="openAcceptConfirmation(item.id)">Terima
+                              </argon-button>
                             </span>
-                            <span class="mx-3" style="font-size: 1rem; cursor: pointer;" @click="openAcceptConfirmation(item.id)">
+                            <span class="p-2">
+                              <argon-button color="danger" size="sm" @click="openRejectConfirmation(item.id)">
+                                Tolak</argon-button>
+                            </span>
+                            <!-- <span class="mx-3" style="font-size: 1rem; cursor: pointer;" @click="openAcceptConfirmation(item.id)">
                               <span style="color:green;">
                                 <i class="fas fa-check-circle" ></i>
                               </span>
@@ -230,7 +250,7 @@ export default {
                               <span style="color:red;">
                                 <i class="fas fa-times-circle" ></i>
                               </span>
-                            </span>
+                            </span> -->
                           </td>
                         </tr>
                       </tbody>
@@ -251,11 +271,11 @@ export default {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              Setujui Usulan ini??
+              Setujui warga ini??
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-danger" @click="confirmAccept">Accept</button>
+              <button type="button" class="btn btn-danger" @click="confirmAccept">Terima</button>
             </div>
           </div>
         </div>
@@ -269,7 +289,7 @@ export default {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              Tolak Usulan ini??
+              Tolak warga ini??
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -278,6 +298,16 @@ export default {
           </div>
         </div>
       </div>
+      <v-dialog v-model="dialog" max-width="400">
+      <v-card class="text-center">
+        <v-card-text>
+          <div class="p-2">
+            <h3>Verifikasi pengguna berhasil!</h3>
+            <v-icon color="blue" size="80">mdi-check-circle-outline</v-icon>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     </div>
   </div>
 </template>

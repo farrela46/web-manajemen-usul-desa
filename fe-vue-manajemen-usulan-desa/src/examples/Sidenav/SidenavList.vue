@@ -55,7 +55,7 @@ export default {
         </sidenav-item>
       </li>
       <li class="nav-item" >
-        <sidenav-item to="/admin/usulan" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Usulan">
+        <sidenav-item to="/admin/usulan" :class="getRoute() === 'manage usulan' ? 'active' : ''" navText="Usulan">
           <template v-slot:icon>
             <i class="ni ni-tv-2 text-white text-sm opacity-10"></i>
           </template>
@@ -69,7 +69,7 @@ export default {
         </sidenav-item>
       </li>
       <li class="nav-item" >
-        <sidenav-item to="/dashboard" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Verifikasi">
+        <sidenav-item to="/admin/verifikasi" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Verifikasi">
           <template v-slot:icon>
             <i class="far fa-check-circle text-white text-sm opacity-10"></i>
           </template>

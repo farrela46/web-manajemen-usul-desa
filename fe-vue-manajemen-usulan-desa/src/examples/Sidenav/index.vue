@@ -44,7 +44,7 @@ export default {
 
       <router-link class="m-0 navbar-brand" to="/">
         <img :src="require('@/assets/img/telyu.png')" class="navbar-brand-img h-100" alt="main_logo" />
-        <span class="ms-2 font-weight-bold me-2 text-white">Dinovasi</span>
+        <span class="ms-4 font-weight-bold me-2 text-white text-uppercase text-lg">Dinovasi</span>
       </router-link>
 
     </div>

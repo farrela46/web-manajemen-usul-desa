@@ -158,10 +158,10 @@ export default {
                         </div>
                       </td>
                       <td class="align-left text-start">
-                        <span class="text-secondary text-md font-weight-bold">{{ program.nama }}</span>
+                        <span class="text-black text-md font-weight-bold">{{ program.nama }}</span>
                       </td>
                       <td class="align-left text-start">
-                        <span class="text-secondary text-md font-weight-bold">{{ program.progress }}</span>
+                        <span class="text-black text-md font-weight-bold">{{ program.progress }}</span>
                       </td>
                     </tr>
                   </tbody>

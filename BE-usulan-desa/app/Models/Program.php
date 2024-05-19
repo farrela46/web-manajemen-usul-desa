@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Suggestion;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class programs extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'comment',
-        'suggestionID',
+        'name',
+        'description',
+        'start_date',
+        'end_date',
+        'status',
+        'target',
         'userID',
+        'suggestionID'
     ];
 
     public function user()

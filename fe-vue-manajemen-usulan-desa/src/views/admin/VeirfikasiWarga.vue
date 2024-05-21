@@ -114,7 +114,7 @@ export default {
       if (this.selectedUsulanId) {
         this.RejectWarga(this.selectedUsulanId);
         this.closeModalReject();
-      }
+      } 
     },
     async AcceptWarga(id) {
       try {
@@ -299,15 +299,15 @@ export default {
         </div>
       </div>
       <v-dialog v-model="dialog" max-width="400">
-      <v-card class="text-center">
-        <v-card-text>
-          <div class="p-2">
-            <h3>Verifikasi pengguna berhasil!</h3>
-            <v-icon color="blue" size="80">mdi-check-circle-outline</v-icon>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+        <v-card class="text-center">
+          <v-card-text>
+            <div class="p-2">
+              <h3>Verifikasi pengguna berhasil!</h3>
+              <v-icon color="blue" size="80">mdi-check-circle-outline</v-icon>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>

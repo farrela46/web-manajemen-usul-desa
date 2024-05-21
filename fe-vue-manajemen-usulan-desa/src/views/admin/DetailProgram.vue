@@ -1,13 +1,15 @@
+use bootstrap;
 <script>
 // import { useRoute } from "vue-router";
 import axios from "axios";
 import BASE_URL from '@/api/config-api';
-// import ArgonButton from "@/components/ArgonButton.vue";
+import ArgonButton from "@/components/ArgonButton.vue";
 import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
+import * as bootstrap from 'bootstrap';
 
 export default {
   components: {
-    // ArgonButton,
+    ArgonButton,
     Breadcrumbs
   },
   created() {
@@ -20,6 +22,7 @@ export default {
   },
   data() {
     return {
+      dialog: false,
       products: [],
       overlay: false,
       breadcrumbsItems: [
@@ -69,6 +72,39 @@ export default {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
     },
+    closeModal() {
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal'))
+      modal.hide();
+    },
+    hapusModal() {
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal'))
+      modal.show();
+    },
+    async confirmHapus() {
+      try {
+        const id = this.$route.params.id;
+        // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
+        //   headers: {
+        //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+        //   },
+        // });
+        console.log(id)
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: 'Program berhasil di hapus',
+          color: 'green'
+        });
+        this.closeModal();
+        this.dialog = true
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    closeDialog() {
+      this.dialog = false,
+      this.$router.push('/admin/program')
+    },
     async retrieveBuku() {
       try {
         this.overlay = true;
@@ -78,7 +114,7 @@ export default {
           }
         });
         this.products = response.data;
-
+        this.$route.params.id;
         if (response.data.length > 0) {
           this.fotoUrl = response.data[0].foto;
         }
@@ -153,9 +189,39 @@ export default {
           </div>
           <div class="form-actions mt-4 d-flex justify-content-end">
             <button class="btn btn-success mx-2" @click="edit">Simpan</button>
-            <button class="btn btn-danger me-2" @click="hapus">Hapus</button>
+            <button class="btn btn-danger me-2" @click="hapusModal">Hapus</button>
           </div>
         </div>
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title text-black" id="deleteConfirmationModalLabel">Konfirmasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Anda yakin ingin menghapus program ini??
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" @click="confirmHapus">Hapus</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <v-dialog v-model="dialog" max-width="400">
+          <v-card class="text-center">
+            <v-card-text>
+              <div class="p-2">
+                <h3>Program berhasil di hapus</h3>
+                <v-icon color="blue" size="80">mdi-check-circle-outline</v-icon>
+              </div>
+            </v-card-text>
+            <template v-slot:actions>
+              <argon-button class="ms-auto" color="secondary" size="sm" variant="outline" @click="closeDialog">Close</argon-button>
+              </template>
+          </v-card>
+        </v-dialog>
       </div>
     </div>
   </div>

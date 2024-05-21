@@ -62,14 +62,14 @@ export default {
         </sidenav-item>
       </li>
       <li class="nav-item" >
-        <sidenav-item to="/dashboard" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Program">
+        <sidenav-item to="/admin/program" :class="getRoute() === 'program' ? 'active' : ''" navText="Program">
           <template v-slot:icon>
             <i class="ni ni-tv-2 text-white text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
       <li class="nav-item" >
-        <sidenav-item to="/admin/verifikasi" :class="getRoute() === 'dashboard' ? 'active' : ''" navText="Verifikasi">
+        <sidenav-item to="/admin/verifikasi" :class="getRoute() === 'verifikasiZ' ? 'active' : ''" navText="Verifikasi">
           <template v-slot:icon>
             <i class="far fa-check-circle text-white text-sm opacity-10"></i>
           </template>

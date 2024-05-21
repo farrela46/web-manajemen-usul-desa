@@ -11,6 +11,9 @@ import UserUsulanDiskusi from "../views/user/UsulanDiskusi.vue";
 import AdminDashboard from "../views/admin/Dashboard.vue";
 import ManageUsulan from "../views/admin/ManageUsulan.vue";
 import VerifikasiWarga from "../views/admin/VeirfikasiWarga.vue";
+import Program from "../views/admin/Program.vue";
+import DetailProgram from "../views/admin/DetailProgram.vue";
+import TambahProgram from "../views/admin/TambahProgram.vue";
 
 import Tables from "../views/Tables.vue";
 import Billing from "../views/Billing.vue";
@@ -58,6 +61,21 @@ const routes = [
     path: "/admin/verifikasi",
     name: "Verifikasi Warga",
     component: VerifikasiWarga,
+  },
+  {
+    path: "/admin/program",
+    name: "Program",
+    component: Program,
+  },
+  {
+    path: "/admin/program/:id",
+    name: "Detail Program",
+    component: DetailProgram,
+  },
+  {
+    path: "/admin/program/tambah",
+    name: "Tambah Program",
+    component: TambahProgram,
   },
 
   //USER

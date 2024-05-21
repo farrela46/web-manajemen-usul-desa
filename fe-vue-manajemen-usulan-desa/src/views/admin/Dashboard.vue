@@ -103,7 +103,7 @@ export default {
   beforeUnmount() {
     this.restorePage();
   },
-  methods: {
+methods: {
     setupPage() {
       this.store.state.hideConfigButton = true;
       this.store.state.showNavbar = true;

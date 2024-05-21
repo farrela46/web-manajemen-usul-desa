@@ -303,7 +303,7 @@ export default {
           <v-card-text>
             <div class="p-2">
               <h3>Verifikasi pengguna berhasil!</h3>
-              <v-icon color="blue" size="80">mdi-check-circle-outline</v-icon>
+              <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
             </div>
           </v-card-text>
         </v-card>

@@ -22,6 +22,7 @@ export default {
   },
   data() {
     return {
+      validate: false,
       dialog: false,
       products: [],
       overlay: false,
@@ -38,12 +39,12 @@ export default {
         }
       ],
       form: {
-        namaProgram: 'Perbaikan Gapura',
-        deskripsi: 'Pekerjaan Konstruksi - Perbaikan Gapura Utara - 2024',
-        tanggalMulai: '2024-05-10',
-        tanggalSelesai: '2024-05-10',
-        status: 'on progress',
-        target: 'Memperbaiki semua gapura yang rusak di wilayah tertentu dalam jangka waktu tertentu, dengan memberikan prioritas kepada gapura yang merupakan pintu gerbang masuk ke kota atau desa.'
+        namaProgram: '',
+        deskripsi: '',
+        tanggalMulai: '',
+        tanggalSelesai: '',
+        status: '',
+        target: ''
       }
     };
   },
@@ -71,6 +72,49 @@ export default {
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
+    },
+    validateForm() {
+      if (
+        !this.form.namaProgram ||
+        !this.form.deskripsi ||
+        !this.form.tanggalMulai ||
+        !this.form.tanggalSelesai ||
+        !this.form.status ||
+        !this.form.target
+      ) {
+        this.validate = true;
+      } else {
+        this.saveForm();
+      }
+    },
+    async saveFrom() {
+      try {
+
+        // const response = await axios.put(BASE_URL + '/user/update', updatedUserData, {
+        //   headers: {
+        //     Authorization: "Bearer " + localStorage.getItem('access_token')
+        //   }
+        // });
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: 'Program berhasil diubah',
+          color: 'green'
+        });
+        this.$router.push('/admin/program');
+
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        if (error.response && error.response.data.message) {
+          const errorMessage = error.response.data.message;
+          this.$notify({
+            type: 'error',
+            title: 'Error',
+            text: errorMessage,
+            color: 'red'
+          });
+        }
+      }
     },
     closeModal() {
       let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal'))
@@ -103,7 +147,7 @@ export default {
     },
     closeDialog() {
       this.dialog = false,
-      this.$router.push('/admin/program')
+        this.$router.push('/admin/program')
     },
     async retrieveBuku() {
       try {
@@ -188,7 +232,7 @@ export default {
             </div>
           </div>
           <div class="form-actions mt-4 d-flex justify-content-end">
-            <button class="btn btn-success mx-2" @click="edit">Simpan</button>
+            <button class="btn btn-success mx-2" @click="validateForm">Simpan</button>
             <button class="btn btn-danger me-2" @click="hapusModal">Hapus</button>
           </div>
         </div>
@@ -214,14 +258,26 @@ export default {
             <v-card-text>
               <div class="p-2">
                 <h3>Program berhasil di hapus</h3>
-                <v-icon color="blue" size="80">mdi-check-circle-outline</v-icon>
+                <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
               </div>
             </v-card-text>
             <template v-slot:actions>
-              <argon-button class="ms-auto" color="secondary" size="sm" variant="outline" @click="closeDialog">Close</argon-button>
-              </template>
+              <argon-button class="ms-auto" color="secondary" size="sm" variant="outline"
+                @click="closeDialog">Close</argon-button>
+            </template>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="validate" max-width="400">
+          <v-card class="text-center">
+            <v-card-text>
+              <div class="p-2">
+                <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
+                <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+
       </div>
     </div>
   </div>

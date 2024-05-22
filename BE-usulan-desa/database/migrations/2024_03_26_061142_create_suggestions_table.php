@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,13 +12,14 @@ return new class extends Migration
     {
         Schema::create('suggestions', function (Blueprint $table) {
             $table->id();
-            $table->integer('userID')->references('users.id');
+            $table->foreignId('userID')->constrained('users')->onDelete('cascade');
             $table->string('suggestion');
             $table->integer('status')->nullable();
             $table->date('date');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

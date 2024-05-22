@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,8 +13,8 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->string('comment');
-            $table->integer('suggestionID')->references('suggestions.id');
-            $table->integer('userID')->references('users.id');
+            $table->foreignId('suggestionID')->constrained('suggestions')->onDelete('cascade');
+            $table->foreignId('userID')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

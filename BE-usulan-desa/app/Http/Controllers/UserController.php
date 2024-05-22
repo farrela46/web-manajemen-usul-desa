@@ -39,14 +39,8 @@ class UserController extends Controller
             ], 500);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'role' => $user->role,
-            'username' => $user->username,
-            'NIK' => $user->NIK,
-            'status' => $user->status,
+            'message' => 'Akun anda berhasil dibuat, hubungi pengurus desa untuk verifikasi akun anda.'
         ], 201);
     }
 
@@ -58,6 +52,11 @@ class UserController extends Controller
             ], 401);
         }
         $user = User::where('email', $request['email'])->firstOrFail();
+        if ($user->status === 'unverified') {
+            return response()->json([
+                'message' => 'Akun anda belum diverifikasi oleh admin, silahkan hubungi staff desa.'
+            ], 403); // 403 Forbidden
+        }
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([

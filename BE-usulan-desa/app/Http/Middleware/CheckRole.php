@@ -21,7 +21,7 @@ class CheckRole
             return $next($request);
         }
 
-        return response()->json(['error' => 'Unauthorized. Only Admins are allowed to perform this action.'], 403);
+        return response()->json(['error' => 'Unauthorized.'], 403);
     }
 
 

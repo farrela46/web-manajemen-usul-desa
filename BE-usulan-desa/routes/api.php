@@ -39,3 +39,7 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:user'])->group(f
     Route::get('/{id}/upvote', [SuggestionController::class, 'Upvote']);
     Route::get('/{id}/downvote', [SuggestionController::class, 'Downvote']);
 });
+
+Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/approve/{id}', [SuggestionController::class, 'approveSuggestion']);
+});

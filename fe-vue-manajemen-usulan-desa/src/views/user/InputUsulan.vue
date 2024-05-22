@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      products: [],
+      usulan: '',
       overlay: false,
       breadcrumbsItems: [
         {
@@ -112,11 +112,19 @@ export default {
                           kenyataan dan
                           dapat dilihat oleh kepala desa</a>
                       </div>
+                      <div class="row mt-1">
+                        <div class="form-floating">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="Subject Usulan">
+                            <label for="floatingInput">Subject Usulan</label>
+                          </div>
+                        </div>
+                      </div>
                       <div class="row">
                         <div class="form-floating">
-                          <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                            style="height: 300px"></textarea>
-                          <label for="floatingTextarea2">Input Usulan</label>
+                          <textarea class="form-control" v-model="usulan" placeholder="Deskripsikan Usulanmu"
+                            id="floatingTextarea2" style="height: 300px"></textarea>
+                          <label for="floatingTextarea2">Deskripsi Usulan</label>
                         </div>
                       </div>
                       <div class="row mt-2 text-end">

@@ -75,7 +75,8 @@ export default {
       this.$router.push('/profile')
     },
     async onLogout() {
-      this.$router.push('/home');
+      this.$router.push('/login');
+      localStorage.removeItem('access_token');
       try {
         await axios.post(`${BASE_URL}/logout`, {}, {
           headers: {

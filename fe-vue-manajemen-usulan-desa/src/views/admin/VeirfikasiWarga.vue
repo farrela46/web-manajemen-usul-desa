@@ -5,6 +5,7 @@ import BASE_URL from '@/api/config-api';
 import ArgonButton from "@/components/ArgonButton.vue";
 // import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
 import * as bootstrap from 'bootstrap';
+import moment from 'moment';
 
 export default {
   components: {
@@ -21,7 +22,7 @@ export default {
   },
   data() {
     return {
-      products: [],
+      users: [],
       overlay: false,
       showModal: false,
       dialog: false,
@@ -38,33 +39,16 @@ export default {
           href: '/',
         }
       ],
-      usulan: [
-        {
-          id: 1,
-          nama: 'Max Verstappen',
-          tanggal_pendaftaran: '15-08-2024',
-          nik: '2818723772138',
-        },
-        {
-          id: 2,
-          nama: 'Vivijay',
-          tanggal_pendaftaran: '14-08-2024',
-          nik: '2818723772138'
-        },
-        {
-          id: 3,
-          nama: 'Made Bagus',
-          tanggal_pendaftaran: '16-08-2024',
-          nik: '2818723772138',
-        },
 
-      ]
     };
   },
   mounted() {
-
+    this.retrieveUser();
   },
   methods: {
+    formatDate(data_date) {
+      return moment.utc(data_date).format('YYYY-MM-DD')
+    },
     setupPage() {
       this.store.state.hideConfigButton = true;
       this.store.state.showNavbar = true;
@@ -114,24 +98,24 @@ export default {
       if (this.selectedUsulanId) {
         this.RejectWarga(this.selectedUsulanId);
         this.closeModalReject();
-      } 
+      }
     },
     async AcceptWarga(id) {
       try {
-        // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
-        //   headers: {
-        //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-        //   },
-        // });
-        console.log(id)
+        const response = await axios.get(`${BASE_URL}/auth/verified/` + id, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'Warga telah diverifikasi',
+          text: response.data.message,
           color: 'green'
         });
         this.closeModalAccept();
         this.dialog = true
+        this.retrieveUser();
       } catch (error) {
         console.error(error);
       }
@@ -156,19 +140,16 @@ export default {
         console.error(error);
       }
     },
-    async retrieveBuku() {
+    async retrieveUser() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
+        const response = await axios.get(`${BASE_URL}/auth/index`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.products = response.data;
+        this.users = response.data;
 
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
-        }
       } catch (error) {
         console.error(error);
       } finally {
@@ -200,14 +181,18 @@ export default {
                           <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">
                             No
                           </th>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            NIK
+                          </th>
                           <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Nama
                           </th>
                           <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                            Tanggal Pendaftaran
+                            Tanggal Daftar
                           </th>
-                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                            NIK
+                          <th
+                            class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            Status
                           </th>
                           <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Aksi
@@ -215,7 +200,7 @@ export default {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="(item, index) in usulan" :key="item.id">
+                        <tr v-for="(item, index) in users" :key="item.id">
                           <td>
                             <div class="px-2 py-1">
                               <div class="d-flex justify-content-center">
@@ -224,15 +209,25 @@ export default {
                             </div>
                           </td>
                           <td class="align-middle text-start">
+                            <span class="text-black text-xs font-weight-bold">{{ item.NIK }}</span>
+                          </td>
+                          <td class="align-middle text-start">
                             <span class="text-black text-xs font-weight-bold">{{ item.nama }}</span>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.tanggal_pendaftaran }}</span>
-                          </td>
-                          <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.nik }}</span>
+                            <span class="text-black text-xs font-weight-bold">{{ formatDate(item.created_at) }}</span>
                           </td>
                           <td class="align-middle text-center">
+                            <span class="text-black text-xs font-weight-bold"> <v-chip v-if="item.status === 'verified'"
+                                color="green">
+                                Verified
+                              </v-chip>
+                              <v-chip v-else color="red">
+                                Unverified
+                              </v-chip>
+                            </span>
+                          </td>
+                          <td v-if="item.status === 'unverified'" class="align-middle text-center">
                             <span class="p-2">
                               <argon-button size="sm" @click="openAcceptConfirmation(item.id)">Terima
                               </argon-button>

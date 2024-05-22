@@ -148,13 +148,21 @@ export default {
         </div>
         <v-dialog v-model="dialog" max-width="500">
           <v-card>
-            <v-card-title class="headline">Anda harus terverifikasi</v-card-title>
-            <v-card-text>
-              Untuk mengakses fitur ini, Anda harus terverifikasi. Silakan verifikasi akun Anda terlebih dahulu.
+            <v-card-title class="headline">
+              <v-icon left>mdi-information</v-icon> Perlu Bantuan?
+            </v-card-title>
+            <v-card-text class="text-center">
+              <div>jika status akun anda belum tervalidasi</div>
+              <div>Segera Hubungi Pengurus Desa dengan Nomer dibawah untuk Authentifikasi warga</div>
+              <div style="font-size: 24px; margin-top: 10px;">085783913913</div>
+              <div style="margin-top: 20px;">Pastikan Nomer NIK telah sesuai dengan KTP yang ada ketika Register akun
+              </div>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="dialog = false">OK</v-btn>
+              <argon-button color="secondary" size="sm" @click="dialog = false">
+                Close</argon-button>
+              
             </v-card-actions>
           </v-card>
         </v-dialog>

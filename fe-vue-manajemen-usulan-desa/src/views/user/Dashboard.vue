@@ -11,7 +11,8 @@ export default {
   },
   data() {
     return {
-      products: [],
+      user: {},
+      dialog: false,
       overlay: false,
       breadcrumbsItems: [
         {
@@ -36,9 +37,21 @@ export default {
     this.restorePage();
   },
   mounted() {
-
+    this.getUser();
   },
   methods: {
+    handleClick(action) {
+      if (this.user && this.user.status === 'unverified') {
+        this.dialog = true;
+        this.dialogMessage = 'Anda harus terverifikasi untuk mengakses fitur ini.';
+      } else {
+        if (action === 'usulan') {
+          this.goUsulan();
+        } else if (action === 'program') {
+          this.goProgram();
+        }
+      }
+    },
     goUsulan() {
       this.$router.push('/usulan');
     },
@@ -46,23 +59,21 @@ export default {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
     },
-    async retrieveBuku() {
+    async getUser() {
       try {
-        this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
+        const response = await axios.get(`${BASE_URL}/user`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.products = response.data;
-
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
-        }
+        this.user = response.data
       } catch (error) {
         console.error(error);
-      } finally {
-        this.overlay = false
+
+        if (error.response && error.response.data.message) {
+          const errorMessage = error.response.data.message;
+          console.log(errorMessage)
+        }
       }
     },
     setupPage() {
@@ -84,7 +95,7 @@ export default {
 </script>
 
 <template>
-  <div class="py-4 container-fluid " >
+  <div class="py-4 container-fluid ">
     <div class="row mt-3">
       <v-overlay :model-value="overlay" class="d-flex align-items-center justify-content-center">
         <v-progress-circular color="primary" size="96" indeterminate></v-progress-circular>
@@ -104,7 +115,7 @@ export default {
                   <div class="col-md-6 d-flex align-items-center">
                     <v-col cols="auto">
                       <h3>List Usulan Warga</h3>
-                      <argon-button size="lg" @click="goUsulan"
+                      <argon-button size="lg" @click="handleClick('usulan')"
                         style="height: 130px; border-radius: 30px; background-color: #4D2C5E; font-size: 25px;"><i
                           class="fas fa-users fa-lg" style="font-size: 25px;"></i> LIST USULAN WARGA</argon-button>
                     </v-col>
@@ -120,7 +131,7 @@ export default {
                   <div class="col-md-6 d-flex align-items-center">
                     <v-col cols="auto">
                       <h3>List Progress Warga</h3>
-                      <argon-button size="lg"
+                      <argon-button size="lg" @click="handleClick('program')"
                         style="height: 130px; border-radius: 30px; background-color: #4D2C5E; font-size: 25px;"><i
                           class="fas fa-users fa-lg" style="font-size: 25px;"></i> PROGRAM KERJA DESA</argon-button>
                     </v-col>
@@ -135,6 +146,18 @@ export default {
             </div>
           </div>
         </div>
+        <v-dialog v-model="dialog" max-width="500">
+          <v-card>
+            <v-card-title class="headline">Anda harus terverifikasi</v-card-title>
+            <v-card-text>
+              Untuk mengakses fitur ini, Anda harus terverifikasi. Silakan verifikasi akun Anda terlebih dahulu.
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="dialog = false">OK</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
     </div>
   </div>

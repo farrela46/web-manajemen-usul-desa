@@ -14,10 +14,7 @@ export default {
     return {
       showMenu: false,
       showMenuUser: false,
-      user: {
-        userName: 'Farl',
-        nik: '3818788920002'
-      },
+      user: {},
       hasAccessToken: false,
       isLogin: false,
       isVerified: true,
@@ -61,9 +58,7 @@ export default {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.id = response.data.user.id;
-        this.userName = response.data.user.name;
-        this.userRole = response.data.user.role;
+        this.user = response.data
       } catch (error) {
         console.error(error);
 
@@ -120,7 +115,7 @@ export default {
           <li class="nav-item dropdown d-flex align-items-center" :class="'ps-2 pe-2'">
             <a href="#" class="p-0 nav-link text-black" :class="[showMenu ? 'show' : '']" id="dropdownMenuButton"
               data-bs-toggle="dropdown" aria-expanded="false" @click="showMenu = !showMenu" @blur="closeMenu">
-              <i class="cursor-pointer fa fa-user"></i>&nbsp;<b> {{ user.userName }} </b>
+              <i class="cursor-pointer fa fa-user"></i>&nbsp;<b> {{ user.nama }} </b>
             </a>
             <!-- <router-link v-else class="nav-link me-2" to="/login">
                   <button class="btn btn-light"> Login </button>
@@ -134,7 +129,7 @@ export default {
               aria-labelledby="dropdownMenuButton">
               <li class="mb-2">
                 <a class=" border-radius-md d-flex justify-content-center p-2">
-                  <v-chip v-if="isVerified" class="ma-2" color="success" variant="outlined">
+                  <v-chip v-if="user.status === 'verified'" class="ma-2" color="success" variant="outlined">
                     <v-icon icon="mdi-check" start></v-icon>
                     Akun Terverifikasi
                   </v-chip>
@@ -145,7 +140,7 @@ export default {
 
                 </a>
                 <p class=" border-radius-md d-flex justify-content-center text-black">
-                  NIK : {{ user.nik }}
+                  NIK : {{ user.NIK }}
                 </p>
               </li>
               <li class="mb-2">

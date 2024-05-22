@@ -18,7 +18,8 @@ export default {
   },
   data() {
     return {
-      name: '',
+      NIK: '',
+      nama: '',
       email: '',
       password: '',
       store: null,
@@ -39,17 +40,19 @@ export default {
       this.loading = true;
       try {
         const response = await axios.post(`${BASE_URL}/auth/register`, {
-          username: this.name,
+          NIK: this.NIK,
+          nama: this.nama,
           email: this.email,
           password: this.password
         });
+        localStorage.setItem('access_token', response.data.access_token);
         this.$notify({
           type: 'success',
           title: 'Success',
           text: response.data.message,
           color: 'green'
         });
-        this.$router.push('/login');
+        this.$router.push('/dashboard');
       } catch (error) {
         console.error(error);
 
@@ -123,7 +126,8 @@ export default {
             </div>
             <div class="card-body">
               <form role="form" @submit.prevent="onSubmit">
-                <argon-input v-model="name" id="name" type="text" placeholder="Name" aria-label="Name" />
+                <argon-input v-model="NIK" id="NIK" type="text" placeholder="NIK" aria-label="Name" />
+                <argon-input v-model="nama" id="name" type="text" placeholder="Name" aria-label="Name" />
                 <argon-input v-model="email" id="email" type="email" placeholder="Email" aria-label="Email" />
                 <argon-input v-model="password" id="password" type="password" placeholder="Password"
                   aria-label="Password" />

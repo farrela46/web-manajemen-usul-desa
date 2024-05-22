@@ -50,13 +50,13 @@ export default {
           text: response.data.message,
           color: 'green'
         });
+        console.log('response.data')
+        const { role } = response.data;
 
-        const { role } = response.data.user;
-
-        if (role === 'Admin') {
+        if (role === 'admin') {
           localStorage.setItem('access_token', response.data.access_token);
           this.$router.push('/admin/dashboard');
-        } else if (role === 'User') {
+        } else if (role === 'user') {
           localStorage.setItem('access_token', response.data.access_token);
           this.$router.push('/dashboard');
         }
@@ -73,7 +73,7 @@ export default {
           });
         }
       } finally {
-        this.loading = false; 
+        this.loading = false;
       }
     },
 
@@ -139,8 +139,8 @@ export default {
                 <div class="text-center">
                   <argon-button v-if="!loading" fullWidth color="dark" type="submit" variant="gradient"
                     class="my-4 mb-2">Login</argon-button>
-                  <argon-button v-else fullWidth color="dark" variant="gradient" class="my-4 mb-2" disabled><v-progress-circular
-                      indeterminate></v-progress-circular></argon-button>
+                  <argon-button v-else fullWidth color="dark" variant="gradient" class="my-4 mb-2"
+                    disabled><v-progress-circular indeterminate></v-progress-circular></argon-button>
                 </div>
                 <p class="text-sm mt-3 mb-0">
                   Tidak punya akun?

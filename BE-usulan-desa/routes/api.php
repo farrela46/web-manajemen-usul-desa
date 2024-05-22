@@ -21,9 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/auth')->group(function () {
+    Route::get('/index', [UserController::class, 'indexUsers'])->middleware('auth:sanctum', 'role:admin');
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/register', [UserController::class, 'register']);
-    Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
     Route::delete('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('/verified/{id}', [UserController::class, 'verified'])->middleware('auth:sanctum', 'role:admin');
 });

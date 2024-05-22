@@ -18,8 +18,8 @@ return new class extends Migration {
             $table->date('end_date');
             $table->string('status');
             $table->string('target');
-            $table->foreignId('userID')->constrained('users')->onDelete('cascade');
-            $table->foreignId('suggestionID')->constrained('suggestions')->onDelete('cascade');
+            $table->foreignId('userID')->constrained('users')->onDelete('cascade')->nullable();
+            $table->foreignId('suggestionID')->constrained('suggestions')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

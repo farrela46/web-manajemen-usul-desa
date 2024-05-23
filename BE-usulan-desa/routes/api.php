@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\SuggestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\SuggestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +43,8 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:user'])->group(f
 
 Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/approve/{id}', [SuggestionController::class, 'approveSuggestion']);
+});
+
+Route::prefix('/program')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/add', [ProgramController::class, 'store']);
 });

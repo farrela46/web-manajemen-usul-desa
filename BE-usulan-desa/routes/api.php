@@ -47,4 +47,6 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:admin'])->group(
 
 Route::prefix('/program')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/add', [ProgramController::class, 'store']);
+    Route::get('/index', [ProgramController::class, 'index'])->middleware('auth:sanctum', 'role:admin');
+
 });

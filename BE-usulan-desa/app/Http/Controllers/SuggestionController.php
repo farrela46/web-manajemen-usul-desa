@@ -229,13 +229,18 @@ class SuggestionController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
-    public function approveSuggestion($id)
+    public function approveSuggestion(Request $request, $id)
     {
         try {
             $suggestion = DB::table('suggestions')->where('id', $id)->first();
             if (!$suggestion) {
                 return response()->json(['status' => 'error', 'message' => 'Usulan tidak ditemukan.'], 404);
             }
+
+            $request->validate([
+                'target' => 'required|string',
+    
+            ]);
 
             // Pindahkan suggestion ke tabel programs
             $programId = DB::table('programs')->insertGetId([
@@ -244,7 +249,7 @@ class SuggestionController extends Controller
                 'start_date' => now(),
                 'end_date' => now()->addMonth(),
                 'status' => 'approved',
-                'target' => 'general',
+                'target' => $request->target,
                 'userID' => $suggestion->userID,
                 'suggestionID' => $suggestion->id,
                 'created_at' => now(),

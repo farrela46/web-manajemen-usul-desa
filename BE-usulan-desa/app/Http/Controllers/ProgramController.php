@@ -13,7 +13,9 @@ class ProgramController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'description' => 'required|min:8',
+            'description' => 'required|string',
+            'target' => 'required|string',
+
         ]);
 
         $program = Program::create([
@@ -22,7 +24,7 @@ class ProgramController extends Controller
             'start_date' => now(),
             'end_date' => now()->addMonth(),
             'status' => 'approved',
-            'target' => 'general',
+            'target' => $request->target,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -38,5 +40,10 @@ class ProgramController extends Controller
             ], 500);
         }
     }
-    
+    public function index()
+    {
+        $program = Program::get();
+
+        return response()->json($program);
+    }
 }

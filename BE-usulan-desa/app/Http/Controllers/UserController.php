@@ -14,7 +14,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
             'nama' => 'required|string',
-            'NIK' => 'required|integer|unique:users,NIK'
+            'NIK' => 'required|digits:16|unique:users,NIK'
         ]);
 
         $user = User::create([
@@ -59,7 +59,7 @@ class UserController extends Controller
             ], 401);
         }
         $user = User::where('email', $request['email'])->firstOrFail();
-        
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -99,9 +99,26 @@ class UserController extends Controller
         return response()->json(['message' => 'Berhasil memverifikasi User'], 200);
     }
 
-    public function indexUsers()
+    public function rejected(Request $request, $id)
     {
-        $users = User::where('role', 'user')->get();
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['error' => 'User tidak dapat ditemukan.'], 404);
+        }
+
+        $user->update([
+            'status' => 'rejected'
+        ]);
+
+        return response()->json(['message' => 'Berhasil menolak User'], 200);
+    }
+    public function indexUsers($status)
+    {
+        if (is_null($status)) {
+            $status = 'unverified';
+        }
+
+        $users = User::where('role', 'user')->where('status', $status)->get();
 
         return response()->json($users);
     }

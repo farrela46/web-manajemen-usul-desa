@@ -42,7 +42,15 @@ class ProgramController extends Controller
     }
     public function index()
     {
-        $program = Program::get();
+        $programs = Program::get();
+
+        return response()->json([
+            'data'=>$programs
+        ]);
+    }
+    public function detailedProgram($id)
+    {
+        $program = Program::find($id);
 
         return response()->json($program);
     }

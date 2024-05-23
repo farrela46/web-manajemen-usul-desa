@@ -266,5 +266,18 @@ class SuggestionController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+    public function rejected(Request $request, $id)
+    {
+        $suggestion = DB::table('suggestions')->where('id', $id)->first();
+        if (!$suggestion) {
+            return response()->json(['error' => 'User tidak dapat ditemukan.'], 404);
+        }
 
+        DB::table('suggestions')->where('id', $id)->update([
+            'status' => 'rejected',
+            'updated_at' => now()
+        ]);
+
+        return response()->json(['message' => 'usulan berhasil ditolak.'], 200);
+    }
 }

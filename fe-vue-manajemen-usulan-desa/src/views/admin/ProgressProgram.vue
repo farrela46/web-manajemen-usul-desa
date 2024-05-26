@@ -65,7 +65,8 @@ export default {
             '../../assets/img/bruce-mars.jpg'
           ]
         },
-      ]
+      ],
+
     };
   },
   mounted() {
@@ -111,6 +112,9 @@ export default {
       } finally {
         this.overlay = false
       }
+    },
+    editProgress(idprogress) {
+      this.$router.push('/admin/program/progress/' + this.$route.params.idprogram + '/edit/' + idprogress);
     },
   },
 };
@@ -192,7 +196,7 @@ export default {
                                 </div>
                               </td>
                               <td class="align-middle text-center">
-                                <argon-button color="white">Edit</argon-button>
+                                <argon-button color="white" @click="editProgress(item.id)">Edit</argon-button>
                                 <argon-button class="mx-2" color="danger">Hapus</argon-button>
                               </td>
                             </tr>

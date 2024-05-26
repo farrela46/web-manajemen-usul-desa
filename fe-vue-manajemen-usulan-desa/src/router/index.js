@@ -15,6 +15,7 @@ import Program from "../views/admin/Program.vue";
 import DetailProgram from "../views/admin/DetailProgram.vue";
 import TambahProgram from "../views/admin/TambahProgram.vue";
 import ProgressProgram from "../views/admin/ProgressProgram.vue";
+import EditProgressProgram from "../views/admin/EditProgressProgram.vue";
 
 import Tables from "../views/Tables.vue";
 import Billing from "../views/Billing.vue";
@@ -79,9 +80,14 @@ const routes = [
     component: TambahProgram,
   },
   {
-    path: "/admin/program/progress/:id",
-    name: "Progress Program",
+    path: "/admin/program/progress/:idprogram",
+    name: "Progress Program", 
     component: ProgressProgram,
+  },
+  {
+    path: "/admin/program/progress/:idprogram/edit/:idprogress",
+    name: "Edit Progress Program",
+    component: EditProgressProgram,
   },
 
   //USER

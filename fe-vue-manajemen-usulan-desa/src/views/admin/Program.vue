@@ -155,8 +155,8 @@ export default {
     showProgram(id) {
       this.$router.push('/admin/program/' + id);
     },
-    tambahProgress(id) {
-      this.$router.push('/admin/program/progress/' + id);
+    tambahProgress(idprogram) {
+      this.$router.push('/admin/program/progress/' + idprogram);
     }
   },
 };

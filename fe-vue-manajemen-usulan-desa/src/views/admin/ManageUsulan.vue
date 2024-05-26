@@ -107,6 +107,16 @@ export default {
       let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('rejectConfirmationModal'))
       modal.show();
     },
+    closeModalReject() {
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('rejectConfirmationModal'))
+      modal.hide();
+    },
+    confirmReject() {
+      if (this.selectedUsulanId) {
+        this.RejectUsulan(this.selectedUsulanId);
+        this.closeModalReject();
+      }
+    },
     async AcceptUsulan(id) {
       try {
         const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
@@ -118,7 +128,26 @@ export default {
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'User berhasil dihapus',
+          text: 'Usulan berhasil diterima',
+          color: 'green'
+        });
+        this.getAllUser();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async RejectUsulan(id) {
+      try {
+        const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
+        console.log(response)
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: 'Usulan berhasil ditolak',
           color: 'green'
         });
         this.getAllUser();
@@ -221,14 +250,15 @@ export default {
                                 <i class="fa fa-pencil-square-o"></i>
                               </span>
                             </span>
-                            <span class="mx-3" style="font-size: 1rem; cursor: pointer;" @click="openAcceptConfirmation(item.id)">
+                            <span class="mx-3" style="font-size: 1rem; cursor: pointer;"
+                              @click="openAcceptConfirmation(item.id)">
                               <span style="color:green;">
-                                <i class="fas fa-check-circle" ></i>
+                                <i class="fas fa-check-circle"></i>
                               </span>
                             </span>
                             <span style="font-size: 1rem; cursor: pointer;" @click="openRejectConfirmation(item.id)">
                               <span style="color:red;">
-                                <i class="fas fa-times-circle" ></i>
+                                <i class="fas fa-times-circle"></i>
                               </span>
                             </span>
                           </td>

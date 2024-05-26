@@ -4,6 +4,7 @@ import axios from "axios";
 import BASE_URL from '@/api/config-api';
 import ArgonButton from "@/components/ArgonButton.vue";
 import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
+import * as bootstrap from 'bootstrap';
 
 export default {
   components: {
@@ -22,6 +23,7 @@ export default {
     return {
       products: [],
       overlay: false,
+      selectedProgressId: null,
       breadcrumbsItems: [
         {
           title: 'Program',
@@ -90,7 +92,7 @@ export default {
     goTambah() {
       this.$router.push('/admin/program/progress/' + this.$route.params.idprogram + '/tambah');
     },
-    
+
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
@@ -116,6 +118,40 @@ export default {
     },
     editProgress(idprogress) {
       this.$router.push('/admin/program/progress/' + this.$route.params.idprogram + '/edit/' + idprogress);
+    },
+    openHapusConfirmation(idprogress) {
+      this.selectedProgressId = idprogress;
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('hapusConfirmationModal'))
+      modal.show();
+    },
+    closeModalDelete() {
+      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('hapusConfirmationModal'))
+      modal.hide();
+    },
+    confirmDelete() {
+      if (this.selectedProgressId) {
+        this.deleteProgress(this.selectedProgressId);
+        this.closeModalDelete();
+      }
+    },
+    async deleteProgress(idprogress) {
+      try {
+        const response = await axios.delete(`${BASE_URL}/deleteUser/` + idprogress, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
+        console.log(response)
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: 'Progress berhasil dihapus',
+          color: 'green'
+        });
+        this.getAllUser();
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };
@@ -198,7 +234,8 @@ export default {
                               </td>
                               <td class="align-middle text-center">
                                 <argon-button color="white" @click="editProgress(item.id)">Edit</argon-button>
-                                <argon-button class="mx-2" color="danger">Hapus</argon-button>
+                                <argon-button class="mx-2" color="danger"
+                                  @click="openHapusConfirmation(item.id)">Hapus</argon-button>
                               </td>
                             </tr>
                           </tbody>
@@ -207,6 +244,24 @@ export default {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="hapusConfirmationModal" tabindex="-1"
+          aria-labelledby="usulanConfirmationModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title text-black" id="deleteConfirmationModalLabel">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Hapus progress ini??
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" @click="confirmDelete">Hapus</button>
               </div>
             </div>
           </div>

@@ -33,9 +33,9 @@ export default {
           href: '/admin/program',
         },
         {
-          title: 'Tambah Progress',
+          title: 'Progress Program',
           disabled: false,
-          href: '/admin/program/progress' + this.$route.params.idprogram,
+          href: '/admin/program/progress/' + this.$route.params.idprogram,
         },
         {
           title: 'Edit Progress',
@@ -84,8 +84,7 @@ export default {
         !this.form.deskripsi ||
         !this.form.tanggalMulai ||
         !this.form.tanggalSelesai ||
-        !this.form.status ||
-        !this.form.target
+        !this.form.foto 
       ) {
         this.validate = true;
       } else {
@@ -103,10 +102,10 @@ export default {
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'Program berhasil diubah',
+          text: 'Progress berhasil diubah',
           color: 'green'
         });
-        this.$router.push('/admin/program');
+        this.$router.push('/admin/program/progress/' + this.$route.params.idprogram);
 
       } catch (error) {
         console.error('Error updating profile:', error);
@@ -131,7 +130,7 @@ export default {
     },
     async confirmHapus() {
       try {
-        const id = this.$route.params.id;
+        const id = this.$route.params.idprogress;
         // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
         //   headers: {
         //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
@@ -152,7 +151,7 @@ export default {
     },
     closeDialog() {
       this.dialog = false,
-        this.$router.push('/admin/program')
+        this.$router.push('/admin/program/progress/' + this.$route.params.idprogram)
     },
     async retrieveBuku() {
       try {
@@ -249,7 +248,7 @@ export default {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                Anda yakin ingin menghapus program ini??
+                Anda yakin ingin menghapus proress program ini??
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -262,7 +261,7 @@ export default {
           <v-card class="text-center">
             <v-card-text>
               <div class="p-2">
-                <h3>Program berhasil di hapus</h3>
+                <h3>Progress berhasil di hapus</h3>
                 <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
               </div>
             </v-card-text>

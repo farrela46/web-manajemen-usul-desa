@@ -87,9 +87,10 @@ export default {
       this.store.state.showFooter = true;
       this.body.classList.add("bg-gray-100");
     },
-    goUsulan() {
-      this.$router.push('/usulan');
+    goTambah() {
+      this.$router.push('/admin/program/progress/' + this.$route.params.idprogram + '/tambah');
     },
+    
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');

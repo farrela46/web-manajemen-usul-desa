@@ -33,23 +33,21 @@ export default {
           href: '/admin/program',
         },
         {
-          title: 'Tambah Progress',
+          title: 'Progress Program',
           disabled: false,
-          href: '/admin/program/' + this.$route.params.idprogram,
+          href: '/admin/program/progress/' + this.$route.params.idprogram,
         },
         {
-          title: 'Edit Progress',
+          title: 'Tambah Progress',
           disabled: true,
           href: '/',
         }
       ],
       form: {
-        namaProgress: 'Pembaruan mesin RB22',
-        deskripsi: 'Pengadaan mesin rb22 ini sangat payah',
-        tanggalMulai: '20-03-2222',
+        namaProgress: '',
+        deskripsi: '',
+        tanggalMulai: '',
         tanggalSelesai: '',
-        status: '',
-        target: '',
         foto: []
       }
     };
@@ -79,12 +77,11 @@ export default {
     },
     validateForm() {
       if (
-        !this.form.namaProgram ||
+        !this.form.namaProgress ||
         !this.form.deskripsi ||
         !this.form.tanggalMulai ||
         !this.form.tanggalSelesai ||
-        !this.form.status ||
-        !this.form.target
+        !this.form.foto 
       ) {
         this.validate = true;
       } else {
@@ -102,10 +99,10 @@ export default {
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'Program berhasil diubah',
+          text: 'Program berhasil ditambahkan',
           color: 'green'
         });
-        this.$router.push('/admin/program');
+        this.$router.push('/admin/program/progress/' + this.$route.params.idprogram);
 
       } catch (error) {
         console.error('Error updating profile:', error);
@@ -193,7 +190,7 @@ export default {
               <label for="nama program" class="col-form-label">Nama Progress</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.namaProgress" placeholder="Perbaikan Gapura">
+              <input type="text" class="form-control" v-model="form.namaProgress" placeholder=" ">
             </div>
           </div>
           <div class="mb-3 row">
@@ -202,7 +199,7 @@ export default {
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
               <textarea class="form-control" rows="3" v-model="form.deskripsi"
-                placeholder="Pekerjaan Konstruksi - Perbaikan Gapura Utara - 2024"></textarea>
+                placeholder=" "></textarea>
             </div>
           </div>
           <div class="mb-3 row">
@@ -231,8 +228,7 @@ export default {
           </div>
 
           <div class="form-actions mt-4 d-flex justify-content-end">
-            <button class="btn btn-success mx-2" @click="validateForm">Simpan</button>
-            <button class="btn btn-danger me-2" @click="hapusModal">Hapus</button>
+            <button class="btn btn-success mx-2" @click="validateForm">Tambah</button>
           </div>
         </div>
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">

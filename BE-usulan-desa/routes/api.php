@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\SuggestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\SuggestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/auth')->group(function () {
-    Route::get('/index', [UserController::class, 'indexUsers'])->middleware('auth:sanctum', 'role:admin');
+    Route::get('/index/{status}', [UserController::class, 'indexUsers'])->middleware('auth:sanctum', 'role:admin');
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/register', [UserController::class, 'register']);
     Route::delete('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
-    Route::get('/verified/{id}', [UserController::class, 'verified'])->middleware('auth:sanctum', 'role:admin');
+    Route::get('/verify/{id}', [UserController::class, 'verified'])->middleware('auth:sanctum', 'role:admin');
+    Route::get('/reject/{id}', [UserController::class, 'rejected'])->middleware('auth:sanctum', 'role:admin');
 });
 
 Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:user'])->group(function () {
@@ -42,4 +44,12 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:user'])->group(f
 
 Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/approve/{id}', [SuggestionController::class, 'approveSuggestion']);
+    Route::get('/reject/{id}', [SuggestionController::class, 'rejected']);
+});
+
+Route::prefix('/program')->group(function () {
+    Route::post('/add', [ProgramController::class, 'store'])->middleware('auth:sanctum', 'role:admin');
+    Route::get('/index', [ProgramController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/{id}', [ProgramController::class, 'detailedProgram'])->middleware('auth:sanctum', 'role:admin');;
+
 });

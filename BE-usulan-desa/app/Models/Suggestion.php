@@ -12,6 +12,7 @@ class Suggestion extends Model
     protected $fillable = [
         'userID',
         'suggestion',
+        'description',
         'status',
         'date'
     ];

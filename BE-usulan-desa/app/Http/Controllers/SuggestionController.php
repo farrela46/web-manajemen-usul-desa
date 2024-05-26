@@ -23,17 +23,19 @@ class SuggestionController extends Controller
 
         $validatedData = $request->validate([
             'suggestion' => 'required|string',
+            'description' => 'required|string',
         ]);
 
         $suggestion = Suggestion::create([
             'userID' => $user->id,
             'suggestion' => $validatedData['suggestion'],
+            'description' => $validatedData['description'],
             'date' => Carbon::now(),
         ]);
 
         if ($suggestion) {
             return response()->json([
-                'message' => 'Suggestion created successfully',
+                'message' => 'Usulan berhasil dibuat',
                 'data' => $suggestion
             ], 201);
         } else {
@@ -56,7 +58,7 @@ class SuggestionController extends Controller
 
             // Query untuk mengambil data usulan beserta jumlah upvote dan downvote
             $suggestion = DB::table('suggestions as b')
-                ->select('a.nama as nama', 'b.suggestion as saran', 'b.updated_at as tanggal', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'))
+                ->select('a.id as id_user', 'a.nama', 'b.suggestion as saran', 'b.description as deskripsi', 'b.updated_at as tanggal', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'))
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
@@ -64,7 +66,7 @@ class SuggestionController extends Controller
                 ->first();
 
             if (!$suggestion) {
-                return response()->json(['status' => 'error', 'message' => 'Suggestion not found.'], 404);
+                return response()->json(['status' => 'error', 'message' => 'Usulan tidak ditemukan.'], 404);
             }
 
             return response()->json(['status' => 'success', 'suggestion' => $suggestion, 'comments' => $comments], 200);
@@ -75,6 +77,12 @@ class SuggestionController extends Controller
 
     public function index()
     {
+        $user = auth()->user();
+        if ($user->status !== 'verified') {
+            return response()->json([
+                'message' => 'Akun kamu belum di verifikasi oleh admin'
+            ], 403);
+        }
         try {
             $suggestions = DB::table('suggestions as b')
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
@@ -82,14 +90,16 @@ class SuggestionController extends Controller
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
                 ->select(
+                    'a.id',
                     'a.nama as nama',
                     'b.suggestion as saran',
+                    'b.description as deskripsi',
                     'b.updated_at as tanggal',
                     DB::raw('IFNULL(u.upvotes, 0) as upvote'),
                     DB::raw('IFNULL(d.downvotes, 0) as downvote'),
                     DB::raw('IFNULL(c.comments, 0) as comment')
                 )
-                ->paginate(10);
+                ->get();
             return response()->json(['status' => 'success', 'data' => $suggestions], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
@@ -111,7 +121,7 @@ class SuggestionController extends Controller
             $comment->userID = Auth::id();
             $comment->save();
 
-            return response()->json(['status' => 'success', 'message' => 'Comment added successfully'], 201);
+            return response()->json(['status' => 'success', 'message' => 'Komentar berhasil ditambahkan'], 201);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
@@ -206,16 +216,68 @@ class SuggestionController extends Controller
                 ->select(
                     'a.nama as nama',
                     'b.suggestion as saran',
+                    'b.description as deskripsi',
                     'b.updated_at as tanggal',
                     DB::raw('IFNULL(u.upvotes, 0) as upvote'),
                     DB::raw('IFNULL(d.downvotes, 0) as downvote'),
                     DB::raw('IFNULL(c.comments, 0) as comment')
                 )
                 ->orderBy(DB::raw('IFNULL(u.upvotes, 0)'), 'desc')
-                ->paginate(10);
+                ->get();
             return response()->json(['status' => 'success', 'data' => $suggestions], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
+    }
+    public function approveSuggestion(Request $request, $id)
+    {
+        try {
+            $suggestion = DB::table('suggestions')->where('id', $id)->first();
+            if (!$suggestion) {
+                return response()->json(['status' => 'error', 'message' => 'Usulan tidak ditemukan.'], 404);
+            }
+
+            $request->validate([
+                'target' => 'required|string',
+    
+            ]);
+
+            // Pindahkan suggestion ke tabel programs
+            $programId = DB::table('programs')->insertGetId([
+                'name' => $suggestion->suggestion,
+                'description' => $suggestion->description,
+                'start_date' => now(),
+                'end_date' => now()->addMonth(),
+                'status' => 'approved',
+                'target' => $request->target,
+                'userID' => $suggestion->userID,
+                'suggestionID' => $suggestion->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            DB::table('suggestions')->where('id', $id)->update([
+                'status' => 'approved',
+                'updated_at' => now()
+            ]);
+
+            return response()->json(['status' => 'success', 'message' => 'usulan disetujui dan dipindahkan ke program.', 'program_id' => $programId], 201);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+    public function rejected(Request $request, $id)
+    {
+        $suggestion = DB::table('suggestions')->where('id', $id)->first();
+        if (!$suggestion) {
+            return response()->json(['error' => 'User tidak dapat ditemukan.'], 404);
+        }
+
+        DB::table('suggestions')->where('id', $id)->update([
+            'status' => 'rejected',
+            'updated_at' => now()
+        ]);
+
+        return response()->json(['message' => 'usulan berhasil ditolak.'], 200);
     }
 }

@@ -152,8 +152,11 @@ export default {
         console.error(error);
       }
     },
-    showProduct(id) {
+    showProgram(id) {
       this.$router.push('/admin/program/' + id);
+    },
+    tambahProgress(id) {
+      this.$router.push('/admin/program/progress/' + id);
     }
   },
 };
@@ -177,7 +180,6 @@ export default {
             <div class="card px-4" style="border-radius: 10px; 
             /* background-color: #E9F5E9; */
             ">
-
               <div class="row mt-2 mb-2">
                 <div class="row">
                   <div class="table-responsive p-0">
@@ -214,14 +216,14 @@ export default {
                             <span class="text-black text-xs font-weight-bold">{{ item.progress }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <span class="" style="font-size: 1rem; cursor: pointer;" @click="showProduct(item.id)">
+                            <span class="" style="font-size: 1rem; cursor: pointer;" @click="showProgram(item.id)">
                               <span style="color: green;">
                                 <i class="fas fa-eye"></i>
                               </span>
                             </span>
                             <v-tooltip text="Tambah Progress">
                               <template v-slot:activator="{ props }">
-                                <span v-bind="props" class="mx-2" style="font-size: 1rem; cursor: pointer;" @click="showProduct(item.id)">
+                                <span v-bind="props" class="mx-2" style="font-size: 1rem; cursor: pointer;" @click="tambahProgress(item.id)">
                                   <span style="color: blue;">
                                     <i class="fas fa-plus-circle"></i> Progress
                                   </span>

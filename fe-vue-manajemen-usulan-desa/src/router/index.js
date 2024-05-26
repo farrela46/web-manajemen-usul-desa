@@ -14,6 +14,7 @@ import VerifikasiWarga from "../views/admin/VeirfikasiWarga.vue";
 import Program from "../views/admin/Program.vue";
 import DetailProgram from "../views/admin/DetailProgram.vue";
 import TambahProgram from "../views/admin/TambahProgram.vue";
+import ProgressProgram from "../views/admin/ProgressProgram.vue";
 
 import Tables from "../views/Tables.vue";
 import Billing from "../views/Billing.vue";
@@ -76,6 +77,11 @@ const routes = [
     path: "/admin/program/tambah",
     name: "Tambah Program",
     component: TambahProgram,
+  },
+  {
+    path: "/admin/program/progress/:id",
+    name: "Progress Program",
+    component: ProgressProgram,
   },
 
   //USER

@@ -21,6 +21,8 @@ export default {
   data() {
     return {
       usulan: '',
+      subject: '',
+      validate: false,
       overlay: false,
       breadcrumbsItems: [
         {
@@ -65,6 +67,13 @@ export default {
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
+    }, 
+    validateForm() {
+      if (!this.subject || !this.usulan) {
+        this.validate = true;
+      } else {
+        this.submitForm();
+      }
     },
     async retrieveBuku() {
       try {
@@ -115,7 +124,7 @@ export default {
                       <div class="row mt-1">
                         <div class="form-floating">
                           <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput" placeholder="Subject Usulan">
+                            <input type="text" class="form-control" id="floatingInput" v-model="subject" placeholder="Subject Usulan">
                             <label for="floatingInput">Subject Usulan</label>
                           </div>
                         </div>
@@ -129,7 +138,7 @@ export default {
                       </div>
                       <div class="row mt-2 text-end">
                         <div class="col">
-                          <argon-button size="sm" color="info" variant="gradient" @click="goUsulan">Post</argon-button>
+                          <argon-button size="sm" color="info" variant="gradient"  @click="validateForm">Post</argon-button>
                         </div>
                       </div>
                     </div>
@@ -139,6 +148,16 @@ export default {
             </div>
           </div>
         </div>
+        <v-dialog v-model="validate" max-width="400">
+          <v-card class="text-center">
+            <v-card-text>
+              <div class="p-2">
+                <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
+                <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
       </div>
     </div>
   </div>

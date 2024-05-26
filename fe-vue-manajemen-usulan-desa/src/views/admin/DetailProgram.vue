@@ -33,7 +33,7 @@ export default {
           href: '/admin/program',
         },
         {
-          title: 'Tambah Program',
+          title: 'Detail Program',
           disabled: true,
           href: '/',
         }
@@ -181,52 +181,52 @@ export default {
       <div class="container">
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
         <div class="card ps-3 pt-2">
-          <div class="row no-gutters mt-3">
-            <div class="col-md-2 form-label">
-              Nama Program
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="nama program" class="col-form-label">Nama Program</label>
             </div>
-            <div class="col-md-10">
+            <div class="col-sm-10" style="padding-right: 20px">
               <input type="text" class="form-control" v-model="form.namaProgram" placeholder="Perbaikan Gapura">
             </div>
           </div>
-          <div class="row no-gutters mt-3">
-            <div class="col-md-2 form-label">
-              Deskripsi
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="deskripsi" class="ol-form-label">Deskripsi</label>
             </div>
-            <div class="col-md-10">
+            <div class="col-sm-10" style="padding-right: 20px">
               <textarea class="form-control" rows="3" v-model="form.deskripsi"
                 placeholder="Pekerjaan Konstruksi - Perbaikan Gapura Utara - 2024"></textarea>
             </div>
           </div>
-          <div class="row  mt-2">
-            <div class="col-md-2 form-label">
-              Tanggal Mulai
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="tanggal mulai" class="col-form-label">Tanggal Mulai</label>
             </div>
-            <div class="col-md-10">
+            <div class="col-sm-10" style="padding-right: 20px">
               <input type="date" class="form-control" v-model="form.tanggalMulai">
             </div>
           </div>
-          <div class="row no-gutters mt-3">
-            <div class="col-md-2 form-label">
-              Tanggal Selesai
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="tanggal selesai" class="col-form-label">Tanggal Selesai</label>
             </div>
-            <div class="col-md-10">
+            <div class="col-sm-10" style="padding-right: 20px">
               <input type="date" class="form-control" v-model="form.tanggalSelesai">
             </div>
           </div>
-          <div class="row no-gutters mt-3">
-            <div class="col-md-2 form-label">
-              Status
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="status" class="col-form-label">Status</label>
             </div>
-            <div class="col-md-10">
+            <div class="col-sm-10" style="padding-right: 20px">
               <input type="text" class="form-control" v-model="form.status" placeholder="on progress">
             </div>
           </div>
-          <div class="row no-gutters mt-3">
-            <div class="col-md-2 form-label">
-              Target
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="target" class="col-form-label">Target</label>
             </div>
-            <div class="col-md-10">
+            <div class="col-sm-10" style="padding-right: 20px">
               <textarea class="form-control" rows="3" v-model="form.target"
                 placeholder="Memperbaiki semua gapura yang rusak di wilayah tertentu dalam jangka waktu tertentu, dengan memberikan prioritas kepada gapura yang merupakan pintu gerbang masuk ke kota atau desa."></textarea>
             </div>

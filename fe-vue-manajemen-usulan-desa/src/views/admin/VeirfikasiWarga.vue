@@ -26,6 +26,7 @@ export default {
       overlay: false,
       showModal: false,
       dialog: false,
+      dialogTolak: false,
       selectedUsulanId: null,
       breadcrumbsItems: [
         {
@@ -102,7 +103,7 @@ export default {
     },
     async AcceptWarga(id) {
       try {
-        const response = await axios.get(`${BASE_URL}/auth/verified/` + id, {
+        const response = await axios.get(`${BASE_URL}/auth/verify/` + id, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
           },
@@ -122,12 +123,13 @@ export default {
     },
     async RejectWarga(id) {
       try {
-        // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
-        //   headers: {
-        //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-        //   },
-        // });
-        console.log(id)
+        const response = await axios.get(`${BASE_URL}/auth/reject/` + id, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
+        this.retrieveUser();
+        console.log(response)
         this.$notify({
           type: 'success',
           title: 'Success',
@@ -135,7 +137,7 @@ export default {
           color: 'green'
         });
         this.closeModalReject();
-        this.dialog = true
+        this.dialogTolak = true
       } catch (error) {
         console.error(error);
       }
@@ -143,7 +145,7 @@ export default {
     async retrieveUser() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/auth/index`, {
+        const response = await axios.get(`${BASE_URL}/auth/index/unverified`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
@@ -223,7 +225,7 @@ export default {
                                 Verified
                               </v-chip>
                               <v-chip v-else color="red">
-                                Unverified
+                                Pending
                               </v-chip>
                             </span>
                           </td>
@@ -298,6 +300,16 @@ export default {
           <v-card-text>
             <div class="p-2">
               <h3>Verifikasi pengguna berhasil!</h3>
+              <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialogTolak" max-width="400">
+        <v-card class="text-center">
+          <v-card-text>
+            <div class="p-2">
+              <h3>Pengguna berhasil ditolak!</h3>
               <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
             </div>
           </v-card-text>

@@ -126,7 +126,7 @@ export default {
             </div>
             <div class="card-body">
               <form role="form" @submit.prevent="onSubmit">
-                <argon-input v-model="NIK" id="NIK" type="text" placeholder="NIK" aria-label="Name" />
+                <argon-input v-model="NIK" id="NIK" type="number" placeholder="NIK" aria-label="Name" />
                 <argon-input v-model="nama" id="name" type="text" placeholder="Name" aria-label="Name" />
                 <argon-input v-model="email" id="email" type="email" placeholder="Email" aria-label="Email" />
                 <argon-input v-model="password" id="password" type="password" placeholder="Password"

@@ -67,12 +67,48 @@ export default {
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
-    }, 
+    },
     validateForm() {
       if (!this.subject || !this.usulan) {
         this.validate = true;
       } else {
         this.submitForm();
+      }
+    },
+    async submitForm() {
+      this.overlay = true;
+      try {
+        const response = await axios.post(`${BASE_URL}/suggestion/add`, {
+          suggestion: this.subject,
+          description: this.usulan
+        }, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: response.data.message,
+          color: 'green'
+        });
+        console.log('response.data');
+        this.$router.push('/usulan')
+      } catch (error) {
+        console.error(error);
+
+        if (error.response && error.response.data.message) {
+          const errorMessage = error.response.data.message;
+          this.$notify({
+            type: 'error',
+            title: 'Error',
+            text: errorMessage,
+            color: 'red'
+          });
+        }
+      } finally {
+        this.overlay = false;
       }
     },
     async retrieveBuku() {
@@ -101,7 +137,7 @@ export default {
 <template>
   <div class="py-4 container-fluid">
     <div class="row mt-3">
-      <v-overlay :model-value="overlay" class="d-flex align-items-center justify-content-center">
+      <v-overlay v-model="overlay" class="d-flex align-items-center justify-content-center">
         <v-progress-circular color="primary" size="96" indeterminate></v-progress-circular>
       </v-overlay>
       <div class="container">
@@ -124,7 +160,8 @@ export default {
                       <div class="row mt-1">
                         <div class="form-floating">
                           <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="floatingInput" v-model="subject" placeholder="Subject Usulan">
+                            <input type="text" class="form-control" id="floatingInput" v-model="subject"
+                              placeholder="Subject Usulan">
                             <label for="floatingInput">Subject Usulan</label>
                           </div>
                         </div>
@@ -138,7 +175,8 @@ export default {
                       </div>
                       <div class="row mt-2 text-end">
                         <div class="col">
-                          <argon-button size="sm" color="info" variant="gradient"  @click="validateForm">Post</argon-button>
+                          <argon-button size="sm" color="info" variant="gradient"
+                            @click="validateForm">Post</argon-button>
                         </div>
                       </div>
                     </div>

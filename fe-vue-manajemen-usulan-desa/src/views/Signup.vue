@@ -18,13 +18,15 @@ export default {
   },
   data() {
     return {
+      validate: false,
       NIK: '',
       nama: '',
       email: '',
       password: '',
       store: null,
       body: null,
-      loading: false
+      loading: false,
+      validateNIK: false,
     };
   },
   created() {
@@ -36,6 +38,15 @@ export default {
     this.restorePage();
   },
   methods: {
+    validateForm() {
+      if (!this.NIK || !this.nama || !this.email || !this.password) {
+        this.validate = true;
+      } else if (this.NIK.length !== 16) {
+        this.validateNIK = true;
+      } else {
+        this.onSubmit();
+      }
+    },
     async onSubmit() {
       this.loading = true;
       try {
@@ -66,7 +77,7 @@ export default {
           });
         }
       } finally {
-        this.loading = false; 
+        this.loading = false;
       }
     },
 
@@ -125,7 +136,7 @@ export default {
               <h5>Register</h5>
             </div>
             <div class="card-body">
-              <form role="form" @submit.prevent="onSubmit">
+              <form role="form" @submit.prevent="validateForm">
                 <argon-input v-model="NIK" id="NIK" type="number" placeholder="NIK" aria-label="Name" />
                 <argon-input v-model="nama" id="name" type="text" placeholder="Name" aria-label="Name" />
                 <argon-input v-model="email" id="email" type="email" placeholder="Email" aria-label="Email" />
@@ -138,9 +149,10 @@ export default {
                   </label>
                 </argon-checkbox> -->
                 <div class="text-center">
-                  <argon-button v-if="!loading" fullWidth color="dark" type="submit" variant="gradient" class="my-4 mb-2">Sign up</argon-button>
-                  <argon-button v-else fullWidth color="dark" variant="gradient" class="my-4 mb-2" disabled><v-progress-circular
-                      indeterminate></v-progress-circular></argon-button>
+                  <argon-button v-if="!loading" fullWidth color="dark" type="submit" variant="gradient"
+                    class="my-4 mb-2">Sign up</argon-button>
+                  <argon-button v-else fullWidth color="dark" variant="gradient" class="my-4 mb-2"
+                    disabled><v-progress-circular indeterminate></v-progress-circular></argon-button>
                 </div>
                 <p class="text-sm mt-3 mb-0">
                   Sudah punya akun?
@@ -150,6 +162,26 @@ export default {
             </div>
           </div>
         </div>
+        <v-dialog v-model="validate" max-width="400">
+          <v-card class="text-center">
+            <v-card-text>
+              <div class="p-2">
+                <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
+                <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="validateNIK" max-width="400">
+          <v-card class="text-center">
+            <v-card-text>
+              <div class="p-2">
+                <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
+                <h5>NIK harus 16 digit</h5>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
       </div>
     </div>
   </main>

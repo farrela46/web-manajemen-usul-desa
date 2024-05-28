@@ -22,7 +22,8 @@ export default {
       password: '',
       store: null,
       body: null,
-      loading: false
+      loading: false,
+      validate: false
     };
   },
   created() {
@@ -34,6 +35,16 @@ export default {
     this.restorePage();
   },
   methods: {
+    validateForm() {
+      if (
+        !this.username ||
+        !this.password 
+      ) {
+        this.validate = true;
+      } else {
+        this.onSubmit();
+      }
+    },
     async onSubmit() {
       this.loading = true;
       try {
@@ -130,7 +141,7 @@ export default {
               <h5>Login</h5>
             </div>
             <div class="card-body">
-              <form role="form" @submit.prevent="onSubmit">
+              <form role="form" @submit.prevent="validateForm">
                 <argon-input v-model="username" id="email" type="email" placeholder="Email" aria-label="Email" />
                 <argon-input v-model="password" id="password" type="password" placeholder="Password"
                   aria-label="Password" />
@@ -149,6 +160,16 @@ export default {
           </div>
         </div>
       </div>
+      <v-dialog v-model="validate" max-width="400">
+          <v-card class="text-center">
+            <v-card-text>
+              <div class="p-2">
+                <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
+                <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
+              </div>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
     </div>
   </main>
   <app-footer />

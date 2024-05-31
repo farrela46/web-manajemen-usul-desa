@@ -246,8 +246,8 @@ class SuggestionController extends Controller
             $programId = DB::table('programs')->insertGetId([
                 'name' => $suggestion->suggestion,
                 'description' => $suggestion->description,
-                'start_date' => now(),
-                'end_date' => now()->addMonth(),
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
                 'status' => 'approved',
                 'target' => $request->target,
                 'userID' => $suggestion->userID,

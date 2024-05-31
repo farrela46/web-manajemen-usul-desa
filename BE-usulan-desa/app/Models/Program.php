@@ -29,4 +29,9 @@ class Program extends Model
     {
         return $this->belongsTo(Suggestion::class, 'suggestionID');
     }
+
+    public function progresses()
+    {
+        return $this->hasMany(Progress::class, 'programID');
+    }
 }

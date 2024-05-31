@@ -15,14 +15,16 @@ class ProgramController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'target' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date'
 
         ]);
 
         $program = Program::create([
             'name' => $request->name,
             'description' => $request->description,
-            'start_date' => now(),
-            'end_date' => now()->addMonth(),
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
             'status' => 'approved',
             'target' => $request->target,
             'created_at' => now(),

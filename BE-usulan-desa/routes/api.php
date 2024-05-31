@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProgressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -50,6 +51,10 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:admin'])->group(
 Route::prefix('/program')->group(function () {
     Route::post('/add', [ProgramController::class, 'store'])->middleware('auth:sanctum', 'role:admin');
     Route::get('/index', [ProgramController::class, 'index'])->middleware('auth:sanctum');
-    Route::get('/{id}', [ProgramController::class, 'detailedProgram'])->middleware('auth:sanctum', 'role:admin');;
+    Route::get('/{id}', [ProgramController::class, 'detailedProgram'])->middleware('auth:sanctum', 'role:admin');
+});
 
+Route::prefix('/progress')->group(function () {
+    Route::post('/add', [ProgressController::class, 'store'])->middleware('auth:sanctum', 'role:admin');
+    Route::get('/index/{programId}', [ProgramController::class, 'index'])->middleware('auth:sanctum');
 });

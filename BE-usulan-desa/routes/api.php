@@ -56,5 +56,6 @@ Route::prefix('/program')->group(function () {
 
 Route::prefix('/progress')->group(function () {
     Route::post('/add', [ProgressController::class, 'store'])->middleware('auth:sanctum', 'role:admin');
-    Route::get('/index/{programId}', [ProgramController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/index/{programId}', [ProgressController::class, 'index'])->middleware('auth:sanctum');
+    Route::get('/{progressID}', [ProgressController::class, 'getOne'])->middleware('auth:sanctum');
 });

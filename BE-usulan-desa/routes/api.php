@@ -31,7 +31,7 @@ Route::prefix('/auth')->group(function () {
     Route::get('/reject/{id}', [UserController::class, 'rejected'])->middleware('auth:sanctum', 'role:admin');
 });
 
-Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::post('/add', [SuggestionController::class, 'store']);
     Route::get('/get', [SuggestionController::class, 'index']);
     Route::get('/rank', [SuggestionController::class, 'rankSuggestion']);

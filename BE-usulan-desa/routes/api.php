@@ -31,22 +31,25 @@ Route::prefix('/auth')->group(function () {
     Route::get('/reject/{id}', [UserController::class, 'rejected'])->middleware('auth:sanctum', 'role:admin');
 });
 
-Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:user'])->group(function () {
-    Route::post('/add', [SuggestionController::class, 'store']);
-    Route::get('/get', [SuggestionController::class, 'index']);
-    Route::get('/rank', [SuggestionController::class, 'rankSuggestion']);
-    Route::post('/update/{id}', [SuggestionController::class, 'update']);
-    Route::delete('/delete/{id}', [SuggestionController::class, 'destroy']);
-    Route::get('/{id}', [SuggestionController::class, 'getOne']);
-    Route::post('/{id}/comment', [SuggestionController::class, 'addComment']);
-    Route::get('/{id}/upvote', [SuggestionController::class, 'Upvote']);
-    Route::get('/{id}/downvote', [SuggestionController::class, 'Downvote']);
-});
+Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
+    Route::middleware('role:user')->group(function () {
+        Route::post('/add', [SuggestionController::class, 'store']);
+        Route::get('/get', [SuggestionController::class, 'index']);
+        Route::get('/rank', [SuggestionController::class, 'rankSuggestion']);
+        Route::post('/update/{id}', [SuggestionController::class, 'update']);
+        Route::delete('/delete/{id}', [SuggestionController::class, 'destroy']);
+        Route::get('/get/{id}', [SuggestionController::class, 'getOne']);
+        Route::post('/{id}/comment', [SuggestionController::class, 'addComment']);
+        Route::get('/{id}/upvote', [SuggestionController::class, 'Upvote']);
+        Route::get('/{id}/downvote', [SuggestionController::class, 'Downvote']);
+    });
 
-Route::prefix('/suggestion')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::post('/approve/{id}', [SuggestionController::class, 'approveSuggestion']);
-    Route::get('/reject/{id}', [SuggestionController::class, 'rejected']);
-    Route::get('/index', [SuggestionController::class, 'indexAdmin']);
+    // Routes for users with 'admin' role
+    Route::middleware('role:admin')->group(function () {
+        Route::post('/approve/{id}', [SuggestionController::class, 'approveSuggestion']);
+        Route::get('/reject/{id}', [SuggestionController::class, 'rejected']);
+        Route::get('/index', [SuggestionController::class, 'indexAdmin']);
+    });
 });
 
 Route::prefix('/program')->group(function () {

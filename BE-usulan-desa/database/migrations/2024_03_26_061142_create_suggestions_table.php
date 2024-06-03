@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('suggestions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('userID')->constrained('users')->onDelete('cascade');
-            $table->string('suggestion');
+            $table->longText('suggestion');
             $table->string('description');
             $table->string('status')->nullable();
             $table->date('date');

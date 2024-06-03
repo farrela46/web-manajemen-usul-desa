@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
+            $table->longText('description');
             $table->date('start_date');
             $table->date('end_date');
             $table->string('status');

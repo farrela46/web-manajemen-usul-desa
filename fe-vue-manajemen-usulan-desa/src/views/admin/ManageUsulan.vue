@@ -37,33 +37,11 @@ export default {
           href: '/',
         }
       ],
-      usulan: [
-        {
-          usulan: 'Ruang tebuka untuk bernapas',
-          tanggal: '15-08-2024',
-          komentar: '49',
-          upvote: '19890',
-          downvote: '289'
-        },
-        {
-          usulan: 'Penyediaan Ruang untuk modifikasi',
-          tanggal: '15-08-2024',
-          komentar: '49',
-          upvote: '210239',
-          downvote: '289'
-        },
-        {
-          usulan: 'Pengusiran Fikri',
-          tanggal: '15-08-2024',
-          komentar: '49',
-          upvote: '81989999',
-          downvote: '0'
-        },
-      ]
+      usulan: []
     };
   },
   mounted() {
-
+    this.retrieveUsulan();
   },
   methods: {
     setupPage() {
@@ -155,19 +133,15 @@ export default {
         console.error(error);
       }
     },
-    async retrieveBuku() {
+    async retrieveUsulan() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
+        const response = await axios.get(`${BASE_URL}/suggestion/index`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.products = response.data;
-
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
-        }
+        this.usulan = response.data.data;
       } catch (error) {
         console.error(error);
       } finally {
@@ -230,13 +204,13 @@ export default {
                             </div>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.usulan }}</span>
+                            <span class="text-black text-xs font-weight-bold">{{ item.saran }}</span>
                           </td>
                           <td class="align-middle text-start">
                             <span class="text-black text-xs font-weight-bold">{{ item.tanggal }}</span>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.komentar }}</span>
+                            <span class="text-black text-xs font-weight-bold">{{ item.comment }}</span>
                           </td>
                           <td class="align-middle text-start">
                             <span class="text-black text-xs font-weight-bold">{{ item.upvote }}</span>

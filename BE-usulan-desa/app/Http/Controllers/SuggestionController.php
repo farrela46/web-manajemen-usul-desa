@@ -58,7 +58,7 @@ class SuggestionController extends Controller
 
             // Query untuk mengambil data usulan beserta jumlah upvote dan downvote
             $suggestion = DB::table('suggestions as b')
-                ->select('a.id as id_user', 'a.nama', 'b.suggestion as saran', 'b.description as deskripsi', 'b.updated_at as tanggal', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'))
+                ->select('a.id as id_user', 'b.id as id_suggestion', 'a.nama', 'b.suggestion as saran', 'b.description as deskripsi', 'b.updated_at as tanggal', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'))
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
@@ -90,7 +90,7 @@ class SuggestionController extends Controller
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
                 ->select(
-                    'a.id',
+                    'b.id',
                     'a.nama as nama',
                     'b.suggestion as saran',
                     'b.description as deskripsi',
@@ -100,6 +100,39 @@ class SuggestionController extends Controller
                     DB::raw('IFNULL(c.comments, 0) as comment')
                 )
                 ->get();
+            return response()->json(['status' => 'success', 'data' => $suggestions], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function indexAdmin(Request $request)
+    {
+        try {
+            $status = $request->query('status');
+
+            $query = DB::table('suggestions as b')
+                ->leftJoin('users as a', 'a.id', '=', 'b.userID')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
+                ->select(
+                    'b.id',
+                    'a.nama as nama',
+                    'b.suggestion as saran',
+                    'b.description as deskripsi',
+                    'b.status as status',
+                    'b.updated_at as tanggal',
+                    DB::raw('IFNULL(u.upvotes, 0) as upvote'),
+                    DB::raw('IFNULL(d.downvotes, 0) as downvote'),
+                    DB::raw('IFNULL(c.comments, 0) as comment')
+                );
+            if (!is_null($status) && $status !== '') {
+                $query->where('b.status', $status);
+            }
+
+            $suggestions = $query->get();
+
             return response()->json(['status' => 'success', 'data' => $suggestions], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
@@ -215,6 +248,7 @@ class SuggestionController extends Controller
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
                 ->select(
                     'a.nama as nama',
+                    'b.id as id_suggestion',
                     'b.suggestion as saran',
                     'b.description as deskripsi',
                     'b.updated_at as tanggal',
@@ -239,7 +273,8 @@ class SuggestionController extends Controller
 
             $request->validate([
                 'target' => 'required|string',
-    
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date'
             ]);
 
             // Pindahkan suggestion ke tabel programs

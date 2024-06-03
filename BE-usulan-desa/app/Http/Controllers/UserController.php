@@ -112,14 +112,20 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Berhasil menolak User'], 200);
     }
-    public function indexUsers($status)
+    public function indexUsers(Request $request)
     {
-        if (is_null($status)) {
-            $status = 'unverified';
+        
+        $status = $request->query('status');
+
+        $query = User::where('role', 'user');
+
+        if (!is_null($status) && $status !== '') {
+            $query->where('status', $status);
         }
 
-        $users = User::where('role', 'user')->where('status', $status)->get();
+        $users = $query->get();
 
         return response()->json($users);
     }
+
 }

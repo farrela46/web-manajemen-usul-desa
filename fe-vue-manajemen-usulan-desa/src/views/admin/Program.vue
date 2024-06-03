@@ -1,7 +1,7 @@
 <script>
 // import { useRoute } from "vue-router";
-// import axios from "axios";
-// import BASE_URL from '@/api/config-api';
+import axios from "axios";
+import BASE_URL from '@/api/config-api';
 import ArgonButton from "@/components/ArgonButton.vue";
 // import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
 import * as bootstrap from 'bootstrap';
@@ -58,7 +58,7 @@ export default {
     };
   },
   mounted() {
-
+this.retrieveProgram();
   },
   methods: {
     setupPage() {
@@ -110,6 +110,21 @@ export default {
       if (this.selectedUsulanId) {
         this.RejectWarga(this.selectedUsulanId);
         this.closeModalReject();
+      }
+    },
+    async retrieveProgram() {
+      try {
+        this.overlay = true;
+        const response = await axios.get(`${BASE_URL}/program/index`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+        this.usulan = response.data.data;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.overlay = false
       }
     },
     async AcceptWarga(id) {
@@ -193,7 +208,7 @@ export default {
                             Nama Program
                           </th>
                           <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                            Progress
+                            Status
                           </th>
                           <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Aksi
@@ -210,10 +225,10 @@ export default {
                             </div>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.nama_program }}</span>
+                            <span class="text-black text-xs font-weight-bold">{{ item.name }}</span>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.progress }}</span>
+                            <span class="text-black text-xs font-weight-bold">{{ item.status }}</span>
                           </td>
                           <td class="align-middle text-center">
                             <span class="" style="font-size: 1rem; cursor: pointer;" @click="showProgram(item.id)">

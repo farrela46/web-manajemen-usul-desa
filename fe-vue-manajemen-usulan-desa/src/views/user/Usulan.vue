@@ -3,7 +3,6 @@ import axios from "axios";
 import BASE_URL from '@/api/config-api';
 import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
 import ArgonButton from "@/components/ArgonButton.vue";
-import 'vuetify/styles'
 
 export default {
   components: {
@@ -38,7 +37,9 @@ export default {
     };
   },
   mounted() {
-    this.retrieveUsulan();
+    import('vuetify/styles').then(() => {
+      this.retrieveUsulan();
+    })
   },
   methods: {
     goUsulan() {

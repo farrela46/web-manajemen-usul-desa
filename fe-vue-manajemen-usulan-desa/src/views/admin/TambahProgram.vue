@@ -35,13 +35,14 @@ export default {
         }
       ],
       form: {
-        namaProgram: 'Perbaikan Gapura',
-        deskripsi: 'Pekerjaan Konstruksi - Perbaikan Gapura Utara - 2024',
-        tanggalMulai: '2024-05-10',
-        tanggalSelesai: '2024-05-10',
-        status: 'on progress',
-        target: 'Memperbaiki semua gapura yang rusak di wilayah tertentu dalam jangka waktu tertentu, dengan memberikan prioritas kepada gapura yang merupakan pintu gerbang masuk ke kota atau desa.'
-      }
+        namaProgram: '',
+        deskripsi: '',
+        tanggalMulai: '',
+        tanggalSelesai: '',
+        status: '',
+        target: ''
+      },
+      validate: false
     };
   },
   mounted() {
@@ -68,6 +69,55 @@ export default {
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
+    },
+    validateForm() {
+      if (!this.form.namaProgram || !this.form.deskripsi || !this.form.tanggalMulai
+        || !this.form.tanggalSelesai || !this.form.status || !this.form.target
+      ) {
+        this.validate = true;
+      } else {
+        this.submitForm();
+      }
+    },
+    async submitForm() {
+      this.overlay = true;
+      try {
+        const response = await axios.post(`${BASE_URL}/program/add`, {
+          name: this.form.namaProgram,
+          description: this.form.deskripsi,
+          target: this.form.target,
+          start_date: this.form.tanggalMulai,
+          end_date: this.form.tanggalSelesai
+
+        }, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: response.data.message,
+          color: 'green'
+        });
+        console.log('response.data');
+        this.$router.push('/admin/program')
+      } catch (error) {
+        console.error(error);
+
+        if (error.response && error.response.data.message) {
+          const errorMessage = error.response.data.message;
+          this.$notify({
+            type: 'error',
+            title: 'Error',
+            text: errorMessage,
+            color: 'red'
+          });
+        }
+      } finally {
+        this.overlay = false;
+      }
     },
     async retrieveBuku() {
       try {
@@ -106,7 +156,7 @@ export default {
               <label for="nama program" class="col-form-label">Nama Program</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.namaProgram" placeholder="Perbaikan Gapura">
+              <input type="text" class="form-control" v-model="form.namaProgram">
             </div>
           </div>
           <div class="mb-3 row">
@@ -114,8 +164,7 @@ export default {
               <label for="deskripsi" class="ol-form-label">Deskripsi</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <textarea class="form-control" rows="3" v-model="form.deskripsi"
-                placeholder="Pekerjaan Konstruksi - Perbaikan Gapura Utara - 2024"></textarea>
+              <textarea class="form-control" rows="3" v-model="form.deskripsi"></textarea>
             </div>
           </div>
           <div class="mb-3 row">
@@ -139,7 +188,7 @@ export default {
               <label for="status" class="col-form-label">Status</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.status" placeholder="on progress">
+              <input type="text" class="form-control" v-model="form.status">
             </div>
           </div>
           <div class="mb-3 row">
@@ -147,16 +196,24 @@ export default {
               <label for="target" class="col-form-label">Target</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <textarea class="form-control" rows="3" v-model="form.target"
-                placeholder="Memperbaiki semua gapura yang rusak di wilayah tertentu dalam jangka waktu tertentu, dengan memberikan prioritas kepada gapura yang merupakan pintu gerbang masuk ke kota atau desa."></textarea>
+              <textarea class="form-control" rows="3" v-model="form.target"></textarea>
             </div>
           </div>
           <div class="form-actions mt-4 d-flex justify-content-end">
-            <button class="btn btn-success mx-2" @click="validateForm">Simpan</button>
-            <button class="btn btn-danger me-2" @click="hapusModal">Hapus</button>
+            <button class="btn btn-success mx-2" @click="validateForm">Tambah</button>
           </div>
         </div>
       </div>
+      <v-dialog v-model="validate" max-width="400">
+        <v-card class="text-center">
+          <v-card-text>
+            <div class="p-2">
+              <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
+              <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>

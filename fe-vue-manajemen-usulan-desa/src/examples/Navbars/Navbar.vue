@@ -75,7 +75,8 @@ export default {
       this.$router.push('/profile')
     },
     async onLogout() {
-      this.$router.push('/login');
+      // this.$router.push('/login');
+      window.location.href = '/login';
       localStorage.removeItem('access_token');
       try {
         await axios.post(`${BASE_URL}/logout`, {}, {
@@ -85,7 +86,8 @@ export default {
         });
 
         localStorage.removeItem('access_token');
-        this.$router.push('/login');
+        // this.$router.push('/login');
+        
       } catch (error) {
         console.error('Logout failed:', error);
       }

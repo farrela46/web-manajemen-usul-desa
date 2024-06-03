@@ -97,7 +97,7 @@ export default {
     },
     async AcceptUsulan(id) {
       try {
-        const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
+        const response = await axios.post(`${BASE_URL}/suggestion/approve/` + id, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
           },
@@ -109,7 +109,7 @@ export default {
           text: 'Usulan berhasil diterima',
           color: 'green'
         });
-        this.getAllUser();
+        this.retrieveUsulan();
       } catch (error) {
         console.error(error);
       }
@@ -219,11 +219,11 @@ export default {
                             <span class="text-black text-xs font-weight-bold">{{ item.downvote }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <span style="font-size: 1rem; cursor: pointer;" @click="editUser(user.id)">
+                            <!-- <span style="font-size: 1rem; cursor: pointer;" @click="editUser(user.id)">
                               <span style="color: black;">
                                 <i class="fa fa-pencil-square-o"></i>
                               </span>
-                            </span>
+                            </span> -->
                             <span class="mx-3" style="font-size: 1rem; cursor: pointer;"
                               @click="openAcceptConfirmation(item.id)">
                               <span style="color:green;">

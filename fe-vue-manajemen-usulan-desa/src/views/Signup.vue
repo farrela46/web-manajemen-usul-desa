@@ -137,8 +137,10 @@ export default {
             </div>
             <div class="card-body">
               <form role="form" @submit.prevent="validateForm">
-                <argon-input v-model="NIK" id="NIK" type="number" placeholder="NIK" aria-label="Name" />
-                <argon-input v-model="nama" id="name" type="text" placeholder="Name" aria-label="Name" />
+                <argon-input class="mb-0" v-model="NIK" id="NIK" type="number" placeholder="NIK" aria-label="Name" />
+                <a  v-if="validateNIK" class="text-sm ms-2" style="color: red; font-size: 9px;"><i class="fas fa-info-circle"
+                    style="color: #ff0000;"></i> NIK HARUS 16 DIGIT</a>
+                <argon-input class="mt-3" v-model="nama" id="name" type="text" placeholder="Name" aria-label="Name" />
                 <argon-input v-model="email" id="email" type="email" placeholder="Email" aria-label="Email" />
                 <argon-input v-model="password" id="password" type="password" placeholder="Password"
                   aria-label="Password" />
@@ -172,7 +174,7 @@ export default {
             </v-card-text>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="validateNIK" max-width="400">
+        <v-dialog v-model="validateNI" max-width="400">
           <v-card class="text-center">
             <v-card-text>
               <div class="p-2">

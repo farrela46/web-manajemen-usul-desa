@@ -59,7 +59,7 @@ export default {
     };
   },
   mounted() {
-
+this.retrieveUsulan();
   },
   methods: {
     goUsulan() {
@@ -83,15 +83,15 @@ export default {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
     },
-    async retrieveBuku() {
+    async retrieveUsulan() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
+        const response = await axios.get(`${BASE_URL}/suggestion/get`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.products = response.data;
+        this.usulan = response.data.data;
 
         if (response.data.length > 0) {
           this.fotoUrl = response.data[0].foto;
@@ -135,25 +135,25 @@ export default {
                             </div>
                             <div class="mt-2">
                               <a class="text-black">{{ item.nama }}</a>
-                              <a class="ms-3 text-black" style="font-size: 12px;">{{ item.date }}</a>
+                              <a class="ms-3 text-black" style="font-size: 12px;">{{ item.tanggal }}</a>
                             </div>
                           </div>
-                          <h4 class="mt-2">{{ item.subject }}</h4>
+                          <h4 class="mt-2">{{ item.saran }}</h4>
                           <div class="row mt-2">
-                            <p class="text-black">{{ item.text }}</p>
+                            <p class="text-black">{{ item.deskripsi }}</p>
                           </div>
                           <div class="row mb-2">
                             <v-chip style="width: 70px; cursor: pointer;">
                               <v-icon icon="mdi-arrow-up-bold-outline" start></v-icon>
-                              12
+                              {{ item.upvote }}
                             </v-chip>
                             <v-chip style="width: auto; margin-left: 5px; cursor: pointer;">
                               <v-icon icon="mdi-arrow-down-bold-outline" start></v-icon>
-                              12
+                              {{ item.downvote }}
                             </v-chip>
                             <v-chip style="width: auto; margin-left: 5px; cursor: pointer;">
                               <v-icon icon="mdi-comment-multiple-outline" start></v-icon>
-                              123
+                              {{ item.comment }}
                             </v-chip>
                           </div>
                         </div>

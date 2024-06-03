@@ -111,25 +111,6 @@ export default {
         this.overlay = false;
       }
     },
-    async retrieveBuku() {
-      try {
-        this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem('access_token')
-          }
-        });
-        this.products = response.data;
-
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.overlay = false
-      }
-    },
   },
 };
 </script>

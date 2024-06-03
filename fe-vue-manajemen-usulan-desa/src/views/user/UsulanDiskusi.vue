@@ -96,6 +96,32 @@ export default {
         this.cekKomen = this.komentar.length === 0;
       }
     },
+    async upvote(id) {
+      try {
+        const response = await axios.get(`${BASE_URL}/suggestion/${id}/upvote`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+        console.log(response)
+        this.retrieveUsulan();
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async downvote(id) {
+      try {
+        const response = await axios.get(`${BASE_URL}/suggestion/${id}/downvote`,  {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+        console.log(response)
+        this.retrieveUsulan();
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async tambahUsulan() {
       this.loadingcomment = true;
       try {
@@ -149,8 +175,8 @@ export default {
             /* background-color: #E9F5E9; */
             ">
               <div class="row mt-2 mb-2" v-if="usulanRow">
-                
-                <div class="row" >
+
+                <div class="row">
                   <div class="row mt-2">
                     <div class="col-12">
                       <div class="card px-4">
@@ -170,12 +196,19 @@ export default {
                             <p class="text-black">{{ usulan.deskripsi }}</p>
                           </div>
                           <div class="row mb-2">
-                            <v-chip style="width: 70px; cursor: pointer;">
-                              <v-icon icon="mdi-arrow-up-bold-outline" start></v-icon>
+                            <v-chip class="no-hover" :color="usulan.user_vote === 'upvote' ? 'green' : ''"
+                              style="width: 70px; cursor: pointer;" @click.stop="upvote(usulan.id_suggestion)">
+                              <v-icon
+                                :icon="usulan.user_vote === 'upvote' ? 'mdi-arrow-up-bold' : 'mdi-arrow-up-bold-outline'"
+                                start></v-icon>
                               {{ usulan.upvote }}
                             </v-chip>
-                            <v-chip style="width: auto; margin-left: 5px; cursor: pointer;">
-                              <v-icon icon="mdi-arrow-down-bold-outline" start></v-icon>
+                            <v-chip class="no-hover" :color="usulan.user_vote === 'downvote' ? 'red' : ''"
+                              style="width: auto; margin-left: 5px; cursor: pointer;"
+                              @click.stop="downvote(usulan.id_suggestion)">
+                              <v-icon
+                                :icon="usulan.user_vote === 'downvote' ? 'mdi-arrow-down-bold' : 'mdi-arrow-down-bold-outline'"
+                                start></v-icon>
                               {{ usulan.downvote }}
                             </v-chip>
                           </div>

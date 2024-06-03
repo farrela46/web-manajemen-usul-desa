@@ -157,7 +157,7 @@ export default {
                                 start></v-icon>
                               {{ item.upvote }}
                             </v-chip>
-                            <v-chip class="no-hover" :color="item.user_vote === 'downvote' ? 'green' : ''"
+                            <v-chip class="no-hover" :color="item.user_vote === 'downvote' ? 'red' : ''"
                               style="width: auto; margin-left: 5px; cursor: pointer;" @click.stop="downvote(item.id)">
                               <v-icon
                                 :icon="item.user_vote === 'downvote' ? 'mdi-arrow-down-bold' : 'mdi-arrow-down-bold-outline'"

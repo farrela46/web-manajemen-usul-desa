@@ -28,6 +28,7 @@ export default {
       dialog: false,
       dialogTolak: false,
       selectedUsulanId: null,
+      selectedFilter: '',
       breadcrumbsItems: [
         {
           title: 'Home',
@@ -108,12 +109,13 @@ export default {
             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
           },
         });
-        this.$notify({
-          type: 'success',
-          title: 'Success',
-          text: response.data.message,
-          color: 'green'
-        });
+        // this.$notify({
+        //   type: 'success',
+        //   title: 'Success',
+        //   text: response.data.message,
+        //   color: 'green'
+        // });
+        console.log(response)
         this.closeModalAccept();
         this.dialog = true
         this.retrieveUser();
@@ -130,12 +132,12 @@ export default {
         });
         this.retrieveUser();
         console.log(response)
-        this.$notify({
-          type: 'success',
-          title: 'Success',
-          text: 'Warga telah diverifikasi',
-          color: 'green'
-        });
+        // this.$notify({
+        //   type: 'success',
+        //   title: 'Success',
+        //   text: 'Warga telah diverifikasi',
+        //   color: 'green'
+        // });
         this.closeModalReject();
         this.dialogTolak = true
       } catch (error) {
@@ -145,9 +147,12 @@ export default {
     async retrieveUser() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/auth/index/unverified`, {
+        const response = await axios.get(`${BASE_URL}/auth/index`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
+          },
+          params: {
+            status: this.selectedFilter // Include the selected filter in the query parameters
           }
         });
         this.users = response.data;
@@ -171,6 +176,17 @@ export default {
       <div class="container">
         <div class="row">
           <div class="col-12">
+            <div class="row ps-3 mb-2">
+              Filter:
+              <div class="col-2">
+                <select class="form-select form-select-sm" aria-label="Small select example" v-model="selectedFilter"  @change="retrieveUser">
+                  <option value="" selected>Semua</option>
+                  <option value="unverified">Unverified</option>
+                  <option value="verified">Verified</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
             <div class="card px-4" style="border-radius: 10px; 
             /* background-color: #E9F5E9; */
             ">

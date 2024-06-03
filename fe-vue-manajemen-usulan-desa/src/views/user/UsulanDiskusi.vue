@@ -41,40 +41,16 @@ export default {
           href: '/',
         }
       ],
-      usulan: {
-        id: 1,
-        nama: 'Saleh Von Forst',
-        date: '15 Hours Ago',
-        subject: 'Ruang tebuka untuk mandi',
-        text: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis rem dolorem necessitatibus omnis quasi fugit dolore aspernatur, rerum voluptates voluptatem deleniti consequatur soluta veritatis excepturi quia in temporibus odio eum. Labore aspernatur, id asperiores veritatis a adipisci voluptate voluptas, quibusdam aperiam, tempora incidunt dolore! Voluptate sequi iste totam modi animi.'
-      },
-      komentar: [
-        {
-          id: 1,
-          nama: 'Saleh Von Forst',
-          date: '15 Hours Ago',
-          subject: 'Ruang tebuka untuk mandi',
-          text: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis rem dolorem necessitatibus omnis quasi fugit dolore aspernatur, rerum voluptates voluptatem deleniti consequatur soluta veritatis excepturi quia in temporibus odio eum. Labore aspernatur, id asperiores veritatis a adipisci voluptate voluptas, quibusdam aperiam, tempora incidunt dolore! Voluptate sequi iste totam modi animi.'
-        },
-        {
-          id: 2,
-          nama: 'Bin Abdul Salim',
-          date: '22 Hours Ago',
-          subject: 'Penyediaan Ruang untuk modifikasi',
-          text: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis rem dolorem necessitatibus omnis quasi fugit dolore aspernatur, rerum voluptates voluptatem deleniti consequatur soluta veritatis excepturi quia in temporibus odio eum. Labore aspernatur, id asperiores veritatis a adipisci voluptate voluptas, quibusdam aperiam, tempora incidunt dolore! Voluptate sequi iste totam modi animi.'
-        },
-        {
-          id: 3,
-          nama: 'Juna Foll Kadotz',
-          date: '1089 Hours Ago',
-          subject: 'Jamet diusir aja plzz',
-          text: 'Banyak orang merasa terganggu oleh perilaku jamet yang mengganggu ketertiban dan keamanan lingkungan. Penting untuk bertindak mengusir mereka agar ketenangan kembali terjaga. Langkah-langkah seperti meningkatkan patroli keamanan dan mendukung kegiatan sosial untuk mengurangi perilaku ini sangat diperlukan demi kenyamanan bersama.'
-        },
-      ],
+      usulan: {},
+      komentar: [],
+      comment: '',
+      usulanRow: false,
+      cekKomen: true,
+      loadingcomment: false
     };
   },
   mounted() {
-
+    this.retrieveUsulan();
   },
   methods: {
     setupPage() {
@@ -98,15 +74,16 @@ export default {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
     },
-    async retrieveBuku() {
+    async retrieveUsulan() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
+        const response = await axios.get(`${BASE_URL}/suggestion/get/` + this.$route.params.id, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.products = response.data;
+        this.usulan = response.data.suggestion;
+        this.komentar = response.data.comments
 
         if (response.data.length > 0) {
           this.fotoUrl = response.data[0].foto;
@@ -114,7 +91,44 @@ export default {
       } catch (error) {
         console.error(error);
       } finally {
-        this.overlay = false
+        this.overlay = false;
+        this.usulanRow = true;
+        this.cekKomen = this.komentar.length === 0;
+      }
+    },
+    async tambahUsulan() {
+      this.loadingcomment = true;
+      try {
+        const response = await axios.post(`${BASE_URL}/suggestion/` + this.$route.params.id + `/comment`, {
+          comment: this.comment,
+        }, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: response.data.message,
+          color: 'green'
+        });
+        console.log('response.data');
+        this.retrieveUsulan();
+      } catch (error) {
+        console.error(error);
+
+        if (error.response && error.response.data.message) {
+          const errorMessage = error.response.data.message;
+          this.$notify({
+            type: 'error',
+            title: 'Error',
+            text: errorMessage,
+            color: 'red'
+          });
+        }
+      } finally {
+        this.loadingcomment = false;
       }
     },
   },
@@ -132,13 +146,13 @@ export default {
         <div class="row">
           <div class="col-12">
             <div class="card px-4" style="border-radius: 10px; 
-            background-color: #E9F5E9;
+            /* background-color: #E9F5E9; */
             ">
               <div class="row mt-2 mb-2">
                 <div class="d-flex align-items-center mt-2" style="border-bottom: 1px solid black;">
                   Menu
                 </div>
-                <div class="row">
+                <div class="row" v-if="usulanRow">
                   <div class="row mt-2">
                     <div class="col-12">
                       <div class="card px-4">
@@ -150,25 +164,21 @@ export default {
                             </div>
                             <div class="mt-2">
                               <a class="text-black">{{ usulan.nama }}</a>
-                              <a class="ms-3 text-black" style="font-size: 12px;">{{ usulan.date }}</a>
+                              <a class="ms-3 text-black" style="font-size: 12px;">{{ usulan.tanggal }}</a>
                             </div>
                           </div>
-                          <h4>{{ usulan.subject }}</h4>
+                          <h4>{{ usulan.saran }}</h4>
                           <div class="row mt-2">
-                            <p class="text-black">{{ usulan.text }}</p>
+                            <p class="text-black">{{ usulan.deskripsi }}</p>
                           </div>
                           <div class="row mb-2">
                             <v-chip style="width: 70px; cursor: pointer;">
                               <v-icon icon="mdi-arrow-up-bold-outline" start></v-icon>
-                              12
+                              {{ usulan.upvote }}
                             </v-chip>
                             <v-chip style="width: auto; margin-left: 5px; cursor: pointer;">
                               <v-icon icon="mdi-arrow-down-bold-outline" start></v-icon>
-                              12
-                            </v-chip>
-                            <v-chip style="width: auto; margin-left: 5px; cursor: pointer;">
-                              <v-icon icon="mdi-comment-multiple-outline" start></v-icon>
-                              123
+                              {{ usulan.downvote }}
                             </v-chip>
                           </div>
                         </div>
@@ -185,7 +195,8 @@ export default {
                           </div>
                         </div>
                         <div class="container">
-
+                          <h6 v-if="komentar.length === 0" class="text-center">Belum ada komentar, jadilah yang pertama
+                          </h6>
                           <div class="row" v-for="item in komentar" :key="item.id">
                             <div class="d-flex align-items-center mt-2">
                               <div class="avatar avatar-sm position-relative me-2">
@@ -193,13 +204,12 @@ export default {
                                   class="shadow-sm w-100 border-radius-lg" />
                               </div>
                               <div class="mt-2">
-                                <a class="text-black">{{ item.nama }}</a>
-                                <a class="ms-3 text-black" style="font-size: 12px;">{{ item.date }}</a>
+                                <a class="text-black">{{ item.nama_komen }}</a>
+                                <a class="ms-3 text-black" style="font-size: 12px;">{{ item.tanggal_komen }}</a>
                               </div>
                             </div>
-                            <h4>{{ item.subject }}</h4>
                             <div class="row mt-2">
-                              <p class="text-black">{{ item.text }}</p>
+                              <p class="text-black">{{ item.comment }}</p>
                             </div>
                           </div>
                         </div>
@@ -217,9 +227,15 @@ export default {
                                   class="shadow-sm w-100 border-radius-lg" />
                               </div>
                               <div class="mt-2 w-100">
-                                <argon-input placeholder="Tambahkan Komentar . . ." icon="far fa-comments fa-lg" iconDir="left" size=lg />
+                                <div class="">
+                                  <argon-input v-model="comment" placeholder="Tambahkan Komentar . . ."
+                                    icon="far fa-comments fa-lg" iconDir="left" size=lg />
+                                </div>
                               </div>
+                              <span class="mdi mdi-send" @click="tambahUsulan"
+                                style="font-size: 24px; cursor: pointer; padding-left:10px"></span>
                             </div>
+                            <v-progress-linear v-if="loadingcomment" indeterminate></v-progress-linear>
                           </div>
                         </div>
                       </div>

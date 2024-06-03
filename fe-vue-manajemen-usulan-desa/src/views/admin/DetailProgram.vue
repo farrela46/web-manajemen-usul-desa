@@ -39,17 +39,17 @@ export default {
         }
       ],
       form: {
-        namaProgram: '',
-        deskripsi: '',
-        tanggalMulai: '',
-        tanggalSelesai: '',
+        name: '',
+        description: '',
+        start_date: '',
+        end_date: '',
         status: '',
         target: ''
       }
     };
   },
   mounted() {
-
+    this.retrieveProgram();
   },
   methods: {
     setupPage() {
@@ -149,15 +149,15 @@ export default {
       this.dialog = false,
         this.$router.push('/admin/program')
     },
-    async retrieveBuku() {
+    async retrieveProgram() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
+        const response = await axios.get(`${BASE_URL}/program/` + this.$route.params.id, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.products = response.data;
+        this.form = response.data;
         this.$route.params.id;
         if (response.data.length > 0) {
           this.fotoUrl = response.data[0].foto;
@@ -186,7 +186,7 @@ export default {
               <label for="nama program" class="col-form-label">Nama Program</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.namaProgram" placeholder="Perbaikan Gapura">
+              <input type="text" class="form-control" v-model="form.name">
             </div>
           </div>
           <div class="mb-3 row">
@@ -194,8 +194,8 @@ export default {
               <label for="deskripsi" class="ol-form-label">Deskripsi</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <textarea class="form-control" rows="3" v-model="form.deskripsi"
-                placeholder="Pekerjaan Konstruksi - Perbaikan Gapura Utara - 2024"></textarea>
+              <textarea class="form-control" rows="3" v-model="form.description"
+                ></textarea>
             </div>
           </div>
           <div class="mb-3 row">
@@ -203,7 +203,7 @@ export default {
               <label for="tanggal mulai" class="col-form-label">Tanggal Mulai</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="date" class="form-control" v-model="form.tanggalMulai">
+              <input type="date" class="form-control" v-model="form.start_date">
             </div>
           </div>
           <div class="mb-3 row">
@@ -211,7 +211,7 @@ export default {
               <label for="tanggal selesai" class="col-form-label">Tanggal Selesai</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="date" class="form-control" v-model="form.tanggalSelesai">
+              <input type="date" class="form-control" v-model="form.end_date">
             </div>
           </div>
           <div class="mb-3 row">

@@ -148,11 +148,9 @@ export default {
             <div class="card px-4" style="border-radius: 10px; 
             /* background-color: #E9F5E9; */
             ">
-              <div class="row mt-2 mb-2">
-                <div class="d-flex align-items-center mt-2" style="border-bottom: 1px solid black;">
-                  Menu
-                </div>
-                <div class="row" v-if="usulanRow">
+              <div class="row mt-2 mb-2" v-if="usulanRow">
+                
+                <div class="row" >
                   <div class="row mt-2">
                     <div class="col-12">
                       <div class="card px-4">

@@ -37,7 +37,14 @@ export default {
           href: '/',
         }
       ],
-      usulan: []
+      usulan: [],
+      setuju: {
+        target: '',
+        start_date: '',
+        end_date: ''
+      },
+      dialogTolak: false,
+      dialogTerima: false
     };
   },
   mounted() {
@@ -60,10 +67,6 @@ export default {
     },
     goUsulan() {
       this.$router.push('/usulan');
-    },
-    formatPrice(price) {
-      const numericPrice = parseFloat(price);
-      return numericPrice.toLocaleString('id-ID');
     },
     detailUsulan(id) {
       this.$router.push('/admin/usulan/' + id)
@@ -102,9 +105,9 @@ export default {
       try {
         const formData = new FormData();
 
-        formData.append('target', this.target);
-        formData.append('start_date', this.start_date);
-        formData.append('end_date', this.end_date);
+        formData.append('target', this.setuju.target);
+        formData.append('start_date', this.setuju.start_date);
+        formData.append('end_date', this.setuju.end_date);
 
         const response = await axios.post(`${BASE_URL}/suggestion/approve/` + id, formData, {
           headers: {
@@ -115,9 +118,10 @@ export default {
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'Usulan berhasil ditolak',
+          text: 'Usulan berhasil diterima',
           color: 'green'
         });
+        this.dialogTerima = true;
         this.retrieveUsulan();
       } catch (error) {
         console.error(error);
@@ -137,6 +141,7 @@ export default {
           text: 'Usulan berhasil ditolak',
           color: 'green'
         });
+        this.dialogTolak = true
         this.retrieveUsulan();
       } catch (error) {
         console.error(error);
@@ -151,6 +156,8 @@ export default {
           }
         });
         this.usulan = response.data.data;
+
+        
       } catch (error) {
         console.error(error);
       } finally {
@@ -233,13 +240,14 @@ export default {
                                 <i class="fa fa-pencil-square-o"></i>
                               </span>
                             </span>
-                            <span class="mx-3" style="font-size: 1rem; cursor: pointer;"
+                            <span v-if="item.status === null" class="mx-3" style="font-size: 1rem; cursor: pointer;"
                               @click="openAcceptConfirmation(item.id)">
                               <span style="color:green;">
                                 <i class="fas fa-check-circle"></i>
                               </span>
                             </span>
-                            <span style="font-size: 1rem; cursor: pointer;" @click="openRejectConfirmation(item.id)">
+                            <span v-if="item.status === null" style="font-size: 1rem; cursor: pointer;"
+                              @click="openRejectConfirmation(item.id)">
                               <span style="color:red;">
                                 <i class="fas fa-times-circle"></i>
                               </span>
@@ -264,7 +272,35 @@ export default {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              Setujui Usulan ini??
+              <div class="row ">
+                <div class="col d-flex align-items-center justify-content-center">
+                  <h5> Terima Usulan? </h5>
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <div class="col-sm-2">
+                  <label for="nama program" class="col-form-label">Target</label>
+                </div>
+                <div class="col-sm-10" style="padding-right: 20px">
+                  <input type="text" class="form-control" v-model="setuju.target">
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <div class="col-sm-2">
+                  <label for="tanggal mulai" class="col-form-label">Tanggal Mulai</label>
+                </div>
+                <div class="col-sm-10" style="padding-right: 20px">
+                  <input type="date" class="form-control" v-model="setuju.start_date">
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <div class="col-sm-2">
+                  <label for="tanggal mulai" class="col-form-label">Tanggal Selesai</label>
+                </div>
+                <div class="col-sm-10" style="padding-right: 20px">
+                  <input type="date" class="form-control" v-model="setuju.end_date">
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -291,6 +327,26 @@ export default {
           </div>
         </div>
       </div>
+      <v-dialog v-model="dialogTolak" max-width="400">
+        <v-card class="text-center">
+          <v-card-text>
+            <div class="p-2">
+              <h3>Usulan berhasil ditolak!</h3>
+              <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="dialogTerima" max-width="400">
+        <v-card class="text-center">
+          <v-card-text>
+            <div class="p-2">
+              <h3>Usulan berhasil diterima!</h3>
+              <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>

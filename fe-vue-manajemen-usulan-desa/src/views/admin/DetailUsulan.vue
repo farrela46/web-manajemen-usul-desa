@@ -101,6 +101,12 @@ export default {
         this.form = response.data.suggestion;
         this.komentar = response.data.comments
 
+        if (this.form.tanggal) {
+          const date = new Date(this.form.tanggal);
+          const formattedDate = date.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+          this.form.tanggal = formattedDate;
+        }
+
         if (response.data.length > 0) {
           this.fotoUrl = response.data[0].foto;
         }
@@ -138,7 +144,7 @@ export default {
               <label for="deskripsi" class="ol-form-label">Deskripsi</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <textarea class="form-control" rows="3" v-model="form.deskripsi"></textarea>
+              <textarea class="form-control" rows="4" v-model="form.deskripsi"></textarea>
             </div>
           </div>
           <div class="mb-3 row">

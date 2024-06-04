@@ -40,39 +40,12 @@ export default {
         id: 1,
         title: 'Pembaruan mesin RB22'
       },
-      usulan: [
-        {
-          id: 1,
-          progress: 'Pengadaan Klep Mesin',
-          tanggal_mulai: '20-04-2022',
-          tanggal_selesai: '22-04-2022',
-          images: [
-            '../../assets/img/bruce-mars.jpg',
-            '../../assets/img/bruce-mars.jpg',
-            '../../assets/img/bruce-mars.jpg',
-            '../../assets/img/bruce-mars.jpg',
-            '../../assets/img/bruce-mars.jpg'
-          ]
-        },
-        {
-          id: 2,
-          progress: 'Pengadaan Mesin',
-          tanggal_mulai: '20-04-2022',
-          tanggal_selesai: '22-04-2022',
-          images: [
-            '../../assets/img/bruce-mars.jpg',
-            '../../assets/img/bruce-mars.jpg',
-            '../../assets/img/bruce-mars.jpg',
-            '../../assets/img/bruce-mars.jpg',
-            '../../assets/img/bruce-mars.jpg'
-          ]
-        },
-      ],
+      usulan: [],
 
     };
   },
   mounted() {
-
+this.retrieveProgress()
   },
   methods: {
     setupPage() {
@@ -97,16 +70,16 @@ export default {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
     },
-    async retrieveBuku() {
+    async retrieveProgress() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
+        const response = await axios.get(`${BASE_URL}/progress/index/` + this.$route.params.idprogram, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.products = response.data;
-
+        this.usulan = response.data.progresses;
+this.progress.title = response.data.nama_program
         if (response.data.length > 0) {
           this.fotoUrl = response.data[0].foto;
         }

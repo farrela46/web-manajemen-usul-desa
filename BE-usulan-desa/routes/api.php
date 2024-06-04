@@ -23,12 +23,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/auth')->group(function () {
-    Route::get('/index', [UserController::class, 'indexUsers'])->middleware('auth:sanctum', 'role:admin');
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/register', [UserController::class, 'register']);
-    Route::delete('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
-    Route::get('/verify/{id}', [UserController::class, 'verified'])->middleware('auth:sanctum', 'role:admin');
-    Route::get('/reject/{id}', [UserController::class, 'rejected'])->middleware('auth:sanctum', 'role:admin');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::delete('/logout', [UserController::class, 'logout']);
+
+        Route::middleware('role:admin')->group(function () {
+            Route::get('/index', [UserController::class, 'indexUsers']);
+            Route::get('/verify/{id}', [UserController::class, 'verified']);
+            Route::get('/reject/{id}', [UserController::class, 'rejected']);
+        });
+    });
 });
 
 Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
@@ -53,15 +59,15 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
     });
 });
 
-Route::prefix('/program')->group(function () {
-    Route::post('/add', [ProgramController::class, 'store'])->middleware('auth:sanctum', 'role:admin');
-    Route::get('/index', [ProgramController::class, 'index'])->middleware('auth:sanctum');
-    Route::get('/{id}', [ProgramController::class, 'detailedProgram'])->middleware('auth:sanctum', 'role:admin');
+Route::prefix('/program')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/add', [ProgramController::class, 'store']);
+    Route::get('/index', [ProgramController::class, 'index']);
+    Route::get('/{id}', [ProgramController::class, 'detailedProgram']);
 });
 
-Route::prefix('/progress')->group(function () {
-    Route::post('/add', [ProgressController::class, 'store'])->middleware('auth:sanctum', 'role:admin');
-    Route::get('/index/{programId}', [ProgressController::class, 'index'])->middleware('auth:sanctum');
-    Route::get('/{progressID}', [ProgressController::class, 'getOne'])->middleware('auth:sanctum');
-    Route::delete('/delete/{id}',[ProgressController::class,'destroy']);
+Route::prefix('/progress')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/add', [ProgressController::class, 'store']);
+    Route::get('/index/{programId}', [ProgressController::class, 'index']);
+    Route::get('/{progressID}', [ProgressController::class, 'getOne']);
+    Route::delete('/delete/{id}', [ProgressController::class, 'destroy']);
 });

@@ -116,7 +116,7 @@ export default {
     },
     async RejectUsulan(id) {
       try {
-        const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
+        const response = await axios.delete(`${BASE_URL}/suggestion/reject/` + id, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
           },
@@ -128,7 +128,7 @@ export default {
           text: 'Usulan berhasil ditolak',
           color: 'green'
         });
-        this.getAllUser();
+        this.retrieveUsulan();
       } catch (error) {
         console.error(error);
       }

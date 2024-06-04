@@ -45,7 +45,7 @@ export default {
     };
   },
   mounted() {
-this.retrieveProgress()
+    this.retrieveProgress()
   },
   methods: {
     setupPage() {
@@ -79,7 +79,7 @@ this.retrieveProgress()
           }
         });
         this.usulan = response.data.progresses;
-this.progress.title = response.data.nama_program
+        this.progress.title = response.data.nama_program
         if (response.data.length > 0) {
           this.fotoUrl = response.data[0].foto;
         }
@@ -190,19 +190,19 @@ this.progress.title = response.data.nama_program
                                 </div>
                               </td>
                               <td class="align-middle text-start">
-                                <span class="text-black text-xs font-weight-bold">{{ item.progress }}</span>
+                                <span class="text-black text-xs font-weight-bold">{{ item.name }}</span>
                               </td>
                               <td class="align-middle text-start">
-                                <span class="text-black text-xs font-weight-bold">{{ item.tanggal_mulai }}</span>
+                                <span class="text-black text-xs font-weight-bold">{{ item.start_date }}</span>
                               </td>
                               <td class="align-middle text-start">
-                                <span class="text-black text-xs font-weight-bold">{{ item.tanggal_selesai }}</span>
+                                <span class="text-black text-xs font-weight-bold">{{ item.end_date }}</span>
                               </td>
                               <td class="align-middle text-start">
                                 <div class="d-flex">
-                                  <img src="../../assets/img/bruce-mars.jpg" class="img-thumbnail" alt="...">
-                                  <img src="../../assets/img/bruce-mars.jpg" class="img-thumbnail" alt="...">
-                                  <img src="../../assets/img/bruce-mars.jpg" class="img-thumbnail" alt="...">
+                                  <img v-for="(url, imgIndex) in item.imageUrls" :key="imgIndex" :src="url"
+                                    class="img-thumbnail" alt="..."
+                                    style=" margin-right: 2px;">
                                 </div>
                               </td>
                               <td class="align-middle text-center">
@@ -221,8 +221,8 @@ this.progress.title = response.data.nama_program
             </div>
           </div>
         </div>
-        <div class="modal fade" id="hapusConfirmationModal" tabindex="-1"
-          aria-labelledby="usulanConfirmationModalLabel" aria-hidden="true">
+        <div class="modal fade" id="hapusConfirmationModal" tabindex="-1" aria-labelledby="usulanConfirmationModalLabel"
+          aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
@@ -245,7 +245,7 @@ this.progress.title = response.data.nama_program
 </template>
 <style>
 .img-thumbnail {
-  width: 70px;
+  width: 100px;
   height: 70px;
   object-fit: cover;
 }

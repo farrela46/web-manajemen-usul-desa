@@ -67,6 +67,66 @@ class ProgressController extends Controller
         }
     }
 
+    public function update(Request $request, $progressID)
+    {
+        $progress = Progress::find($progressID);
+
+        if (!$progress) {
+            return response()->json(['error' => 'Progress tidak ditemukan.'], 404);
+        }
+
+        $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'programID' => 'required|exists:programs,id',
+            'gambar' => 'nullable',
+            'gambar.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096',
+        ]);
+
+        $imageUrls = [];
+        if ($request->hasFile('gambar')) {
+            $oldPictures = $progress->progress_picture;
+            foreach ($oldPictures as $oldPicture) {
+                $filePath = str_replace('storage/', 'public/', $oldPicture->path); // Convert to the storage path
+                if (Storage::exists($filePath)) {
+                    Storage::delete($filePath);
+                }
+                Progress_picture::where('progressID', $progressID)->delete();
+            }
+
+            foreach ($request->file('gambar') as $gambar) {
+                $path = $gambar->store('public/progress_images');
+                $imageUrl = asset(str_replace('public/', 'storage/', $path));
+                $imageUrls[] = $imageUrl;
+
+                Progress_picture::create([
+                    'path' => $path,
+                    'progressID' => $progress->id,
+                ]);
+            }
+        } else {
+            $oldPictures = $progress->progress_picture;
+            foreach ($oldPictures as $oldPicture) {
+                $imageUrls[] = asset(str_replace('public/', 'storage/', $oldPicture->path));
+            }
+        }
+
+        $progress->name = $request->input('name');
+        $progress->description = $request->input('description');
+        $progress->start_date = $request->input('start_date');
+        $progress->end_date = $request->input('end_date');
+        $progress->programID = $request->input('programID');
+        $progress->save();
+
+        return response()->json([
+            'message' => 'Progress berhasil di update',
+            'progress' => $progress,
+            'imageUrls' => $imageUrls
+        ]);
+    }
+
 
     public function index($programId)
     {

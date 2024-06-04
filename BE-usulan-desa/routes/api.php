@@ -69,5 +69,6 @@ Route::prefix('/progress')->middleware(['auth:sanctum', 'role:admin'])->group(fu
     Route::post('/add', [ProgressController::class, 'store']);
     Route::get('/index/{programId}', [ProgressController::class, 'index']);
     Route::get('/{progressID}', [ProgressController::class, 'getOne']);
+    Route::post('/update/{id}',[ProgressController::class,'update']);
     Route::delete('/delete/{id}', [ProgressController::class, 'destroy']);
 });

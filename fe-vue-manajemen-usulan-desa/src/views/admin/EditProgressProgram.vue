@@ -44,14 +44,14 @@ export default {
         }
       ],
       form: {
-        idprogram: 1,
-        idprogress: 1,
-        namaProgram: 'Pengadaan mesin RB22',
-        namaProgress: 'Pengadaan Klep Mesin',
-        deskripsi: 'Pengadaan mesin rb22 ini sangat payah',
-        tanggalMulai: '20-03-2222',
-        tanggalSelesai: '',
-        foto: []
+        idprogram: '',
+        idprogress: '',
+        namaProgram: '',
+        name: '',
+        description: '',
+        start_date: '',
+        end_date: '',
+        files: []
       }
     };
   },
@@ -73,32 +73,48 @@ export default {
       this.store.state.showFooter = true;
       this.body.classList.add("bg-gray-100");
     },
-
-    formatPrice(price) {
-      const numericPrice = parseFloat(price);
-      return numericPrice.toLocaleString('id-ID');
-    },
     validateForm() {
       if (
-        !this.form.namaProgram ||
-        !this.form.deskripsi ||
-        !this.form.tanggalMulai ||
-        !this.form.tanggalSelesai ||
-        !this.form.foto
+        !this.form.name ||
+        !this.form.description ||
+        !this.form.start_date ||
+        !this.form.end_date
+
       ) {
         this.validate = true;
       } else {
         this.saveForm();
       }
     },
-    async saveFrom() {
+    handleFileChange(event) {
+      const files = event.target.files;
+      this.form.files = [];
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].type.startsWith('image/')) {
+          this.form.files.push(files[i]);
+        }
+      }
+    },
+    async saveForm() {
       try {
+        const formData = new FormData();
 
-        // const response = await axios.put(BASE_URL + '/user/update', updatedUserData, {
-        //   headers: {
-        //     Authorization: "Bearer " + localStorage.getItem('access_token')
-        //   }
-        // });
+        formData.append('name', this.form.name);
+        formData.append('description', this.form.description);
+        formData.append('start_date', this.form.start_date);
+        formData.append('end_date', this.form.end_date);
+
+        if (this.form.files && this.form.files.length > 0) {
+          for (let i = 0; i < this.form.files.length; i++) {
+            formData.append('gambar[]', this.form.files[i]);
+          }
+        }
+        const response = await axios.post(BASE_URL + '/progress/update/' + this.$route.params.idprogress, formData, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+        console.log(response)
         this.$notify({
           type: 'success',
           title: 'Success',
@@ -170,9 +186,6 @@ export default {
       } finally {
         this.overlay = false
       }
-    },
-    handleFileChange(event) {
-      this.form.foto = event.target.files[0];
     },
   },
 };

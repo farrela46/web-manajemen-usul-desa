@@ -56,7 +56,7 @@ export default {
     };
   },
   mounted() {
-
+    this.retrieveProgress();
   },
   methods: {
     setupPage() {
@@ -84,7 +84,7 @@ export default {
         !this.form.deskripsi ||
         !this.form.tanggalMulai ||
         !this.form.tanggalSelesai ||
-        !this.form.foto 
+        !this.form.foto
       ) {
         this.validate = true;
       } else {
@@ -153,19 +153,18 @@ export default {
       this.dialog = false,
         this.$router.push('/admin/program/progress/' + this.$route.params.idprogram)
     },
-    async retrieveBuku() {
+    async retrieveProgress() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
+        const response = await axios.get(`${BASE_URL}/progress/` + this.$route.params.idprogress, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.products = response.data;
-        this.$route.params.id;
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
-        }
+        this.form = response.data.progresses;
+        this.form.namaProgram = response.data.nama_program
+
+
       } catch (error) {
         console.error(error);
       } finally {
@@ -194,7 +193,7 @@ export default {
               <label for="nama program" class="col-form-label">Nama Progress</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.namaProgress" placeholder="Perbaikan Gapura">
+              <input type="text" class="form-control" v-model="form.name">
             </div>
           </div>
           <div class="mb-3 row">
@@ -202,8 +201,7 @@ export default {
               <label for="deskripsi" class="ol-form-label">Deskripsi</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <textarea class="form-control" rows="3" v-model="form.deskripsi"
-                placeholder="Pekerjaan Konstruksi - Perbaikan Gapura Utara - 2024"></textarea>
+              <textarea class="form-control" rows="3" v-model="form.description"></textarea>
             </div>
           </div>
           <div class="mb-3 row">
@@ -211,7 +209,7 @@ export default {
               <label for="tanggal mulai" class="col-form-label">Tanggal Mulai</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="date" class="form-control" v-model="form.tanggalMulai">
+              <input type="date" class="form-control" v-model="form.start_date">
             </div>
           </div>
           <div class="mb-3 row">
@@ -219,7 +217,7 @@ export default {
               <label for="tanggal selesai" class="col-form-label">Tanggal Selesai</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="date" class="form-control" v-model="form.tanggalSelesai">
+              <input type="date" class="form-control" v-model="form.end_date">
             </div>
           </div>
           <div class="mb-3 row">
@@ -229,9 +227,8 @@ export default {
             <div class="col-sm-10" style="padding-right: 20px">
               <input type="file" class="form-control" ref="fileInput" @change="handleFileChange" multiple>
               <br>
-              <img src="../../assets/img/bruce-mars.jpg" class="img-thumbnail" alt="...">
-              <img src="../../assets/img/bruce-mars.jpg" class="img-thumbnail" alt="...">
-              <img src="../../assets/img/bruce-mars.jpg" class="img-thumbnail" alt="...">
+              <img v-for="(url, imgIndex) in form.imageUrls" :key="imgIndex" :src="url" class="img-thumbnail" alt="..."
+                style=" margin-right: 2px;">
             </div>
           </div>
 
@@ -286,3 +283,9 @@ export default {
     </div>
   </div>
 </template>
+<style>
+.img-thumbnail {
+  width: 200px;
+  object-fit: cover;
+}
+</style>

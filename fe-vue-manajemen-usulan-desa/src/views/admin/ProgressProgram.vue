@@ -21,7 +21,6 @@ export default {
   },
   data() {
     return {
-      products: [],
       overlay: false,
       selectedProgressId: null,
       breadcrumbsItems: [
@@ -143,7 +142,7 @@ export default {
           <div class="p-2">
             <div class="row mb-2">
               <div class="col-12 d-flex justify-content-end">
-                <argon-button color="primary" size="sm" @click="goTambah"> <i class="fas fa-plus mx-2"></i> Tambah
+                <argon-button color="primary" size="sm" @click="goTambah"><i class="fas fa-plus mx-2"></i> Tambah
                   Progress</argon-button>
               </div>
             </div>
@@ -206,7 +205,7 @@ export default {
                                 </div>
                               </td>
                               <td class="align-middle text-center">
-                                <argon-button color="white" @click="editProgress(item.id)">Edit</argon-button>
+                                <argon-button color="white" @click="editProgress(item.id_progress)">Edit</argon-button>
                                 <argon-button class="mx-2" color="danger"
                                   @click="openHapusConfirmation(item.id)">Hapus</argon-button>
                               </td>

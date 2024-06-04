@@ -61,14 +61,19 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
 
 Route::prefix('/program')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/add', [ProgramController::class, 'store']);
+    Route::post('/update/{id}', [ProgramController::class, 'update']);
     Route::get('/index', [ProgramController::class, 'index']);
     Route::get('/{id}', [ProgramController::class, 'detailedProgram']);
 });
 
-Route::prefix('/progress')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::post('/add', [ProgressController::class, 'store']);
+Route::prefix('/progress')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/index/{programId}', [ProgressController::class, 'index']);
     Route::get('/{progressID}', [ProgressController::class, 'getOne']);
-    Route::post('/update/{id}',[ProgressController::class,'update']);
-    Route::delete('/delete/{id}', [ProgressController::class, 'destroy']);
+
+    Route::middleware('role:admin')->group(function () {
+        Route::post('/add', [ProgressController::class, 'store']);
+        Route::post('/update/{id}', [ProgressController::class, 'update']);
+        Route::delete('/delete/{id}', [ProgressController::class, 'destroy']);
+    });
+
 });

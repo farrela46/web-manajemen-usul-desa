@@ -47,7 +47,7 @@ class ProgramController extends Controller
         $programs = Program::get();
 
         return response()->json([
-            'data'=>$programs
+            'data' => $programs
         ]);
     }
     public function detailedProgram($id)
@@ -55,5 +55,34 @@ class ProgramController extends Controller
         $program = Program::find($id);
 
         return response()->json($program);
+    }
+
+    public function update(Request $request, $programID)
+    {
+        $program = Program::find($programID);
+
+        if (!$program) {
+            return response()->json(['error' => 'Program tidak ditemukan.'], 404);
+        }
+
+        $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'target' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date'
+        ]);
+
+        $program->name = $request->input('name');
+        $program->description = $request->input('description');
+        $program->start_date = $request->input('start_date');
+        $program->end_date = $request->input('end_date');
+        $program->target = $request->input('target');
+        $program->save();
+
+        return response()->json([
+            'message' => 'Program berhasil di update',
+            'program' => $program,
+        ]);
     }
 }

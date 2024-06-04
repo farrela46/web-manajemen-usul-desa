@@ -80,7 +80,6 @@ class ProgressController extends Controller
             'description' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'programID' => 'required|exists:programs,id',
             'gambar' => 'nullable',
             'gambar.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096',
         ]);
@@ -117,7 +116,6 @@ class ProgressController extends Controller
         $progress->description = $request->input('description');
         $progress->start_date = $request->input('start_date');
         $progress->end_date = $request->input('end_date');
-        $progress->programID = $request->input('programID');
         $progress->save();
 
         return response()->json([

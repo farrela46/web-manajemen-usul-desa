@@ -30,6 +30,7 @@ class SuggestionController extends Controller
             'userID' => $user->id,
             'suggestion' => $validatedData['suggestion'],
             'description' => $validatedData['description'],
+            'status' => 'pending',
             'date' => Carbon::now(),
         ]);
 

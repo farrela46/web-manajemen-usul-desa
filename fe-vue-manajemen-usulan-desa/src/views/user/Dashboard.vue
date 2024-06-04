@@ -55,6 +55,9 @@ export default {
     goUsulan() {
       this.$router.push('/usulan');
     },
+    goProgram() {
+      this.$router.push('/program');
+    },
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');

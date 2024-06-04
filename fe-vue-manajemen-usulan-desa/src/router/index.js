@@ -4,11 +4,13 @@ import LandingPage from "../views/LandingPage.vue";
 //USER
 import UserDashboard from "../views/user/Dashboard.vue";
 import UserUsulan from "../views/user/Usulan.vue";
+import ProgramDesa from "../views/user/Program.vue";
 import InputUsulan from "../views/user/InputUsulan.vue";
 import UserUsulanDiskusi from "../views/user/UsulanDiskusi.vue";
 
 //ADMIN
 import AdminDashboard from "../views/admin/Dashboard.vue";
+import DetailUsulan from "../views/admin/DetailUsulan.vue";
 import ManageUsulan from "../views/admin/ManageUsulan.vue";
 import VerifikasiWarga from "../views/admin/VeirfikasiWarga.vue";
 import Program from "../views/admin/Program.vue";
@@ -61,6 +63,11 @@ const routes = [
     component: ManageUsulan,
   },
   {
+    path: "/admin/usulan/:id",
+    name: "Detail Usulan",
+    component: DetailUsulan,
+  },
+  {
     path: "/admin/verifikasi",
     name: "Verifikasi Warga",
     component: VerifikasiWarga,
@@ -106,6 +113,11 @@ const routes = [
     path: "/usulan",
     name: "Usulan Warga",
     component: UserUsulan,
+  },
+  {
+    path: "/program",
+    name: "Program Desa",
+    component: ProgramDesa,
   },
   {
     path: "/usulan/input",

@@ -10,6 +10,7 @@ import UserUsulanDiskusi from "../views/user/UsulanDiskusi.vue";
 
 //ADMIN
 import AdminDashboard from "../views/admin/Dashboard.vue";
+import DetailUsulan from "../views/admin/DetailUsulan.vue";
 import ManageUsulan from "../views/admin/ManageUsulan.vue";
 import VerifikasiWarga from "../views/admin/VeirfikasiWarga.vue";
 import Program from "../views/admin/Program.vue";
@@ -60,6 +61,11 @@ const routes = [
     path: "/admin/usulan",
     name: "Manage Usulan",
     component: ManageUsulan,
+  },
+  {
+    path: "/admin/usulan/:id",
+    name: "Detail Usulan",
+    component: DetailUsulan,
   },
   {
     path: "/admin/verifikasi",

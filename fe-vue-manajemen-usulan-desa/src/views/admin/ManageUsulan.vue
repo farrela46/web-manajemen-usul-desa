@@ -65,6 +65,9 @@ export default {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
     },
+    detailUsulan(id) {
+      this.$router.push('/admin/usulan/' + id)
+    },
     openAcceptConfirmation(id) {
       this.selectedUsulanId = id;
       let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('acceptConfirmationModal'))
@@ -97,7 +100,13 @@ export default {
     },
     async AcceptUsulan(id) {
       try {
-        const response = await axios.post(`${BASE_URL}/suggestion/approve/` + id, {
+        const formData = new FormData();
+
+        formData.append('target', this.target);
+        formData.append('start_date', this.start_date);
+        formData.append('end_date', this.end_date);
+
+        const response = await axios.post(`${BASE_URL}/suggestion/approve/` + id, formData, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
           },
@@ -106,7 +115,7 @@ export default {
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'Usulan berhasil diterima',
+          text: 'Usulan berhasil ditolak',
           color: 'green'
         });
         this.retrieveUsulan();
@@ -116,7 +125,7 @@ export default {
     },
     async RejectUsulan(id) {
       try {
-        const response = await axios.delete(`${BASE_URL}/suggestion/reject/` + id, {
+        const response = await axios.get(`${BASE_URL}/suggestion/reject/` + id, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
           },
@@ -219,11 +228,11 @@ export default {
                             <span class="text-black text-xs font-weight-bold">{{ item.downvote }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <!-- <span style="font-size: 1rem; cursor: pointer;" @click="editUser(user.id)">
+                            <span style="font-size: 1rem; cursor: pointer;" @click="detailUsulan(item.id)">
                               <span style="color: black;">
                                 <i class="fa fa-pencil-square-o"></i>
                               </span>
-                            </span> -->
+                            </span>
                             <span class="mx-3" style="font-size: 1rem; cursor: pointer;"
                               @click="openAcceptConfirmation(item.id)">
                               <span style="color:green;">

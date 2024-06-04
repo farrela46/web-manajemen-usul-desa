@@ -48,7 +48,7 @@ export default {
         deskripsi: '',
         tanggalMulai: '',
         tanggalSelesai: '',
-        foto: []
+        files: []
       }
     };
   },
@@ -81,40 +81,11 @@ export default {
         !this.form.deskripsi ||
         !this.form.tanggalMulai ||
         !this.form.tanggalSelesai ||
-        !this.form.foto 
+        !this.form.files
       ) {
         this.validate = true;
       } else {
-        this.saveForm();
-      }
-    },
-    async saveFrom() {
-      try {
-
-        // const response = await axios.put(BASE_URL + '/user/update', updatedUserData, {
-        //   headers: {
-        //     Authorization: "Bearer " + localStorage.getItem('access_token')
-        //   }
-        // });
-        this.$notify({
-          type: 'success',
-          title: 'Success',
-          text: 'Program berhasil ditambahkan',
-          color: 'green'
-        });
-        this.$router.push('/admin/program/progress/' + this.$route.params.idprogram);
-
-      } catch (error) {
-        console.error('Error updating profile:', error);
-        if (error.response && error.response.data.message) {
-          const errorMessage = error.response.data.message;
-          this.$notify({
-            type: 'error',
-            title: 'Error',
-            text: errorMessage,
-            color: 'red'
-          });
-        }
+        this.addProgress();
       }
     },
     closeModal() {
@@ -150,27 +121,56 @@ export default {
       this.dialog = false,
         this.$router.push('/admin/program')
     },
-    async retrieveBuku() {
-      try {
-        this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem('access_token')
-          }
-        });
-        this.products = response.data;
-        this.$route.params.id;
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
+    handleFileChange(event) {
+      const files = event.target.files;
+      this.form.files = [];
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].type.startsWith('image/')) {
+          this.form.files.push(files[i]);
         }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.overlay = false
       }
     },
-    handleFileChange(event) {
-      this.form.foto = event.target.files[0];
+    async addProgress() {
+      try {
+        const formData = new FormData();
+
+        formData.append('name', this.form.namaProgress);
+        formData.append('description', this.form.deskripsi);
+        formData.append('start_date', this.form.tanggalMulai);
+        formData.append('end_date', this.form.tanggalSelesai);
+        formData.append('programID', this.$route.params.idprogram);
+
+        
+        for (let i = 0; i < this.form.files.length; i++) {
+          formData.append('gambar[]', this.form.files[i]);
+        }
+
+        const token = localStorage.getItem('access_token');
+        const response = await axios.post(`${BASE_URL}/progress/add`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': 'Bearer ' + token,
+          },
+        });
+        this.$notify({
+          type: 'success',
+          title: 'Success',
+          text: response.data.message,
+          color: 'green',
+        });
+        this.$router.push('/admin/program/progress/' + this.$route.params.idprogram)
+      } catch (error) {
+        console.error(error);
+        if (error.response && error.response.data.message) {
+          const errorMessage = error.response.data.message;
+          this.$notify({
+            type: 'error',
+            title: 'Error',
+            text: errorMessage,
+            color: 'red',
+          });
+        }
+      }
     },
   },
 };
@@ -198,8 +198,7 @@ export default {
               <label for="deskripsi" class="ol-form-label">Deskripsi</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <textarea class="form-control" rows="3" v-model="form.deskripsi"
-                placeholder=" "></textarea>
+              <textarea class="form-control" rows="3" v-model="form.deskripsi" placeholder=" "></textarea>
             </div>
           </div>
           <div class="mb-3 row">

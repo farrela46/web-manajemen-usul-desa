@@ -32,6 +32,7 @@ Route::prefix('/auth')->group(function () {
 });
 
 Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
+    // Routes for users with 'user' role
     Route::middleware('role:user')->group(function () {
         Route::post('/add', [SuggestionController::class, 'store']);
         Route::get('/get', [SuggestionController::class, 'index']);
@@ -43,12 +44,12 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
         Route::get('/{id}/upvote', [SuggestionController::class, 'Upvote']);
         Route::get('/{id}/downvote', [SuggestionController::class, 'Downvote']);
     });
-
     // Routes for users with 'admin' role
     Route::middleware('role:admin')->group(function () {
         Route::post('/approve/{id}', [SuggestionController::class, 'approveSuggestion']);
         Route::get('/reject/{id}', [SuggestionController::class, 'rejected']);
         Route::get('/index', [SuggestionController::class, 'indexAdmin']);
+        Route::get('/admin/get/{id}', [SuggestionController::class, 'DetailAdmin']);
     });
 });
 

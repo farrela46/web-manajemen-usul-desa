@@ -147,16 +147,17 @@ export default {
     async confirmHapus() {
       try {
         const id = this.$route.params.idprogress;
-        // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
-        //   headers: {
-        //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-        //   },
-        // });
-        console.log(id)
+        const response = await axios.delete(`${BASE_URL}/progress/delete/` + id, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
+
+        console.log(response)
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'Program berhasil di hapus',
+          text: 'Progress berhasil di hapus',
           color: 'green'
         });
         this.closeModal();

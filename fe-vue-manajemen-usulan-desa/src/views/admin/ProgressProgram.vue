@@ -108,7 +108,8 @@ export default {
     },
     async deleteProgress(idprogress) {
       try {
-        const response = await axios.delete(`${BASE_URL}/deleteUser/` + idprogress, {
+        
+        const response = await axios.delete(`${BASE_URL}/progress/delete/` + idprogress, {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('access_token'),
           },
@@ -120,7 +121,7 @@ export default {
           text: 'Progress berhasil dihapus',
           color: 'green'
         });
-        this.getAllUser();
+        this.retrieveProgress();
       } catch (error) {
         console.error(error);
       }
@@ -200,14 +201,13 @@ export default {
                               <td class="align-middle text-start">
                                 <div class="d-flex">
                                   <img v-for="(url, imgIndex) in item.imageUrls" :key="imgIndex" :src="url"
-                                    class="img-thumbnail" alt="..."
-                                    style=" margin-right: 2px;">
+                                    class="img-thumbnail" alt="..." style=" margin-right: 2px;">
                                 </div>
                               </td>
                               <td class="align-middle text-center">
                                 <argon-button color="white" @click="editProgress(item.id_progress)">Edit</argon-button>
                                 <argon-button class="mx-2" color="danger"
-                                  @click="openHapusConfirmation(item.id)">Hapus</argon-button>
+                                  @click="openHapusConfirmation(item.id_progress)">Hapus</argon-button>
                               </td>
                             </tr>
                           </tbody>

@@ -78,6 +78,38 @@ class SuggestionController extends Controller
         }
     }
 
+    // detail usulan admin
+    public function DetailAdmin($id)
+    {
+        try {
+            // Query untuk mengambil semua komentar terkait dengan usulan
+            $comments = DB::table('comments as c')
+                ->select('c.comment', 'c.created_at as tanggal_komen', 'u.nama as nama_komen')
+                ->leftJoin('users as u', 'u.id', '=', 'c.userID')
+                ->where('c.suggestionID', $id)
+                ->orderBy('c.created_at', 'ASC')
+                ->get();
+
+            // Query untuk mengambil data usulan beserta jumlah upvote dan downvote
+            $suggestion = DB::table('suggestions as b')
+                ->select('a.id as id_user', 'b.id as id_suggestion', 'a.nama', 'b.suggestion as saran', 'b.description as deskripsi', 'b.created_at as tanggal', 'b.status', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'), DB::raw('IFNULL(c.comments, 0) as comment')) 
+                ->leftJoin('users as a', 'a.id', '=', 'b.userID')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
+                ->where('b.id', $id)
+                ->first();
+
+            if (!$suggestion) {
+                return response()->json(['status' => 'error', 'message' => 'Usulan tidak ditemukan.'], 404);
+            }
+
+            return response()->json(['status' => 'success', 'suggestion' => $suggestion, 'comments' => $comments], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
     public function index()
     {
         $user = auth()->user();

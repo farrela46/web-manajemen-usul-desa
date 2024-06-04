@@ -7,6 +7,7 @@ use App\Models\Progress;
 use Illuminate\Http\Request;
 use App\Models\Progress_picture;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProgressController extends Controller
 {
@@ -126,22 +127,47 @@ class ProgressController extends Controller
             return asset(str_replace('public/', 'storage/', $picture->path));
         });
 
-            $progressData = [
-                'id_progress' => $progress->id,
-                'name' => $progress->name,
-                'description' => $progress->description,
-                'start_date' => $progress->start_date,
-                'end_date' => $progress->end_date,
-                'programID' => $progress->programID,
-                'created_at' => $progress->created_at,
-                'updated_at' => $progress->updated_at,
-                'imageUrls' => $imageUrls,
-            ];
+        $progressData = [
+            'id_progress' => $progress->id,
+            'name' => $progress->name,
+            'description' => $progress->description,
+            'start_date' => $progress->start_date,
+            'end_date' => $progress->end_date,
+            'programID' => $progress->programID,
+            'created_at' => $progress->created_at,
+            'updated_at' => $progress->updated_at,
+            'imageUrls' => $imageUrls,
+        ];
 
         return response()->json([
             'id_program' => $program->id,
             'nama_program' => $program->name,
             'progresses' => $progressData
         ]);
+    }
+
+    public function destroy($progressID)
+    {
+        $progress = Progress::find($progressID);
+
+        if (!$progress) {
+            return response()->json([
+                'message' => 'Progress not found'
+            ], 404);
+        }
+
+        $progressPictures = $progress->progress_picture;
+
+        // Delete the files from storage
+        foreach ($progressPictures as $picture) {
+            $filePath = str_replace('storage/', 'public/', $picture->path); // Convert to the storage path
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+        }
+
+        $progress->delete();
+
+        return response()->json(['message' => 'Progress berhasil dihapus']);
     }
 }

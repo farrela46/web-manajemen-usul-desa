@@ -3,13 +3,12 @@ use bootstrap;
 // import { useRoute } from "vue-router";
 import axios from "axios";
 import BASE_URL from '@/api/config-api';
-import ArgonButton from "@/components/ArgonButton.vue";
+// import ArgonButton from "@/components/ArgonButton.vue";
 import Breadcrumbs from '@/components/Vuetify/Breadcrumbs.vue';
-import * as bootstrap from 'bootstrap';
 
 export default {
   components: {
-    ArgonButton,
+    // ArgonButton,
     Breadcrumbs
   },
   created() {
@@ -52,7 +51,7 @@ export default {
     };
   },
   mounted() {
-    this.retrieveProgram();
+    this.retrieveUsulan();
   },
   methods: {
     setupPage() {
@@ -90,85 +89,27 @@ export default {
         this.saveForm();
       }
     },
-    async saveFrom() {
-      try {
 
-        // const response = await axios.put(BASE_URL + '/user/update', updatedUserData, {
-        //   headers: {
-        //     Authorization: "Bearer " + localStorage.getItem('access_token')
-        //   }
-        // });
-        this.$notify({
-          type: 'success',
-          title: 'Success',
-          text: 'Program berhasil diubah',
-          color: 'green'
-        });
-        this.$router.push('/admin/program');
-
-      } catch (error) {
-        console.error('Error updating profile:', error);
-        if (error.response && error.response.data.message) {
-          const errorMessage = error.response.data.message;
-          this.$notify({
-            type: 'error',
-            title: 'Error',
-            text: errorMessage,
-            color: 'red'
-          });
-        }
-      }
-    },
-    closeModal() {
-      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal'))
-      modal.hide();
-    },
-    hapusModal() {
-      let modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal'))
-      modal.show();
-    },
-    async confirmHapus() {
-      try {
-        const id = this.$route.params.id;
-        // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
-        //   headers: {
-        //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-        //   },
-        // });
-        console.log(id)
-        this.$notify({
-          type: 'success',
-          title: 'Success',
-          text: 'Program berhasil di hapus',
-          color: 'green'
-        });
-        this.closeModal();
-        this.dialog = true
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    closeDialog() {
-      this.dialog = false,
-        this.$router.push('/admin/program')
-    },
-    async retrieveProgram() {
+    async retrieveUsulan() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/program/` + this.$route.params.id, {
+        const response = await axios.get(`${BASE_URL}/suggestion/admin/get/` + this.$route.params.id, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.form = response.data;
-        this.$route.params.id;
+        this.form = response.data.suggestion;
+        this.komentar = response.data.comments
+
         if (response.data.length > 0) {
           this.fotoUrl = response.data[0].foto;
         }
       } catch (error) {
         console.error(error);
       } finally {
-        this.overlay = false
+        this.overlay = false;
+        this.usulanRow = true;
+        this.cekKomen = this.komentar.length === 0;
       }
     },
   },
@@ -189,7 +130,7 @@ export default {
               <label for="nama program" class="col-form-label">Nama Program</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.name">
+              <input type="text" class="form-control" v-model="form.saran">
             </div>
           </div>
           <div class="mb-3 row">
@@ -197,7 +138,7 @@ export default {
               <label for="deskripsi" class="ol-form-label">Deskripsi</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <textarea class="form-control" rows="3" v-model="form.description"></textarea>
+              <textarea class="form-control" rows="3" v-model="form.deskripsi"></textarea>
             </div>
           </div>
           <div class="mb-3 row">
@@ -213,7 +154,7 @@ export default {
               <label for="tanggal mulai" class="col-form-label">Tanggal Usulan</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="date" class="form-control" v-model="form.start_date" disab>
+              <input type="date" class="form-control" v-model="form.tanggal" disab>
             </div>
           </div>
           <div class="mb-3 row">
@@ -221,7 +162,7 @@ export default {
               <label for="status" class="col-form-label">User</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.user" disabled>
+              <input type="text" class="form-control" v-model="form.nama" disabled>
             </div>
           </div>
           <div class="mb-3 row">
@@ -241,7 +182,7 @@ export default {
             </div>
           </div>
           <div class="row mt-4">
-            <h4> Komentar {{ komentar.length }} </h4>
+            <h4> Komentar ({{ komentar.length }}) </h4>
           </div>
           <div class="row">
             <h6 v-if="komentar.length === 0" class="text-center">Belum ada komentar, jadilah yang pertama

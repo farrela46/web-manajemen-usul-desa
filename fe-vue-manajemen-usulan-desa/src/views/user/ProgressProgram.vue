@@ -44,6 +44,9 @@ export default {
     this.retrieveProgress()
   },
   methods: {
+    back() {
+      this.$router.push('/program')
+    },
     setupPage() {
       this.store.state.hideConfigButton = true;
       this.store.state.showNavbar = true;
@@ -85,8 +88,8 @@ export default {
         this.overlay = false
       }
     },
-    editProgress(idprogress) {
-      this.$router.push('/admin/program/progress/' + this.$route.params.idprogram + '/edit/' + idprogress);
+    detailProgress(idprogress) {
+      this.$router.push('/program/' + this.$route.params.idprogram + '/progress/' + idprogress);
     },
     openHapusConfirmation(idprogress) {
       this.selectedProgressId = idprogress;
@@ -136,6 +139,14 @@ export default {
       <div class="container">
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
         <div class="card ps-3 pt-2" style="background-color: #E9F5E9;">
+          <div class="row mt-2 mb-2">
+            <div class="d-flex align-items-center mt-2 justify-content-start row">
+              <div class="col">
+                <argon-button @click="back" color="light" size="sm" class="ms-auto"><i class="fas fa-chevron-left"></i>
+                  Back</argon-button>
+              </div>
+            </div>
+          </div>
           <h3>{{ progress.title }}</h3>
           <div class="p-2">
             <div class="row">
@@ -194,7 +205,7 @@ export default {
                                 </div>
                               </td>
                               <td class="align-middle text-center">
-                                <argon-button  @click="editProgress(item.id_progress)" style="background-color: #514094;">Lihat Progress</argon-button>
+                                <argon-button  @click="detailProgress(item.id_progress)" style="background-color: #514094;">Lihat Progress</argon-button>
                               </td>
                             </tr>
                           </tbody>

@@ -35,7 +35,7 @@ export default {
         {
           title: 'Progress Program',
           disabled: false,
-          href: '/admin/program/progress/' + this.$route.params.idprogram,
+          href: '/program/' + this.$route.params.idprogram + '/progress'
         },
         {
           title: 'Edit Progress',
@@ -59,6 +59,9 @@ export default {
     this.retrieveProgress();
   },
   methods: {
+    back() {
+      this.$router.push('/program/' + this.$route.params.idprogram + '/progress')
+    },
     setupPage() {
       this.store.state.hideConfigButton = true;
       this.store.state.showNavbar = true;
@@ -200,7 +203,16 @@ export default {
       </v-overlay>
       <div class="container">
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
+
         <div class="card ps-3 pt-2">
+          <div class="row mt-2 mb-2">
+            <div class="d-flex align-items-center mt-2 justify-content-start row">
+              <div class="col">
+                <argon-button @click="back" color="light" size="sm" class="ms-auto"><i class="fas fa-chevron-left"></i>
+                  Back</argon-button>
+              </div>
+            </div>
+          </div>
           <h3>{{ form.namaProgram }}</h3>
           <div class="mb-3 row">
             <div class="col-sm-2">
@@ -239,67 +251,24 @@ export default {
               <label for="tanggal selesai" class="col-form-label">Foto</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="file" class="form-control" ref="fileInput" @change="handleFileChange" multiple>
-              <br>
               <img v-for="(url, imgIndex) in form.imageUrls" :key="imgIndex" :src="url" class="img-thumbnail" alt="..."
                 style=" margin-right: 2px;">
             </div>
           </div>
 
-          <div class="form-actions mt-4 d-flex justify-content-end">
+          <!-- <div class="form-actions mt-4 d-flex justify-content-end">
             <button class="btn btn-success mx-2" @click="validateForm">Simpan</button>
             <button class="btn btn-danger me-2" @click="hapusModal">Hapus</button>
-          </div>
+          </div> -->
         </div>
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title text-black" id="deleteConfirmationModalLabel">Konfirmasi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                Anda yakin ingin menghapus proress program ini??
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" @click="confirmHapus">Hapus</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <v-dialog v-model="dialog" max-width="400">
-          <v-card class="text-center">
-            <v-card-text>
-              <div class="p-2">
-                <h3>Progress berhasil di hapus</h3>
-                <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
-              </div>
-            </v-card-text>
-            <template v-slot:actions>
-              <argon-button class="ms-auto" color="secondary" size="sm" variant="outline"
-                @click="closeDialog">Close</argon-button>
-            </template>
-          </v-card>
-        </v-dialog>
-        <v-dialog v-model="validate" max-width="400">
-          <v-card class="text-center">
-            <v-card-text>
-              <div class="p-2">
-                <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
-                <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-
       </div>
     </div>
   </div>
 </template>
 <style>
 .img-thumbnail {
-  width: 200px;
+  width: 100px;
+  height: 70px;
   object-fit: cover;
 }
 </style>

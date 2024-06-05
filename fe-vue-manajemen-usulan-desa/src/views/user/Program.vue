@@ -123,10 +123,10 @@ export default {
       </v-overlay>
       <div class="container">
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
-        <div class="row">
+        <div class="row" >
           <div class="col-12">
-            <div class="card px-4" style="border-radius: 10px; 
-            /* background-color: #E9F5E9; */
+            <div class="card ps-5 pe-3" style="border-radius: 10px; 
+            background-color: #E9F5E9;
             ">
               <div class="row mt-2 mb-2">
                 <div class="d-flex align-items-center mt-2 justify-content-start row">
@@ -136,7 +136,7 @@ export default {
                       Back</argon-button>
                   </div>
                 </div>
-                <div class="row mt-2 p-2">
+                <div class="row mt-2 bg-white card">
                   <div class="table-responsive p-0">
                     <table class="table align-items-center mb-0">
                       <thead>
@@ -183,13 +183,13 @@ export default {
                             <span class="text-black text-xs font-weight-bold">{{ item.status }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <argon-button @click="lihatProgram(item.id)" size="sm" class="ms-auto" style="background-color: #514094;">
-                              Progress</argon-button>
-                            <span class="mx-2" style="font-size: 1rem; cursor: pointer;" @click="lihatProgress(item.id)">
+                            <span class="mx-2" style="font-size: 1rem; cursor: pointer;" @click="lihatProgram(item.id)">
                               <span style="color: green;">
                                 <i class="fas fa-eye fa-lg"></i>
                               </span>
                             </span>
+                            <argon-button @click="lihatProgress(item.id)" size="sm" class="ms-auto" style="background-color: #514094;">
+                              Progress</argon-button>
                             <!-- <v-tooltip text="Tambah Progress">
                               <template v-slot:activator="{ props }">
                                 <span v-bind="props" class="mx-2" style="font-size: 1rem; cursor: pointer;"

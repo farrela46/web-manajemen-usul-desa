@@ -6,7 +6,7 @@ import UserDashboard from "../views/user/Dashboard.vue";
 import UserUsulan from "../views/user/Usulan.vue";
 import ProgramDesa from "../views/user/Program.vue";
 import DetailProgramDesa from "../views/user/DetailProgram.vue";
-import ProgressProgramDesa from "../views/user/ProgramProgress.vue";
+import ProgressProgramDesa from "../views/user/ProgressProgram.vue";
 import InputUsulan from "../views/user/InputUsulan.vue";
 import UserUsulanDiskusi from "../views/user/UsulanDiskusi.vue";
 

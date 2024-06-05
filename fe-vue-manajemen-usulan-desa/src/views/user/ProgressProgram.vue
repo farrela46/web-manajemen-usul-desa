@@ -27,18 +27,15 @@ export default {
         {
           title: 'Program',
           disabled: false,
-          href: '/admin/program',
+          href: '/program',
         },
         {
-          title: 'Tambah Progress',
+          title: 'Progress Program',
           disabled: true,
           href: '/',
         }
       ],
-      progress: {
-        id: 1,
-        title: 'Pembaruan mesin RB22'
-      },
+      progress: {},
       usulan: [],
 
     };
@@ -50,14 +47,14 @@ export default {
     setupPage() {
       this.store.state.hideConfigButton = true;
       this.store.state.showNavbar = true;
-      this.store.state.showSidenav = true;
+      this.store.state.showSidenav = false;
       this.store.state.showFooter = false;
       this.body.classList.remove("bg-gray-100");
     },
     restorePage() {
       this.store.state.hideConfigButton = false;
       this.store.state.showNavbar = true;
-      this.store.state.showSidenav = true;
+      this.store.state.showSidenav = false;
       this.store.state.showFooter = true;
       this.body.classList.add("bg-gray-100");
     },
@@ -138,20 +135,12 @@ export default {
       </v-overlay>
       <div class="container">
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
-        <div class="card ps-3 pt-2">
+        <div class="card ps-3 pt-2" style="background-color: #E9F5E9;">
           <h3>{{ progress.title }}</h3>
           <div class="p-2">
-            <div class="row mb-2">
-              <div class="col-12 d-flex justify-content-end">
-                <argon-button color="primary" size="sm" @click="goTambah"><i class="fas fa-plus mx-2"></i> Tambah
-                  Progress</argon-button>
-              </div>
-            </div>
             <div class="row">
               <div class="col-12">
-                <div class="card px-4" style="border-radius: 10px; 
-              /* background-color: #E9F5E9; */
-              ">
+                <div class="card px-4">
                   <div class="row mt-2 mb-2">
                     <div class="row">
                       <div class="table-responsive p-0">
@@ -205,9 +194,7 @@ export default {
                                 </div>
                               </td>
                               <td class="align-middle text-center">
-                                <argon-button color="white" @click="editProgress(item.id_progress)">Edit</argon-button>
-                                <argon-button class="mx-2" color="danger"
-                                  @click="openHapusConfirmation(item.id_progress)">Hapus</argon-button>
+                                <argon-button  @click="editProgress(item.id_progress)" style="background-color: #514094;">Lihat Progress</argon-button>
                               </td>
                             </tr>
                           </tbody>
@@ -244,7 +231,7 @@ export default {
 </template>
 <style>
 .img-thumbnail {
-  width: 70px;
+  width: 100px;
   height: 70px;
   object-fit: cover;
 }

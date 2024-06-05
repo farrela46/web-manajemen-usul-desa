@@ -30,26 +30,33 @@ export default {
         {
           title: 'Program',
           disabled: false,
-          href: '/program',
+          href: '/admin/program',
         },
         {
-          title: 'Detail Program',
+          title: 'Progress Program',
+          disabled: false,
+          href: '/admin/program/progress/' + this.$route.params.idprogram,
+        },
+        {
+          title: 'Edit Progress',
           disabled: true,
           href: '/',
         }
       ],
       form: {
+        idprogram: '',
+        idprogress: '',
+        namaProgram: '',
         name: '',
         description: '',
         start_date: '',
         end_date: '',
-        status: '',
-        target: ''
+        files: []
       }
     };
   },
   mounted() {
-    this.retrieveProgram();
+    this.retrieveProgress();
   },
   methods: {
     setupPage() {
@@ -66,42 +73,55 @@ export default {
       this.store.state.showFooter = true;
       this.body.classList.add("bg-gray-100");
     },
-    goUsulan() {
-      this.$router.push('/usulan');
-    },
-    formatPrice(price) {
-      const numericPrice = parseFloat(price);
-      return numericPrice.toLocaleString('id-ID');
-    },
     validateForm() {
       if (
-        !this.form.namaProgram ||
-        !this.form.deskripsi ||
-        !this.form.tanggalMulai ||
-        !this.form.tanggalSelesai ||
-        !this.form.status ||
-        !this.form.target
+        !this.form.name ||
+        !this.form.description ||
+        !this.form.start_date ||
+        !this.form.end_date
+
       ) {
         this.validate = true;
       } else {
         this.saveForm();
       }
     },
-    async saveFrom() {
+    handleFileChange(event) {
+      const files = event.target.files;
+      this.form.files = [];
+      for (let i = 0; i < files.length; i++) {
+        if (files[i].type.startsWith('image/')) {
+          this.form.files.push(files[i]);
+        }
+      }
+    },
+    async saveForm() {
       try {
+        const formData = new FormData();
 
-        // const response = await axios.put(BASE_URL + '/user/update', updatedUserData, {
-        //   headers: {
-        //     Authorization: "Bearer " + localStorage.getItem('access_token')
-        //   }
-        // });
+        formData.append('name', this.form.name);
+        formData.append('description', this.form.description);
+        formData.append('start_date', this.form.start_date);
+        formData.append('end_date', this.form.end_date);
+
+        if (this.form.files && this.form.files.length > 0) {
+          for (let i = 0; i < this.form.files.length; i++) {
+            formData.append('gambar[]', this.form.files[i]);
+          }
+        }
+        const response = await axios.post(BASE_URL + '/progress/update/' + this.$route.params.idprogress, formData, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+        console.log(response)
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'Program berhasil diubah',
+          text: 'Progress berhasil diubah',
           color: 'green'
         });
-        this.$router.push('/admin/program');
+        this.$router.push('/admin/program/progress/' + this.$route.params.idprogram);
 
       } catch (error) {
         console.error('Error updating profile:', error);
@@ -126,17 +146,18 @@ export default {
     },
     async confirmHapus() {
       try {
-        const id = this.$route.params.id;
-        // const response = await axios.delete(`${BASE_URL}/deleteUser/` + id, {
-        //   headers: {
-        //     Authorization: 'Bearer ' + localStorage.getItem('access_token'),
-        //   },
-        // });
-        console.log(id)
+        const id = this.$route.params.idprogress;
+        const response = await axios.delete(`${BASE_URL}/progress/delete/` + id, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          },
+        });
+
+        console.log(response)
         this.$notify({
           type: 'success',
           title: 'Success',
-          text: 'Program berhasil di hapus',
+          text: 'Progress berhasil di hapus',
           color: 'green'
         });
         this.closeModal();
@@ -147,29 +168,25 @@ export default {
     },
     closeDialog() {
       this.dialog = false,
-        this.$router.push('/admin/program')
+        this.$router.push('/admin/program/progress/' + this.$route.params.idprogram)
     },
-    async retrieveProgram() {
+    async retrieveProgress() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/program/get/` + this.$route.params.idprogram, {
+        const response = await axios.get(`${BASE_URL}/progress/` + this.$route.params.idprogress, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.form = response.data;
-        this.$route.params.id;
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
-        }
+        this.form = response.data.progresses;
+        this.form.namaProgram = response.data.nama_program
+
+
       } catch (error) {
         console.error(error);
       } finally {
         this.overlay = false
       }
-    },
-    back() {
-      this.$router.push('/program')
     },
   },
 };
@@ -183,68 +200,56 @@ export default {
       </v-overlay>
       <div class="container">
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
-        <div class="card p-3 pt-2" style="background-color: #E9F5E9;">
-          <div class="row d-flex align-items-center justify-content">
-            <div class="col">
-              <argon-button @click="back" color="light" size="sm" class="ms-auto"><i class="fas fa-chevron-left"></i>
-                Back</argon-button>
+        <div class="card ps-3 pt-2">
+          <h3>{{ form.namaProgram }}</h3>
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="nama program" class="col-form-label">Nama Progress</label>
+            </div>
+            <div class="col-sm-10" style="padding-right: 20px">
+              <input type="text" class="form-control" v-model="form.name">
             </div>
           </div>
-          <div class="card p-2 mt-4">
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="deskripsi" class="ol-form-label">Deskripsi</label>
+            </div>
+            <div class="col-sm-10" style="padding-right: 20px">
+              <textarea class="form-control" rows="3" v-model="form.description"></textarea>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="tanggal mulai" class="col-form-label">Tanggal Mulai</label>
+            </div>
+            <div class="col-sm-10" style="padding-right: 20px">
+              <input type="date" class="form-control" v-model="form.start_date">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="tanggal selesai" class="col-form-label">Tanggal Selesai</label>
+            </div>
+            <div class="col-sm-10" style="padding-right: 20px">
+              <input type="date" class="form-control" v-model="form.end_date">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="col-sm-2">
+              <label for="tanggal selesai" class="col-form-label">Foto</label>
+            </div>
+            <div class="col-sm-10" style="padding-right: 20px">
+              <input type="file" class="form-control" ref="fileInput" @change="handleFileChange" multiple>
+              <br>
+              <img v-for="(url, imgIndex) in form.imageUrls" :key="imgIndex" :src="url" class="img-thumbnail" alt="..."
+                style=" margin-right: 2px;">
+            </div>
+          </div>
 
-            <div class="mb-3 row mt-4">
-              <div class="col-sm-2">
-                <label for="nama program" class="col-form-label">Nama Program</label>
-              </div>
-              <div class="col-sm-10" style="padding-right: 20px">
-                <input type="text" class="form-control" v-model="form.name" disabled>
-              </div>
-            </div>
-            <div class="mb-3 row">
-              <div class="col-sm-2">
-                <label for="deskripsi" class="ol-form-label">Deskripsi</label>
-              </div>
-              <div class="col-sm-10" style="padding-right: 20px">
-                <textarea class="form-control" rows="4" v-model="form.description" disabled></textarea>
-              </div>
-            </div>
-            <div class="mb-3 row">
-              <div class="col-sm-2">
-                <label for="tanggal mulai" class="col-form-label">Tanggal Mulai</label>
-              </div>
-              <div class="col-sm-10" style="padding-right: 20px">
-                <input type="date" class="form-control" v-model="form.start_date" disabled>
-              </div>
-            </div>
-            <div class="mb-3 row">
-              <div class="col-sm-2">
-                <label for="tanggal selesai" class="col-form-label">Tanggal Selesai</label>
-              </div>
-              <div class="col-sm-10" style="padding-right: 20px">
-                <input type="date" class="form-control" v-model="form.end_date" disabled>
-              </div>
-            </div>
-            <div class="mb-3 row">
-              <div class="col-sm-2">
-                <label for="status" class="col-form-label">Status</label>
-              </div>
-              <div class="col-sm-10" style="padding-right: 20px">
-                <input type="text" class="form-control" v-model="form.status" disabled>
-              </div>
-            </div>
-            <div class="mb-3 row">
-              <div class="col-sm-2">
-                <label for="target" class="col-form-label">Target</label>
-              </div>
-              <div class="col-sm-10" style="padding-right: 20px">
-                <textarea class="form-control" rows="3" v-model="form.target" disabled></textarea>
-              </div>
-            </div>
-          </div>
-          <!-- <div class="form-actions mt-4 d-flex justify-content-end">
+          <div class="form-actions mt-4 d-flex justify-content-end">
             <button class="btn btn-success mx-2" @click="validateForm">Simpan</button>
             <button class="btn btn-danger me-2" @click="hapusModal">Hapus</button>
-          </div> -->
+          </div>
         </div>
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
@@ -254,7 +259,7 @@ export default {
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                Anda yakin ingin menghapus program ini??
+                Anda yakin ingin menghapus proress program ini??
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -267,7 +272,7 @@ export default {
           <v-card class="text-center">
             <v-card-text>
               <div class="p-2">
-                <h3>Program berhasil di hapus</h3>
+                <h3>Progress berhasil di hapus</h3>
                 <v-icon color="blue" size="80">mdi-checkbox-marked-circle-outline</v-icon>
               </div>
             </v-card-text>
@@ -292,3 +297,9 @@ export default {
     </div>
   </div>
 </template>
+<style>
+.img-thumbnail {
+  width: 200px;
+  object-fit: cover;
+}
+</style>

@@ -35,7 +35,7 @@ export default {
         {
           title: 'Progress Program',
           disabled: false,
-          href: '/admin/program/progress/' + this.$route.params.idprogram,
+          href: '/admin/program/' + this.$route.params.idprogram+ '/progress',
         },
         {
           title: 'Tambah Progress',
@@ -69,11 +69,6 @@ export default {
       this.store.state.showSidenav = true;
       this.store.state.showFooter = true;
       this.body.classList.add("bg-gray-100");
-    },
-
-    formatPrice(price) {
-      const numericPrice = parseFloat(price);
-      return numericPrice.toLocaleString('id-ID');
     },
     validateForm() {
       if (

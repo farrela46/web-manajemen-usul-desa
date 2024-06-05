@@ -30,15 +30,12 @@ export default {
           href: '/admin/program',
         },
         {
-          title: 'Tambah Progress',
+          title: 'Progress Program',
           disabled: true,
           href: '/',
         }
       ],
-      progress: {
-        id: 1,
-        title: 'Pembaruan mesin RB22'
-      },
+      progress: {},
       usulan: [],
 
     };
@@ -62,7 +59,7 @@ export default {
       this.body.classList.add("bg-gray-100");
     },
     goTambah() {
-      this.$router.push('/admin/program/progress/' + this.$route.params.idprogram + '/tambah');
+      this.$router.push('/admin/program/' + this.$route.params.idprogram+ '/progress/'  + 'tambah');
     },
 
     formatPrice(price) {
@@ -89,7 +86,7 @@ export default {
       }
     },
     editProgress(idprogress) {
-      this.$router.push('/admin/program/progress/' + this.$route.params.idprogram + '/edit/' + idprogress);
+      this.$router.push('/admin/program/' + this.$route.params.idprogram + '/progress/'  + idprogress + '/edit');
     },
     openHapusConfirmation(idprogress) {
       this.selectedProgressId = idprogress;

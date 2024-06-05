@@ -121,7 +121,7 @@ export default {
           text: 'Progress berhasil diubah',
           color: 'green'
         });
-        this.$router.push('/admin/program/progress/' + this.$route.params.idprogram);
+        this.$router.push('/admin/program/' + this.$route.params.idprogram + '/progress' );
 
       } catch (error) {
         console.error('Error updating profile:', error);

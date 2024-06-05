@@ -91,17 +91,17 @@ const routes = [
     component: TambahProgram,
   },
   {
-    path: "/admin/program/progress/:idprogram/tambah",
+    path: "/admin/program/:idprogram/progress/tambah",
     name: "Tambah Progress Program", 
     component: TambahProgressProgram,
   },
   {
-    path: "/admin/program/progress/:idprogram",
+    path: "/admin/program/:idprogram/progress",
     name: "Progress Program", 
     component: ProgressProgram,
   },
   {
-    path: "/admin/program/progress/:idprogram/edit/:idprogress",
+    path: "/admin/program/:idprogram/progress/:idprogress/edit",
     name: "Edit Progress Program",
     component: EditProgressProgram,
   },

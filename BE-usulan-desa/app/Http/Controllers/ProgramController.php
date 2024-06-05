@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Program;
+use App\Models\Suggestion;
 use Illuminate\Http\Request;
 
 class ProgramController extends Controller
@@ -84,5 +85,40 @@ class ProgramController extends Controller
             'message' => 'Program berhasil di update',
             'program' => $program,
         ]);
+    }
+
+    public function dashboard()
+    {
+        try {
+            $totalUsulan = Suggestion::count();
+            $totalProgram = Program::count();
+            $usulanDisetujui = Suggestion::where('status', 'approved')->count();
+            $usulanDitolak = Suggestion::where('status', 'rejected')->count();
+
+            $programs = Program::with([
+                'progresses' => function ($query) {
+                    $query->latest('updated_at')->limit(1);
+                }
+            ])
+                ->get(['id', 'name'])
+                ->map(function ($program) {
+                    $latestProgress = $program->progresses->first();
+                    return [
+                        'name' => $program->name,
+                        'progress' => $latestProgress ? $latestProgress->description : 'No progress',
+                    ];
+                });
+
+
+            return response()->json([
+                'total_usulan' => $totalUsulan,
+                'total_program' => $totalProgram,
+                'usulan_disetujui' => $usulanDisetujui,
+                'usulan_ditolak' => $usulanDitolak,
+                'programs' => $programs,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 }

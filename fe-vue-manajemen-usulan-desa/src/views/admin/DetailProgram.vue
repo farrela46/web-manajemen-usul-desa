@@ -219,7 +219,7 @@ export default {
               <label for="status" class="col-form-label">Status</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.status" placeholder="on progress">
+              <input type="text" class="form-control" v-model="form.status" >
             </div>
           </div>
           <div class="mb-3 row">
@@ -228,7 +228,7 @@ export default {
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
               <textarea class="form-control" rows="3" v-model="form.target"
-                placeholder="Memperbaiki semua gapura yang rusak di wilayah tertentu dalam jangka waktu tertentu, dengan memberikan prioritas kepada gapura yang merupakan pintu gerbang masuk ke kota atau desa."></textarea>
+                ></textarea>
             </div>
           </div>
           <!-- <div class="form-actions mt-4 d-flex justify-content-end">

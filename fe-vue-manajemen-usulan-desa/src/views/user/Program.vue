@@ -196,7 +196,7 @@ export default {
                             <span class="text-black text-xs font-weight-bold">{{ item.status }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <argon-button @click="tambahProgress(item.id)" color="info" size="sm" class="ms-auto">
+                            <argon-button @click="lihatProgress(item.id)" size="sm" class="ms-auto" style="background-color: #514094;">
                               Progress</argon-button>
                             <span class="mx-2" style="font-size: 1rem; cursor: pointer;" @click="showProgram(item.id)">
                               <span style="color: green;">

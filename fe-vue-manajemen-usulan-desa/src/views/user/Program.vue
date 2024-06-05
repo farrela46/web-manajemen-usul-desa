@@ -26,23 +26,7 @@ export default {
           href: '/',
         }
       ],
-      usulan: [
-        {
-          id: 1,
-          nama_program: 'Pembaruan mesin RB22',
-          progress: 'Pengadaan Ban dalam Baru',
-        },
-        {
-          id: 2,
-          nama_program: 'Pemalsuan Nilai Listrik',
-          progress: 'Pembuataan desain palsu',
-        },
-        {
-          id: 3,
-          nama_program: 'Perataa Lapangan',
-          progress: 'Beli semen wkwk',
-        },
-      ]
+      usulan: []
     };
   },
   created() {

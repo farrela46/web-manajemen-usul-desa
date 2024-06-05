@@ -55,14 +55,14 @@ export default {
     setupPage() {
       this.store.state.hideConfigButton = true;
       this.store.state.showNavbar = true;
-      this.store.state.showSidenav = true;
+      this.store.state.showSidenav = false;
       this.store.state.showFooter = false;
       this.body.classList.remove("bg-gray-100");
     },
     restorePage() {
       this.store.state.hideConfigButton = false;
       this.store.state.showNavbar = true;
-      this.store.state.showSidenav = true;
+      this.store.state.showSidenav = false;
       this.store.state.showFooter = true;
       this.body.classList.add("bg-gray-100");
     },
@@ -168,6 +168,9 @@ export default {
         this.overlay = false
       }
     },
+    back() {
+      this.$router.push('/program')
+    },
   },
 };
 </script>
@@ -181,7 +184,14 @@ export default {
       <div class="container">
         <Breadcrumbs class="d-flex align-items-center" :items="breadcrumbsItems" />
         <div class="card ps-3 pt-2">
-          <div class="mb-3 row">
+          <div class="row d-flex align-items-center justify-content">
+            <div class="col">
+              <argon-button @click="back" color="light" size="sm" class="ms-auto"><i
+                          class="fas fa-chevron-left"></i>
+                        Back</argon-button>
+            </div>
+          </div>
+          <div class="mb-3 row mt-4">
             <div class="col-sm-2">
               <label for="nama program" class="col-form-label">Nama Program</label>
             </div>

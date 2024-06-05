@@ -61,9 +61,10 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
 
 Route::prefix('/program')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/index', [ProgramController::class, 'index']);
-    Route::get('/{id}', [ProgramController::class, 'detailedProgram']);
+    Route::get('/get/{id}', [ProgramController::class, 'detailedProgram']);
 
     Route::middleware('role:admin')->group(function () {
+        Route::get('/dashboard', [ProgramController::class, 'dashboard']);
         Route::post('/add', [ProgramController::class, 'store']);
         Route::post('/get/update/{id}', [ProgramController::class, 'update']);
     });

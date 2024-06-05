@@ -75,9 +75,8 @@ export default {
     goUsulan() {
       this.$router.push('/usulan');
     },
-    formatPrice(price) {
-      const numericPrice = parseFloat(price);
-      return numericPrice.toLocaleString('id-ID');
+    lihatProgress(idprogram) {
+      this.$router.push('/program/' + idprogram);
     },
     async getUser() {
       try {
@@ -145,7 +144,8 @@ export default {
               <div class="row mt-2 mb-2">
                 <div class="d-flex align-items-center mt-2 justify-content-start row">
                   <div class="col">
-                    <argon-button @click="back" color="light" size="sm" class="ms-auto"><i class="fas fa-chevron-left"></i>
+                    <argon-button @click="back" color="light" size="sm" class="ms-auto"><i
+                        class="fas fa-chevron-left"></i>
                       Back</argon-button>
                   </div>
                 </div>
@@ -159,6 +159,12 @@ export default {
                           </th>
                           <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                             Nama Program
+                          </th>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            Tanggal Mulai
+                          </th>
+                          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            Tanggal Selesai
                           </th>
                           <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                             Status
@@ -181,15 +187,23 @@ export default {
                             <span class="text-black text-xs font-weight-bold">{{ item.name }}</span>
                           </td>
                           <td class="align-middle text-start">
+                            <span class="text-black text-xs font-weight-bold">{{ item.start_date }}</span>
+                          </td>
+                          <td class="align-middle text-start">
+                            <span class="text-black text-xs font-weight-bold">{{ item.end_date }}</span>
+                          </td>
+                          <td class="align-middle text-start">
                             <span class="text-black text-xs font-weight-bold">{{ item.status }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <span class="" style="font-size: 1rem; cursor: pointer;" @click="showProgram(item.id)">
+                            <argon-button @click="lihatProgress(item.id)" size="sm" class="ms-auto" style="background-color: #514094;">
+                              Progress</argon-button>
+                            <span class="mx-2" style="font-size: 1rem; cursor: pointer;" @click="showProgram(item.id)">
                               <span style="color: green;">
-                                <i class="fas fa-eye"></i>
+                                <i class="fas fa-eye fa-lg"></i>
                               </span>
                             </span>
-                            <v-tooltip text="Tambah Progress">
+                            <!-- <v-tooltip text="Tambah Progress">
                               <template v-slot:activator="{ props }">
                                 <span v-bind="props" class="mx-2" style="font-size: 1rem; cursor: pointer;"
                                   @click="tambahProgress(item.id)">
@@ -198,7 +212,7 @@ export default {
                                   </span>
                                 </span>
                               </template>
-                            </v-tooltip>
+</v-tooltip> -->
                           </td>
                         </tr>
                       </tbody>

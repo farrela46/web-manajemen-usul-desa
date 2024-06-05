@@ -5,6 +5,7 @@ import LandingPage from "../views/LandingPage.vue";
 import UserDashboard from "../views/user/Dashboard.vue";
 import UserUsulan from "../views/user/Usulan.vue";
 import ProgramDesa from "../views/user/Program.vue";
+import DetailProgramDesa from "../views/user/DetailProgram.vue";
 import InputUsulan from "../views/user/InputUsulan.vue";
 import UserUsulanDiskusi from "../views/user/UsulanDiskusi.vue";
 
@@ -118,6 +119,11 @@ const routes = [
     path: "/program",
     name: "Program Desa",
     component: ProgramDesa,
+  },
+  {
+    path: "/program/:id",
+    name: "Detail Program Desa",
+    component: DetailProgramDesa,
   },
   {
     path: "/usulan/input",

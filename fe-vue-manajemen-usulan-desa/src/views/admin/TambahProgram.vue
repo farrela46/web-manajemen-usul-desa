@@ -183,14 +183,14 @@ export default {
               <input type="date" class="form-control" v-model="form.tanggalSelesai">
             </div>
           </div>
-          <div class="mb-3 row">
+          <!-- <div class="mb-3 row">
             <div class="col-sm-2">
               <label for="status" class="col-form-label">Status</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
               <input type="text" class="form-control" v-model="form.status">
             </div>
-          </div>
+          </div> -->
           <div class="mb-3 row">
             <div class="col-sm-2">
               <label for="target" class="col-form-label">Target</label>

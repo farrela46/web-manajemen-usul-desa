@@ -30,7 +30,7 @@ export default {
         {
           title: 'Program',
           disabled: false,
-          href: '/admin/program',
+          href: '/program',
         },
         {
           title: 'Detail Program',
@@ -186,7 +186,7 @@ export default {
               <label for="nama program" class="col-form-label">Nama Program</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.name">
+              <input type="text" class="form-control" v-model="form.name" disabled>
             </div>
           </div>
           <div class="mb-3 row">
@@ -195,7 +195,7 @@ export default {
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
               <textarea class="form-control" rows="4" v-model="form.description"
-                ></textarea>
+                disabled></textarea>
             </div>
           </div>
           <div class="mb-3 row">
@@ -203,7 +203,7 @@ export default {
               <label for="tanggal mulai" class="col-form-label">Tanggal Mulai</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="date" class="form-control" v-model="form.start_date">
+              <input type="date" class="form-control" v-model="form.start_date" disabled>
             </div>
           </div>
           <div class="mb-3 row">
@@ -211,7 +211,7 @@ export default {
               <label for="tanggal selesai" class="col-form-label">Tanggal Selesai</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="date" class="form-control" v-model="form.end_date">
+              <input type="date" class="form-control" v-model="form.end_date" disabled>
             </div>
           </div>
           <div class="mb-3 row">
@@ -219,7 +219,7 @@ export default {
               <label for="status" class="col-form-label">Status</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.status" >
+              <input type="text" class="form-control" v-model="form.status"  disabled>
             </div>
           </div>
           <div class="mb-3 row">
@@ -228,7 +228,7 @@ export default {
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
               <textarea class="form-control" rows="3" v-model="form.target"
-                ></textarea>
+              disabled></textarea>
             </div>
           </div>
           <!-- <div class="form-actions mt-4 d-flex justify-content-end">

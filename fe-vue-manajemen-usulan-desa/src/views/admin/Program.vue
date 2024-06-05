@@ -24,6 +24,7 @@ export default {
       products: [],
       overlay: false,
       showModal: false,
+      programShow: false,
       dialog: false,
       selectedUsulanId: null,
       breadcrumbsItems: [
@@ -124,7 +125,8 @@ export default {
       } catch (error) {
         console.error(error);
       } finally {
-        this.overlay = false
+        this.overlay = false,
+        this.programShow = true
       }
     },
     async AcceptWarga(id) {
@@ -190,7 +192,7 @@ export default {
               Program</argon-button>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="programShow">
           <div class="col-12">
             <div class="card px-4" style="border-radius: 10px; 
             /* background-color: #E9F5E9; */

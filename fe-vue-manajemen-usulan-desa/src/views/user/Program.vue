@@ -59,8 +59,11 @@ export default {
     goUsulan() {
       this.$router.push('/usulan');
     },
-    lihatProgress(idprogram) {
+    lihatProgram(idprogram) {
       this.$router.push('/program/' + idprogram);
+    },
+    lihatProgress(idprogram) {
+      this.$router.push('/program/' + idprogram + '/progress');
     },
     async getUser() {
       try {
@@ -180,7 +183,7 @@ export default {
                             <span class="text-black text-xs font-weight-bold">{{ item.status }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <argon-button @click="lihatProgress(item.id)" size="sm" class="ms-auto" style="background-color: #514094;">
+                            <argon-button @click="lihatProgram(item.id)" size="sm" class="ms-auto" style="background-color: #514094;">
                               Progress</argon-button>
                             <span class="mx-2" style="font-size: 1rem; cursor: pointer;" @click="lihatProgress(item.id)">
                               <span style="color: green;">

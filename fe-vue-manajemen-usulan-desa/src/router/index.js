@@ -6,6 +6,7 @@ import UserDashboard from "../views/user/Dashboard.vue";
 import UserUsulan from "../views/user/Usulan.vue";
 import ProgramDesa from "../views/user/Program.vue";
 import DetailProgramDesa from "../views/user/DetailProgram.vue";
+import ProgressProgramDesa from "../views/user/ProgramProgress.vue";
 import InputUsulan from "../views/user/InputUsulan.vue";
 import UserUsulanDiskusi from "../views/user/UsulanDiskusi.vue";
 
@@ -121,9 +122,14 @@ const routes = [
     component: ProgramDesa,
   },
   {
-    path: "/program/:id",
+    path: "/program/:idprogram",
     name: "Detail Program Desa",
     component: DetailProgramDesa,
+  },
+  {
+    path: "/program/:idprogram/progress",
+    name: "Progress Program Desa",
+    component: ProgressProgramDesa,
   },
   {
     path: "/usulan/input",

@@ -27,12 +27,12 @@ export default {
       overlay: false,
       breadcrumbsItems: [
         {
-          title: 'Program',
+          title: 'Usulan',
           disabled: false,
-          href: '/admin/program',
+          href: '/admin/usulan',
         },
         {
-          title: 'Detail Program',
+          title: 'Detail Usulan',
           disabled: true,
           href: '/',
         }

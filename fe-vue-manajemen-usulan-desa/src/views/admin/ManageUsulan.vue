@@ -220,7 +220,14 @@ export default {
                             </div>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.saran }}</span>
+                            <div class="d-flex px-2 py-1">
+                              <div  style="width: 300px;">
+                                <h6 class="mb-0 text-sm">{{ item.saran }}</h6>
+                                <p class="text-xs text-secondary text-truncate mb-0">
+                                  {{ item.deskripsi }}
+                                </p>
+                              </div>
+                            </div>
                           </td>
                           <td class="align-middle text-start">
                             <span class="text-black text-xs font-weight-bold">{{ item.tanggal }}</span>

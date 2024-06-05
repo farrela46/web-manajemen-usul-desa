@@ -94,6 +94,7 @@ class ProgramController extends Controller
             $totalProgram = Program::count();
             $usulanDisetujui = Suggestion::where('status', 'approved')->count();
             $usulanDitolak = Suggestion::where('status', 'rejected')->count();
+            $totalvote =  $usulanDitolak + $usulanDisetujui;
 
             $programs = Program::with([
                 'progresses' => function ($query) {
@@ -109,6 +110,10 @@ class ProgramController extends Controller
                     ];
                 });
 
+                $persetujuan = [
+                    'disetujui' => $usulanDisetujui /$totalvote * 100,
+                    'ditolak' => $usulanDitolak /$totalvote * 100
+                ];
 
             return response()->json([
                 'total_usulan' => $totalUsulan,
@@ -116,6 +121,7 @@ class ProgramController extends Controller
                 'usulan_disetujui' => $usulanDisetujui,
                 'usulan_ditolak' => $usulanDitolak,
                 'programs' => $programs,
+                'persetujuan' => $persetujuan
             ]);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);

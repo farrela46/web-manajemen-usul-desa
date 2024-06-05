@@ -59,11 +59,14 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
     });
 });
 
-Route::prefix('/program')->middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::post('/add', [ProgramController::class, 'store']);
-    Route::post('/update/{id}', [ProgramController::class, 'update']);
+Route::prefix('/program')->middleware(['auth:sanctum'])->group(function () {
     Route::get('/index', [ProgramController::class, 'index']);
     Route::get('/{id}', [ProgramController::class, 'detailedProgram']);
+
+    Route::middleware('role:admin')->group(function () {
+        Route::post('/add', [ProgramController::class, 'store']);
+        Route::post('/get/update/{id}', [ProgramController::class, 'update']);
+    });
 });
 
 Route::prefix('/progress')->middleware(['auth:sanctum'])->group(function () {

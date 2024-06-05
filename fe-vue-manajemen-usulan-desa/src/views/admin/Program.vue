@@ -58,7 +58,7 @@ export default {
     };
   },
   mounted() {
-this.retrieveProgram();
+    this.retrieveProgram();
   },
   methods: {
     setupPage() {
@@ -225,7 +225,14 @@ this.retrieveProgram();
                             </div>
                           </td>
                           <td class="align-middle text-start">
-                            <span class="text-black text-xs font-weight-bold">{{ item.name }}</span>
+                            <div class="d-flex px-2 py-1">
+                              <div  style="width: 300px;">
+                                <h6 class="mb-0 text-sm">{{ item.name }}</h6>
+                                <p class="text-xs text-secondary text-truncate mb-0">
+                                  {{ item.description }}
+                                </p>
+                              </div>
+                            </div>
                           </td>
                           <td class="align-middle text-start">
                             <span class="text-black text-xs font-weight-bold">{{ item.status }}</span>
@@ -238,7 +245,8 @@ this.retrieveProgram();
                             </span>
                             <v-tooltip text="Tambah Progress">
                               <template v-slot:activator="{ props }">
-                                <span v-bind="props" class="mx-2" style="font-size: 1rem; cursor: pointer;" @click="tambahProgress(item.id)">
+                                <span v-bind="props" class="mx-2" style="font-size: 1rem; cursor: pointer;"
+                                  @click="tambahProgress(item.id)">
                                   <span style="color: blue;">
                                     <i class="fas fa-plus-circle"></i> Progress
                                   </span>

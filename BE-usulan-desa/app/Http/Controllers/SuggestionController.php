@@ -208,7 +208,7 @@ class SuggestionController extends Controller
                         'saran' => $suggestionAsalMap[$suggestion->id_asal]->saran,
                         'deskripsi' => $suggestionAsalMap[$suggestion->id_asal]->deskripsi,
                         'tanggal' => $suggestionAsalMap[$suggestion->id_asal]->tanggal
-                    ] : []
+                    ] : null
                 ];
             });
 

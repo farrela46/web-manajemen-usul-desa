@@ -161,8 +161,6 @@ class SuggestionController extends Controller
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, type FROM suggestions_votes WHERE userID = ' . $userID . ') as v'), 'v.suggestionID', '=', 'b.id')
-                ->leftJoin('suggestions as p', 'p.id', '=', 'b.suggestions_id')
-                ->leftJoin('users as parent_user', 'parent_user.id', '=', 'p.userID')
                 ->select(
                     'b.id',
                     'a.nama as nama',
@@ -173,17 +171,21 @@ class SuggestionController extends Controller
                     DB::raw('IFNULL(u.upvotes, 0) as upvote'),
                     DB::raw('IFNULL(d.downvotes, 0) as downvote'),
                     DB::raw('IFNULL(c.comments, 0) as comment'),
-                    // Kolom parent suggestion
-                    'p.id as id_ditanggapi',
-                    'parent_user.nama as nama_ditanggapi',
-                    'p.suggestion as suggestion_ditanggapi',
-                    'p.description as description_ditanggapi',
-                    'p.created_at as tanggal_ditanggapi',
-                    
                 )
                 ->get();
 
-            return response()->json(['status' => 'success', 'data' => $suggestions], 200);
+            $tanggapan = DB::table('suggestions as b')
+                ->leftJoin('users as a', 'a.id', '=', 'b.userID')
+                ->select(
+                    'b.id',
+                    'a.nama as nama',
+                    'b.suggestion as saran',
+                    'b.description as deskripsi',
+                    'b.created_at as tanggal',
+                    'b.suggestions_id as id_usulan'
+                )
+                ->whereNotNull('b.suggestions_id')->get();
+            return response()->json(['status' => 'success', 'data' => $suggestions, 'tanggapan' => $tanggapan], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }

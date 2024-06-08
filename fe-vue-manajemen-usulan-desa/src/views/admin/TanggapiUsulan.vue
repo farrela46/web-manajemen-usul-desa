@@ -67,7 +67,7 @@ export default {
       return numericPrice.toLocaleString('id-ID');
     },
     validateForm() {
-      if (!this.form.tanggapan || !this.form.deskripsi
+      if (!this.form.suggestion || !this.form.description
       ) {
         this.validate = true;
       } else {

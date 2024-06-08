@@ -15,6 +15,7 @@ class Suggestion extends Model
         'suggestion',
         'description',
         'status',
+        'suggestions_id',
         'date'
     ];
 
@@ -32,4 +33,16 @@ class Suggestion extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function parentSuggestion()
+    {
+        return $this->belongsTo(Suggestion::class, 'suggestions_id');
+    }
+
+
+    public function childSuggestions(): HasMany
+    {
+        return $this->hasMany(Suggestion::class, 'suggestions_id');
+    }
+
 }

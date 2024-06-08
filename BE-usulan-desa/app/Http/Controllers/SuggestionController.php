@@ -152,17 +152,17 @@ class SuggestionController extends Controller
                 'message' => 'Akun kamu belum di verifikasi oleh admin'
             ], 403);
         }
+
         try {
             $userID = $user->id;
 
+            // Ambil data semua suggestions
             $suggestions = DB::table('suggestions as b')
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, type FROM suggestions_votes WHERE userID = ' . $userID . ') as v'), 'v.suggestionID', '=', 'b.id')
-                ->leftJoin('suggestions as p', 'p.id', '=', 'b.suggestions_id')
-                ->leftJoin('users as parent_user', 'parent_user.id', '=', 'p.userID')
                 ->select(
                     'b.id',
                     'a.nama as nama',
@@ -173,23 +173,57 @@ class SuggestionController extends Controller
                     DB::raw('IFNULL(u.upvotes, 0) as upvote'),
                     DB::raw('IFNULL(d.downvotes, 0) as downvote'),
                     DB::raw('IFNULL(c.comments, 0) as comment'),
-                    // Kolom parent suggestion
-                    'p.id as id_ditanggapi',
-                    'parent_user.nama as nama_ditanggapi',
-                    'p.suggestion as suggestion_ditanggapi',
-                    'p.description as description_ditanggapi',
-                    'p.created_at as tanggal_ditanggapi',
-                    
+                    'b.suggestions_id as id_asal'
                 )
                 ->get();
 
-            return response()->json(['status' => 'success', 'data' => $suggestions], 200);
+            // Ambil data suggestions yang merupakan tanggapan ke suggestion lain
+            $suggestionAsalMap = DB::table('suggestions as b')
+                ->leftJoin('users as a', 'a.id', '=', 'b.userID')
+                ->select(
+                    'b.id',
+                    'a.nama as nama',
+                    'b.suggestion as saran',
+                    'b.description as deskripsi',
+                    'b.created_at as tanggal'
+                )
+                ->get()
+                ->keyBy('id');
+
+            // Menggabungkan data
+            $response_data = $suggestions->map(function ($suggestion) use ($suggestionAsalMap) {
+                return [
+                    'id' => $suggestion->id,
+                    'nama' => $suggestion->nama,
+                    'saran' => $suggestion->saran,
+                    'deskripsi' => $suggestion->deskripsi,
+                    'tanggal' => $suggestion->tanggal,
+                    'user_vote' => $suggestion->user_vote,
+                    'upvote' => $suggestion->upvote,
+                    'downvote' => $suggestion->downvote,
+                    'comment' => $suggestion->comment,
+                    'suggestion_asal' => $suggestion->id_asal ? [
+                        'id' => $suggestionAsalMap[$suggestion->id_asal]->id,
+                        'nama' => $suggestionAsalMap[$suggestion->id_asal]->nama,
+                        'saran' => $suggestionAsalMap[$suggestion->id_asal]->saran,
+                        'deskripsi' => $suggestionAsalMap[$suggestion->id_asal]->deskripsi,
+                        'tanggal' => $suggestionAsalMap[$suggestion->id_asal]->tanggal
+                    ] : []
+                ];
+            });
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $response_data
+            ], 200);
+
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
-
-
 
     public function indexAdmin(Request $request)
     {

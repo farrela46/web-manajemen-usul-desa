@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
             'nama' => 'Andi',
             'email' => 'andi@gmail.com',
             'password' => bcrypt('password'),
+            'status' => 'unverified',
             'role' => 'user',
         ]);
 
@@ -31,6 +32,7 @@ class UserSeeder extends Seeder
             'nama' => 'Budi',
             'email' => 'budi@gmail.com',
             'password' => bcrypt('password'),
+            'status' => 'unverified',
             'role' => 'user',
         ]);
 
@@ -38,6 +40,7 @@ class UserSeeder extends Seeder
             'nama' => 'vivi',
             'email' => 'vivi@gmail.com',
             'password' => bcrypt('password'),
+            'status' => 'unverified',
             'role' => 'user',
         ]);
     }

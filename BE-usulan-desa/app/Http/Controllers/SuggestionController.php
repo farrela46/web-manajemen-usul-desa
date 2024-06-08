@@ -211,7 +211,8 @@ class SuggestionController extends Controller
                     DB::raw('IFNULL(u.upvotes, 0) as upvote'),
                     DB::raw('IFNULL(d.downvotes, 0) as downvote'),
                     DB::raw('IFNULL(c.comments, 0) as comment')
-                );
+                )
+                ->where('b.userID', '!=', 1);
             if (!is_null($status) && $status !== '') {
                 $query->where('b.status', $status);
             }

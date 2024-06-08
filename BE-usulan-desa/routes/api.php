@@ -53,6 +53,7 @@ Route::prefix('/suggestion')->middleware(['auth:sanctum'])->group(function () {
     // Routes for users with 'admin' role
     Route::middleware('role:admin')->group(function () {
         Route::post('/response/{suggestionId}', [SuggestionController::class, 'responseSuggestion']);
+        Route::get('/response/{suggestionId}', [SuggestionController::class, 'getResponse']);
         Route::post('/approve/{id}', [SuggestionController::class, 'approveSuggestion']);
         Route::get('/reject/{id}', [SuggestionController::class, 'rejected']);
         Route::get('/index', [SuggestionController::class, 'indexAdmin']);

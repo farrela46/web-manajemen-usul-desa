@@ -79,6 +79,16 @@ class SuggestionController extends Controller
         }
     }
 
+    public function getResponse($suggestionId)
+    {
+        try {
+            $response = Suggestion::where('suggestions_id', ($suggestionId))->get();
+            return response()->json(['status' => 'success', 'data' => $response], 201);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
     public function getOne($id)
     {
         $user = auth()->user();

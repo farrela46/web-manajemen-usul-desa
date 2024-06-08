@@ -147,7 +147,7 @@ export default {
                   NIK : {{ user.NIK }}
                 </p>
               </li>
-              <li class="mb-2">
+              <!-- <li class="mb-2">
                 <a class="dropdown-item border-radius-md" @click="goProfile">
                   <div class="py-1 d-flex">
                     <div class="my-auto mx-3">
@@ -182,7 +182,7 @@ export default {
                     </div>
                   </div>
                 </a>
-              </li>
+              </li> -->
               <li>
                 <a class="dropdown-item border-radius-md" @click="onLogout">
                   <div class="py-1 d-flex">

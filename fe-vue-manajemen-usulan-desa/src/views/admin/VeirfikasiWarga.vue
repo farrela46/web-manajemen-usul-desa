@@ -179,7 +179,8 @@ export default {
             <div class="row ps-3 mb-2">
               Filter:
               <div class="col-2">
-                <select class="form-select form-select-sm" aria-label="Small select example" v-model="selectedFilter"  @change="retrieveUser">
+                <select class="form-select form-select-sm" aria-label="Small select example" v-model="selectedFilter"
+                  @change="retrieveUser">
                   <option value="" selected>Semua</option>
                   <option value="unverified">Unverified</option>
                   <option value="verified">Verified</option>
@@ -240,7 +241,10 @@ export default {
                                 color="green">
                                 Verified
                               </v-chip>
-                              <v-chip v-else color="red">
+                              <v-chip v-if="item.status === 'rejected'" color="green">
+                                Rejected
+                              </v-chip>
+                              <v-chip v-if="item.status === 'unverified'" color="red">
                                 Pending
                               </v-chip>
                             </span>

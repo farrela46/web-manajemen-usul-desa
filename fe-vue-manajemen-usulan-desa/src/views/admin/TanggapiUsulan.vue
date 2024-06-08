@@ -67,8 +67,7 @@ this.$router.push('/admin/usulan')
       return numericPrice.toLocaleString('id-ID');
     },
     validateForm() {
-      if (!this.form.namaProgram || !this.form.deskripsi || !this.form.tanggalMulai
-        || !this.form.tanggalSelesai || !this.form.status || !this.form.target
+      if (!this.form.tanggapan || !this.form.deskripsi 
       ) {
         this.validate = true;
       } else {
@@ -78,13 +77,9 @@ this.$router.push('/admin/usulan')
     async submitForm() {
       this.overlay = true;
       try {
-        const response = await axios.post(`${BASE_URL}/program/add`, {
-          name: this.form.namaProgram,
+        const response = await axios.post(`${BASE_URL}/suggestion/response/` + this.$route.params.id, {
+          suggestion: this.form.tanggapan,
           description: this.form.deskripsi,
-          target: this.form.target,
-          start_date: this.form.tanggalMulai,
-          end_date: this.form.tanggalSelesai
-
         }, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
@@ -98,7 +93,7 @@ this.$router.push('/admin/usulan')
           color: 'green'
         });
         console.log('response.data');
-        this.$router.push('/admin/program')
+        this.$router.push('/admin/usulan')
       } catch (error) {
         console.error(error);
 
@@ -113,25 +108,6 @@ this.$router.push('/admin/usulan')
         }
       } finally {
         this.overlay = false;
-      }
-    },
-    async retrieveBuku() {
-      try {
-        this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/buku/get`, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem('access_token')
-          }
-        });
-        this.products = response.data;
-
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.overlay = false
       }
     },
   },

@@ -88,9 +88,9 @@ export default {
     },
     restorePage() {
       this.store.state.hideConfigButton = false;
-      this.store.state.showNavbar = true;
-      this.store.state.showSidenav = true;
-      this.store.state.showFooter = true;
+      this.store.state.showNavbar = false;
+      this.store.state.showSidenav = false;
+      this.store.state.showFooter = false;
       this.body.classList.add("bg-gray-100");
     }
   },

@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->string('suggestion');
             $table->longText('description');
             $table->string('status')->nullable();
+            $table->unsignedBigInteger('suggestions_id')->nullable();
+            $table->foreign('suggestions_id')->references('id')->on('suggestions')->onDelete('set null');
             $table->date('date');
             $table->timestamps();
         });

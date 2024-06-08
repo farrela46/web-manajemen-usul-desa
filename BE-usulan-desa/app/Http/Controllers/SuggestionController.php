@@ -46,6 +46,39 @@ class SuggestionController extends Controller
         }
     }
 
+    public function responseSuggestion(Request $request, $suggestionId)
+    {
+        $user = auth()->user();
+
+        $validatedData = $request->validate([
+            'suggestion' => 'required|string',
+            'description' => 'required|string',
+        ]);
+
+        $suggestion = Suggestion::create([
+            'userID' => $user->id,
+            'suggestion' => $validatedData['suggestion'],
+            'description' => $validatedData['description'],
+            'status' => 'pending',
+            'suggestions_id' => $suggestionId,
+            'date' => Carbon::now(),
+        ]);
+
+        if ($suggestion) {
+            // Ambil data saran induk dengan menggunakan eager loading
+            $suggestion->load('parentSuggestion');
+
+            return response()->json([
+                'message' => 'Usulan berhasil dibuat',
+                'data' => $suggestion
+            ], 201);
+        } else {
+            return response()->json([
+                'message' => 'Server error'
+            ], 500);
+        }
+    }
+
     public function getOne($id)
     {
         $user = auth()->user();
@@ -93,7 +126,7 @@ class SuggestionController extends Controller
 
             // Query untuk mengambil data usulan beserta jumlah upvote dan downvote
             $suggestion = DB::table('suggestions as b')
-                ->select('a.id as id_user', 'b.id as id_suggestion', 'a.nama', 'b.suggestion as saran', 'b.description as deskripsi', 'b.created_at as tanggal', 'b.status', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'), DB::raw('IFNULL(c.comments, 0) as comment')) 
+                ->select('a.id as id_user', 'b.id as id_suggestion', 'a.nama', 'b.suggestion as saran', 'b.description as deskripsi', 'b.created_at as tanggal', 'b.status', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'), DB::raw('IFNULL(c.comments, 0) as comment'))
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
@@ -128,6 +161,8 @@ class SuggestionController extends Controller
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, type FROM suggestions_votes WHERE userID = ' . $userID . ') as v'), 'v.suggestionID', '=', 'b.id')
+                ->leftJoin('suggestions as p', 'p.id', '=', 'b.suggestions_id')
+                ->leftJoin('users as parent_user', 'parent_user.id', '=', 'p.userID')
                 ->select(
                     'b.id',
                     'a.nama as nama',
@@ -138,13 +173,23 @@ class SuggestionController extends Controller
                     DB::raw('IFNULL(u.upvotes, 0) as upvote'),
                     DB::raw('IFNULL(d.downvotes, 0) as downvote'),
                     DB::raw('IFNULL(c.comments, 0) as comment'),
+                    // Kolom parent suggestion
+                    'p.id as id_ditanggapi',
+                    'parent_user.nama as nama_ditanggapi',
+                    'p.suggestion as suggestion_ditanggapi',
+                    'p.description as description_ditanggapi',
+                    'p.created_at as tanggal_ditanggapi',
+                    
                 )
                 ->get();
+
             return response()->json(['status' => 'success', 'data' => $suggestions], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+
+
 
     public function indexAdmin(Request $request)
     {

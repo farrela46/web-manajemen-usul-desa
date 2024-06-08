@@ -35,14 +35,14 @@ export default {
         }
       ],
       form: {
-        tanggapan: '',
-        deskripsi: '',
+        suggestion: '',
+        description: '',
       },
       validate: false
     };
   },
   mounted() {
-
+    this.retrieveTanggapan();
   },
   methods: {
     setupPage() {
@@ -60,14 +60,14 @@ export default {
       this.body.classList.add("bg-gray-100");
     },
     back() {
-this.$router.push('/admin/usulan')
+      this.$router.push('/admin/usulan')
     },
     formatPrice(price) {
       const numericPrice = parseFloat(price);
       return numericPrice.toLocaleString('id-ID');
     },
     validateForm() {
-      if (!this.form.tanggapan || !this.form.deskripsi 
+      if (!this.form.tanggapan || !this.form.deskripsi
       ) {
         this.validate = true;
       } else {
@@ -78,8 +78,8 @@ this.$router.push('/admin/usulan')
       this.overlay = true;
       try {
         const response = await axios.post(`${BASE_URL}/suggestion/response/` + this.$route.params.id, {
-          suggestion: this.form.tanggapan,
-          description: this.form.deskripsi,
+          suggestion: this.form.suggestion,
+          description: this.form.description,
         }, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
@@ -110,6 +110,21 @@ this.$router.push('/admin/usulan')
         this.overlay = false;
       }
     },
+    async retrieveTanggapan() {
+      try {
+        this.overlay = true;
+        const response = await axios.get(`${BASE_URL}/suggestion/response/` + this.$route.params.id, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+        this.form = response.data.data;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.overlay = false
+      }
+    },
   },
 };
 </script>
@@ -128,7 +143,7 @@ this.$router.push('/admin/usulan')
               <label for="nama program" class="col-form-label">Tanggapan</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <input type="text" class="form-control" v-model="form.tanggapan">
+              <input type="text" class="form-control" v-model="form.suggestion">
             </div>
           </div>
           <div class="mb-3 row">
@@ -136,7 +151,7 @@ this.$router.push('/admin/usulan')
               <label for="deskripsi" class="ol-form-label">Deskripsi</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
-              <textarea class="form-control" rows="3" v-model="form.deskripsi"></textarea>
+              <textarea class="form-control" rows="3" v-model="form.description"></textarea>
             </div>
           </div>
           <div class="form-actions mt-4 d-flex justify-content-end">

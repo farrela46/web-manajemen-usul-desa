@@ -1,7 +1,7 @@
-
+// Import required modules
 import { createRouter, createWebHistory } from 'vue-router';
-import axios from 'axios';
-import BASE_URL from '@/api/config-api';
+// import axios from 'axios';
+// import BASE_URL from '@/api/config-api';
 import LandingPage from '../views/LandingPage.vue';
 
 // USER
@@ -36,9 +36,12 @@ import Login from '../views/Loginn.vue';
 import Signin from '../views/Signin.vue';
 
 // Error Page
-import Unauthorized from '../views/Unauthorized.vue'; // Create this component
+import Unauthorized from '../views/Unauthorized.vue'; 
+
+
 
 const routes = [
+
   {
     path: '/',
     name: '/',
@@ -212,6 +215,7 @@ const routes = [
     name: 'Unauthorized',
     component: Unauthorized,
   },
+
 ];
 
 const router = createRouter({
@@ -220,41 +224,50 @@ const router = createRouter({
   linkActiveClass: 'active',
 });
 
-router.beforeEach(async (to, from, next) => {
-  const isAuthenticated = localStorage.getItem('access_token') !== null;
-  const userRole = await getUserRole();
+// // Loading state
+// let isLoading = true;
 
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
-      next({
-        path: '/login',
-        query: { redirect: to.fullPath },
-      });
-    } else {
-      const requiredRole = to.meta.role;
-      if (userRole !== requiredRole) {
-        next({ path: '/unauthorized' });
-      } else {
-        next();
-      }
-    }
-  } else {
-    next();
-  }
-});
+// router.beforeEach(async (to, from, next) => {
 
-async function getUserRole() {
-  try {
-    const response = await axios.get(`${BASE_URL}/user`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-      },
-    });
-    return response.data.role;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+//   const isAuthenticated = localStorage.getItem('access_token') !== null;
+//   const userRole = await getUserRole();
+
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     if (!isAuthenticated) {
+//       next({
+//         path: '/login',
+//         query: { redirect: to.fullPath },
+//       });
+//     } else {
+//       const requiredRole = to.meta.role;
+//       if (userRole !== requiredRole) {
+//         next({ path: '/unauthorized' });
+//       } else {
+//         next();
+//       }
+//     }
+//   } else {
+//     next();
+//   }
+//   isLoading = false;
+// });
+
+// async function getUserRole() {
+//   try {
+//     const response = await axios.get(`${BASE_URL}/user`, {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+//       },
+//     });
+//     return response.data.role;
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }
+
+// export function useRouterLoading() {
+//   return isLoading;
+// }
 
 export default router;

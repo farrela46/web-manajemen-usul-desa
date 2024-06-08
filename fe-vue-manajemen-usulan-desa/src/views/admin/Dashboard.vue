@@ -35,24 +35,7 @@ export default {
         },
       },
       cards: [],
-      program: [
-        {
-          nama: 'Perbaikan Gapura',
-          progress: 'Pembacaan Doa'
-        },
-        {
-          nama: 'Pembuatan Jamban',
-          progress: 'Peletakan kayu pertama'
-        },
-        {
-          nama: 'Perbaikan Rumah Pak Romli',
-          progress: 'Pembersihan Lahan'
-        },
-        {
-          nama: 'Penangkapan Jamet',
-          progress: 'Pembacaan Ikrar Jamet'
-        }
-      ]
+      program: []
     };
   },
   created() {

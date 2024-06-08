@@ -84,10 +84,10 @@ export default {
           }
         });
         
-        // window.location.href = '/login';
+        window.location.href = '/login';
         localStorage.removeItem('access_token');
         localStorage.removeItem('username');
-        this.$router.push('/login');
+        // this.$router.push('/login');
         
       } catch (error) {
         console.error('Logout failed:', error);

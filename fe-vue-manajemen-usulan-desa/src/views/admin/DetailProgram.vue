@@ -152,7 +152,7 @@ export default {
     async retrieveProgram() {
       try {
         this.overlay = true;
-        const response = await axios.get(`${BASE_URL}/program/` + this.$route.params.id, {
+        const response = await axios.get(`${BASE_URL}/program/get/` + this.$route.params.id, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }

@@ -69,7 +69,10 @@ export default {
       this.$router.push('/usulan');
     },
     detailUsulan(id) {
-      this.$router.push('/admin/usulan/' + id)
+      this.$router.push('/admin/usulan/' + id )
+    },
+    tanggapiUsulan(id) {
+      this.$router.push('/admin/usulan/' + id + '/tanggapi')
     },
     openAcceptConfirmation(id) {
       this.selectedUsulanId = id;
@@ -156,7 +159,6 @@ export default {
           }
         });
         this.usulan = response.data.data;
-
         
       } catch (error) {
         console.error(error);
@@ -219,8 +221,8 @@ export default {
                               </div>
                             </div>
                           </td>
-                          <td class="align-middle text-start">
-                            <div class="d-flex px-2 py-1">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
+                            <div class="d-flex px-2 py-1"  >
                               <div  style="width: 300px;">
                                 <h6 class="mb-0 text-sm">{{ item.saran }}</h6>
                                 <p class="text-xs text-secondary text-truncate mb-0">
@@ -229,31 +231,31 @@ export default {
                               </div>
                             </div>
                           </td>
-                          <td class="align-middle text-start">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
                             <span class="text-black text-xs font-weight-bold">{{ item.tanggal }}</span>
                           </td>
-                          <td class="align-middle text-start">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
                             <span class="text-black text-xs font-weight-bold">{{ item.comment }}</span>
                           </td>
-                          <td class="align-middle text-start">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
                             <span class="text-black text-xs font-weight-bold">{{ item.upvote }}</span>
                           </td>
-                          <td class="align-middle text-start">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
                             <span class="text-black text-xs font-weight-bold">{{ item.downvote }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <span style="font-size: 1rem; cursor: pointer;" @click="detailUsulan(item.id)">
+                            <span style="font-size: 1rem; cursor: pointer;" @click="tanggapiUsulan(item.id)">
                               <span style="color: black;">
                                 <i class="fa fa-pencil-square-o"></i>
                               </span>
                             </span>
-                            <span v-if="item.status === null" class="mx-3" style="font-size: 1rem; cursor: pointer;"
+                            <span v-if="item.status === 'pending'" class="mx-3" style="font-size: 1rem; cursor: pointer;"
                               @click="openAcceptConfirmation(item.id)">
                               <span style="color:green;">
                                 <i class="fas fa-check-circle"></i>
                               </span>
                             </span>
-                            <span v-if="item.status === null" style="font-size: 1rem; cursor: pointer;"
+                            <span v-if="item.status === 'pending'" style="font-size: 1rem; cursor: pointer;"
                               @click="openRejectConfirmation(item.id)">
                               <span style="color:red;">
                                 <i class="fas fa-times-circle"></i>

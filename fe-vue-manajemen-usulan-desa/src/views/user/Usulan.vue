@@ -41,7 +41,15 @@ export default {
       this.retrieveUsulan();
     })
   },
+  // props: {
+  //   usulan: Array
+  // },
   methods: {
+    formatDate(date) {
+      if (!date) return "";
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+      return new Date(date).toLocaleDateString(undefined, options);
+    },
     goUsulan() {
       this.$router.push('/usulan/input')
     },
@@ -134,7 +142,7 @@ export default {
                 <div v-for="item in usulan" :key="item.id" style="color: black; cursor: pointer;">
                   <div class="row mt-2">
                     <div class="col-12">
-                      <div class="card px-4" @click="navigateToUsulan(item.id)">
+                      <div class="card px-4 py-3" @click="navigateToUsulan(item.id)">
                         <div class="row">
                           <div class="d-flex align-items-center mt-2">
                             <div class="avatar avatar-sm position-relative me-2">
@@ -143,14 +151,36 @@ export default {
                             </div>
                             <div class="mt-2">
                               <a class="text-black">{{ item.nama }}</a>
-                              <a class="ms-3 text-black" style="font-size: 12px;">{{ item.tanggal }}</a>
+                              <a class="ms-3 text-black" style="font-size: 12px;">{{ formatDate(item.tanggal) }}</a>
                             </div>
                           </div>
                           <h4 class="mt-2">{{ item.saran }}</h4>
                           <div class="row mt-2">
                             <p class="text-black">{{ item.deskripsi }}</p>
                           </div>
-                          <div class="row mb-2">
+
+                          <!-- Nested Response -->
+                          <div v-if="item.suggestion_asal" class="row mt-3 ms-4">
+                            <div class="card px-3 py-2" style="background: #f5f5f5;"  @click.stop="navigateToUsulan(item.suggestion_asal.id)">
+                              <div class="d-flex align-items-center mt-2">
+                                <div class="avatar avatar-sm position-relative me-2">
+                                  <img :src="require('@/assets/img/team-1.jpg')" alt="profile_image"
+                                    class="shadow-sm w-100 border-radius-lg" />
+                                </div>
+                                <div class="mt-2">
+                                  <a class="text-black">{{ item.suggestion_asal.nama }}</a>
+                                  <a class="ms-3 text-black" style="font-size: 12px;">{{
+        formatDate(item.suggestion_asal.tanggal) }}</a>
+                                </div>
+                              </div>
+                              <h6 class="mt-2">{{ item.suggestion_asal.saran }}</h6>
+                              <div class="row mt-2">
+                                <p class="text-black">{{ item.suggestion_asal.deskripsi }}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row mb-2 mt-2">
                             <v-chip class="no-hover" :color="item.user_vote === 'upvote' ? 'green' : ''"
                               style="width: 70px; cursor: pointer;" @click.stop="upvote(item.id)">
                               <v-icon

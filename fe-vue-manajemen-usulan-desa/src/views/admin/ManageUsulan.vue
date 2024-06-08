@@ -68,6 +68,9 @@ export default {
     goUsulan() {
       this.$router.push('/usulan');
     },
+    detailUsulan(id) {
+      this.$router.push('/admin/usulan/' + id )
+    },
     tanggapiUsulan(id) {
       this.$router.push('/admin/usulan/' + id + '/tanggapi')
     },
@@ -156,7 +159,6 @@ export default {
           }
         });
         this.usulan = response.data.data;
-
         
       } catch (error) {
         console.error(error);
@@ -247,13 +249,13 @@ export default {
                                 <i class="fa fa-pencil-square-o"></i>
                               </span>
                             </span>
-                            <span v-if="item.status === null" class="mx-3" style="font-size: 1rem; cursor: pointer;"
+                            <span v-if="item.status === 'pending'" class="mx-3" style="font-size: 1rem; cursor: pointer;"
                               @click="openAcceptConfirmation(item.id)">
                               <span style="color:green;">
                                 <i class="fas fa-check-circle"></i>
                               </span>
                             </span>
-                            <span v-if="item.status === null" style="font-size: 1rem; cursor: pointer;"
+                            <span v-if="item.status === 'pending'" style="font-size: 1rem; cursor: pointer;"
                               @click="openRejectConfirmation(item.id)">
                               <span style="color:red;">
                                 <i class="fas fa-times-circle"></i>

@@ -76,17 +76,18 @@ export default {
     },
     async onLogout() {
       // this.$router.push('/login');
-      window.location.href = '/login';
-      localStorage.removeItem('access_token');
+      // localStorage.removeItem('access_token');
       try {
-        await axios.post(`${BASE_URL}/logout`, {}, {
+        await axios.delete(`${BASE_URL}/auth/logout`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token'),
           }
         });
-
+        
+        // window.location.href = '/login';
         localStorage.removeItem('access_token');
-        // this.$router.push('/login');
+        localStorage.removeItem('username');
+        this.$router.push('/login');
         
       } catch (error) {
         console.error('Logout failed:', error);
@@ -140,8 +141,8 @@ export default {
                     <v-icon icon="mdi-close" start></v-icon>
                     Akun Tidak Terverifikasi
                   </v-chip>
-
                 </a>
+
                 <p class=" border-radius-md d-flex justify-content-center text-black">
                   NIK : {{ user.NIK }}
                 </p>

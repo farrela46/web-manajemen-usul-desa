@@ -18,6 +18,7 @@ import UserUsulanDiskusi from '../views/user/UsulanDiskusi.vue';
 import AdminDashboard from '../views/admin/Dashboard.vue';
 import DetailUsulan from '../views/admin/DetailUsulan.vue';
 import ManageUsulan from '../views/admin/ManageUsulan.vue';
+import TanggapiUsulan from '../views/admin/TanggapiUsulan.vue';
 import VerifikasiWarga from '../views/admin/VeirfikasiWarga.vue';
 import Program from '../views/admin/Program.vue';
 import DetailProgram from '../views/admin/DetailProgram.vue';
@@ -76,6 +77,12 @@ const routes = [
     path: '/admin/usulan/:id',
     name: 'Detail Usulan',
     component: DetailUsulan,
+    meta: { requiresAuth: true, role: 'admin' },
+  },
+  {
+    path: '/admin/usulan/:id/tanggapi',
+    name: 'Tanggapi Usulan',
+    component: TanggapiUsulan,
     meta: { requiresAuth: true, role: 'admin' },
   },
   {
@@ -215,7 +222,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const isAuthenticated = localStorage.getItem('access_token') !== null;
-  const userRole = await getUserRole(); // Fetch user role from API
+  const userRole = await getUserRole();
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!isAuthenticated) {

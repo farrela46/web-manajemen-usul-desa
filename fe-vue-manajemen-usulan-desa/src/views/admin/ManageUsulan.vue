@@ -68,8 +68,8 @@ export default {
     goUsulan() {
       this.$router.push('/usulan');
     },
-    detailUsulan(id) {
-      this.$router.push('/admin/usulan/' + id)
+    tanggapiUsulan(id) {
+      this.$router.push('/admin/usulan/' + id + '/tanggapi')
     },
     openAcceptConfirmation(id) {
       this.selectedUsulanId = id;
@@ -219,8 +219,8 @@ export default {
                               </div>
                             </div>
                           </td>
-                          <td class="align-middle text-start">
-                            <div class="d-flex px-2 py-1">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
+                            <div class="d-flex px-2 py-1"  >
                               <div  style="width: 300px;">
                                 <h6 class="mb-0 text-sm">{{ item.saran }}</h6>
                                 <p class="text-xs text-secondary text-truncate mb-0">
@@ -229,20 +229,20 @@ export default {
                               </div>
                             </div>
                           </td>
-                          <td class="align-middle text-start">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
                             <span class="text-black text-xs font-weight-bold">{{ item.tanggal }}</span>
                           </td>
-                          <td class="align-middle text-start">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
                             <span class="text-black text-xs font-weight-bold">{{ item.comment }}</span>
                           </td>
-                          <td class="align-middle text-start">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
                             <span class="text-black text-xs font-weight-bold">{{ item.upvote }}</span>
                           </td>
-                          <td class="align-middle text-start">
+                          <td class="align-middle text-start" style="cursor: pointer" @click="detailUsulan(item.id)">
                             <span class="text-black text-xs font-weight-bold">{{ item.downvote }}</span>
                           </td>
                           <td class="align-middle text-center">
-                            <span style="font-size: 1rem; cursor: pointer;" @click="detailUsulan(item.id)">
+                            <span style="font-size: 1rem; cursor: pointer;" @click="tanggapiUsulan(item.id)">
                               <span style="color: black;">
                                 <i class="fa fa-pencil-square-o"></i>
                               </span>

@@ -55,27 +55,40 @@ class SuggestionController extends Controller
             'description' => 'required|string',
         ]);
 
-        $suggestion = Suggestion::create([
-            'userID' => $user->id,
-            'suggestion' => $validatedData['suggestion'],
-            'description' => $validatedData['description'],
-            'status' => 'pending',
-            'suggestions_id' => $suggestionId,
-            'date' => Carbon::now(),
-        ]);
+        $existingSuggestion = Suggestion::where('userID', $user->id)
+            ->where('suggestions_id', $suggestionId)
+            ->first();
 
-        if ($suggestion) {
-            // Ambil data saran induk dengan menggunakan eager loading
+
+        if ($existingSuggestion) {
+            $existingSuggestion->suggestion = $validatedData['suggestion'];
+            $existingSuggestion->description = $validatedData['description'];
+            $existingSuggestion->date = Carbon::now();
+            $existingSuggestion->save();
+
+            $existingSuggestion->load('parentSuggestion');
+
+            return response()->json([
+                'message' => 'Usulan berhasil diperbarui',
+                'data' => $existingSuggestion
+            ], 200);
+        } else {
+            $suggestion = Suggestion::create([
+                'userID' => $user->id,
+                'suggestion' => $validatedData['suggestion'],
+                'description' => $validatedData['description'],
+                'status' => 'pending',
+                'suggestions_id' => $suggestionId,
+                'date' => Carbon::now(),
+            ]);
+
+            // Load parent suggestion jika perlu
             $suggestion->load('parentSuggestion');
 
             return response()->json([
                 'message' => 'Usulan berhasil dibuat',
                 'data' => $suggestion
             ], 201);
-        } else {
-            return response()->json([
-                'message' => 'Server error'
-            ], 500);
         }
     }
 

@@ -1,0 +1,133 @@
+<div class="mx-3 mt-4 mb-5" :style="{
+          backgroundColor: 'white',
+          borderRadius: '30px 30px 30px 30px'
+        }">
+        <div class="row h-100 justify-content-center align-items-center m-5">
+          <div class="col-auto text-center m-2">
+            <h2 class="text-dark mb-4 mt-5 pb-5">Website Usul Desa Telkom Surabaya</h2>
+            <div class="row">
+              <div class="col-md-6">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                    <div v-for="(image, index) in images" :key="index"
+                      :class="['carousel-item', { active: index === 0 }]">
+                      <img :src="image.link" class="d-block w-100" :alt="'Slide ' + (index + 1)"
+                        style="max-width: 400px; object-fit: cover; border-radius: 30px;">
+                    </div>
+                  </div>
+                  <div class="carousel-indicators">
+                    <button v-for="(image, index) in images" :key="index" type="button"
+                      :data-bs-target="'#carouselExampleIndicators'" :data-bs-slide-to="index"
+                      :class="['thumbnail', { 'first-two': index === 0 || index === 1 }, { active: index === 0 }]"
+                      aria-label="'Slide ' + (index + 1)">
+                      <img :src="image.link" class="d-block" :alt="'Slide ' + (index + 1)"
+                        style="width: 90px; height: auto;">
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-md-6 d-flex align-items-center">
+                <p class="lead"> Desa Telkom Surabaya merupakan salah satu kampus Universitas Telkom yaitu sebuah
+                  perguruan
+                  tinggi swasta di Indonesia yang dikelola oleh Yayasan Pendidikan Telkom dalam afiliasi Telkom
+                  Indonesia
+                  yang berada di Kota Surabaya. Desa Telkom Surabaya Terletak di Jl. Ketintang No.156, Ketintang, Kec.
+                  Gayungan, Surabaya, Jawa Timur 60231 </p>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="col-auto text-center m-4 px-3">
+            <h2 class="text-dark mb-4 mt-5">Tujuan</h2>
+            <p class="lead"> Website ini adalah sebuah platform digital berbasis website yang dapat memfasilitasi
+              proses pengajuan, penilaian, pengesahan, dan pelaporan usulan-usulan desa secara transparan dan akuntabel.
+            </p>
+          </div>
+          <section class="py-5 ">
+            <div class="row align-items-center">
+              <div class="col-md-12">
+                <div class="row justify-content-start">
+                  <div class="col-md-6">
+                    <div color="info" class="info">
+                      <span style="font-size: 3rem;">
+                        <span style="color: green;">
+                          <i class="fas fa-globe"></i>
+                        </span>
+                      </span>
+                      <h5 class="font-weight-bolder mt-3">Informasi Desa</h5>
+                      <p class="pe-5">Website Usul Desa ini meliputi informasi pembangunan dan usulan masyarakat Desa
+                        Telkom Surabaya</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div color="info" class="info"><span style="font-size: 3rem;">
+                        <span style="color: green;">
+                          <i class="fa fa-users"></i>
+                        </span>
+                      </span>
+                      <h5 class="font-weight-bolder mt-3">Layanan Masyarakat</h5>
+                      <p class="pe-5">Website ini menyediakan layanan pengusulan ide masyarakat dari permasalahan yang
+                        ada di lapangan</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row justify-content-start mt-4">
+                  <div class="col-md-6">
+                    <div color="info" class="info">
+                      <span style="font-size: 3rem;">
+                        <span style="color: green;">
+                          <i class="fa fa-hand-peace-o"></i>
+                        </span>
+                      </span>
+                      <h5 class="font-weight-bolder mt-3">Kemudahan</h5>
+                      <p class="pe-5">Kemudahan dalam penggunaan website sehingga masyarakat tidak bingung dalam
+                        menyampaikan ide atau usulan.</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div color="info" class="info">
+                      <span style="font-size: 3rem;">
+                        <span style="color: green;">
+                          <i class="fa fa-lock"></i>
+                        </span>
+                      </span>
+                      <h5 class="font-weight-bolder mt-3">Keamanan</h5>
+                      <p class="pe-5">Kami akan mengusahakan data pengguna aman pada kami (semoga wkwk)</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <hr class="my-5">
+          <section class="py-5 mb-5">
+            <div class="row align-items-center">
+              <div class="col-md-6 d-flex justify-content-center align-items-center">
+                <div class="row">
+                  <div class="col m-3">
+                    <h2 class="font-weight-normal">Ayo aspirasikan idemu!</h2>
+                    <p style="font-size: 18px;">Dengan ide masyarakat tentu membantu pertumbuhan Desa Telkom Surabaya
+                      menjadi Desa yang maju dan lebih baik. Perangkat desa akan mendengarkan idemu dan berusaha
+                      merealisasikannya
+                    </p>
+                    <router-link to="/login">
+                      <button type="button" class="btn btn-sm mb-0 mt-3 bg-gradient-success">Usulkan Sekarang!</button>
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 mt-6 d-flex justify-content-center align-items-center">
+                <div class="card">
+                  <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2"><a
+                      class="d-block blur-shadow-image"><img :src="require('@/assets/img/coc.jpg')"
+                        alt="Steve Reading Book" class="img-fluid border-radius-lg"></a></div>
+                  <div class="card-body text-center">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <app-footer class="py-3 sticky-bottom bg-white border-radius-lg" />
+        </div>
+      </div>

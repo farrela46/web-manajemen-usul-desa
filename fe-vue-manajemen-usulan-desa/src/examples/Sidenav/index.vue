@@ -42,10 +42,10 @@ export default {
       <i class="top-0 p-3 cursor-pointer fas fa-times text-secondary opacity-5 position-absolute end-0 d-none d-xl-none"
         aria-hidden="true" id="iconSidenav"></i>
 
-      <router-link class="m-0 navbar-brand" to="/">
+      <div class="m-0 navbar-brand">
         <img :src="require('@/assets/img/telyu.png')" class="navbar-brand-img h-100" alt="main_logo" />
         <span class="ms-4 font-weight-bold me-2 text-white text-uppercase text-lg">Dinovasi</span>
-      </router-link>
+      </div>
 
     </div>
 
@@ -57,7 +57,7 @@ export default {
 <style>
 .bg-langit {
   /* background-image: url(../../assets/img/telyusu.jpg); */
-  background-color: #ff6d62;
+  background-color: #FAFAFA;
   /* background-size: cover; */
 }
 

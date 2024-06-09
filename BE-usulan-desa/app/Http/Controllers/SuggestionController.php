@@ -95,7 +95,7 @@ class SuggestionController extends Controller
     public function getResponse($suggestionId)
     {
         try {
-            $response = Suggestion::where('suggestions_id', $suggestionId   )->first();
+            $response = Suggestion::where('suggestions_id', $suggestionId)->first();
             return response()->json(['status' => 'success', 'data' => $response], 201);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
@@ -167,7 +167,7 @@ class SuggestionController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         if ($user->status !== 'verified') {
@@ -178,9 +178,9 @@ class SuggestionController extends Controller
 
         try {
             $userID = $user->id;
+            $rank = $request->query('rank');
 
-            // Ambil data semua suggestions
-            $suggestions = DB::table('suggestions as b')
+            $query = DB::table('suggestions as b')
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
@@ -197,10 +197,16 @@ class SuggestionController extends Controller
                     DB::raw('IFNULL(d.downvotes, 0) as downvote'),
                     DB::raw('IFNULL(c.comments, 0) as comment'),
                     'b.suggestions_id as id_asal'
-                )
-                ->get();
+                );
 
-            // Ambil data suggestions yang merupakan tanggapan ke suggestion lain
+            if ($rank) {
+                $query->orderBy('upvote', 'desc');
+            } else {
+                $query->orderBy('b.created_at', 'desc');
+            }
+
+            $suggestions = $query->get();
+
             $suggestionAsalMap = DB::table('suggestions as b')
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
                 ->select(
@@ -213,7 +219,6 @@ class SuggestionController extends Controller
                 ->get()
                 ->keyBy('id');
 
-            // Menggabungkan data
             $response_data = $suggestions->map(function ($suggestion) use ($suggestionAsalMap) {
                 return [
                     'id' => $suggestion->id,

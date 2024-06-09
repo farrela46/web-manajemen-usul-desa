@@ -83,3 +83,5 @@ Route::prefix('/progress')->middleware(['auth:sanctum'])->group(function () {
     });
 
 });
+
+Route::get('/landingpage', [UserController::class, 'landingPage']);

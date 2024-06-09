@@ -34,6 +34,7 @@ export default {
         }
       ],
       usulan: [],
+      selectedFilter: 'latest',
     };
   },
   mounted() {
@@ -77,20 +78,28 @@ export default {
     async retrieveUsulan() {
       try {
         this.overlay = true;
+
+        let params = {};
+        if (this.selectedFilter === 'upvote') {
+          params.rank = true;
+        }
+
         const response = await axios.get(`${BASE_URL}/suggestion/get`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
-          }
+          },
+          params: params // Include params in request
         });
+
         this.usulan = response.data.data;
 
-        if (response.data.length > 0) {
-          this.fotoUrl = response.data[0].foto;
+        if (response.data.data.length > 0) {
+          this.fotoUrl = response.data.data[0].foto;
         }
       } catch (error) {
         console.error(error);
       } finally {
-        this.overlay = false
+        this.overlay = false;
       }
     },
     async upvote(id) {
@@ -135,9 +144,22 @@ export default {
           <div class="col-12">
             <div class="card px-4" style="background-color: #E9F5E9;">
               <div class="row mt-2 mb-2">
-                <div class="d-flex align-items-center mt-2 mb-2">
-                  <argon-button size="sm" @click="goUsulan"> <i class="fas fa-plus mx-2"></i> Tambah
-                    Usulan</argon-button>
+                <div class=" row  mt-2 mb-2">
+                  <div class="col-2">
+                    <argon-button size="sm" @click="goUsulan"> <i class="fas fa-plus mx-2"></i> Tambah
+                      Usulan</argon-button>
+                  </div>
+                  <div class="col">
+                    <div class="row ps-3 mb-2">
+                      <div class="col-2">
+                        <select class="form-select form-select-sm" aria-label="Small select example"
+                          v-model="selectedFilter" @change="retrieveUsulan">
+                          <option value="latest">Latest</option>
+                          <option value="upvote">Most Upvote</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div v-for="item in usulan" :key="item.id" style="color: black; cursor: pointer;">
                   <div class="row mt-2">
@@ -161,7 +183,8 @@ export default {
 
                           <!-- Nested Response -->
                           <div v-if="item.suggestion_asal" class="row mt-3 ms-4">
-                            <div class="card px-3 py-2" style="background: #f5f5f5;"  @click.stop="navigateToUsulan(item.suggestion_asal.id)">
+                            <div class="card px-3 py-2" style="background: #f5f5f5;"
+                              @click.stop="navigateToUsulan(item.suggestion_asal.id)">
                               <div class="d-flex align-items-center mt-2">
                                 <div class="avatar avatar-sm position-relative me-2">
                                   <img :src="require('@/assets/img/team-1.jpg')" alt="profile_image"

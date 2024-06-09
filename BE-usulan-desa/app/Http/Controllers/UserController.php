@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Suggestion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -114,7 +115,7 @@ class UserController extends Controller
     }
     public function indexUsers(Request $request)
     {
-        
+
         $status = $request->query('status');
 
         $query = User::where('role', 'user');
@@ -126,6 +127,24 @@ class UserController extends Controller
         $users = $query->get();
 
         return response()->json($users);
+    }
+
+    public function landingPage()
+    {
+        $suggestion = Suggestion::whereNull('suggestions_id')->count();
+
+        $approved = Suggestion::where('status', 'approved')->count();
+
+        $users = User::where('role', 'user')->where('status', 'verified')->count();
+
+        return response()->json(
+            [
+                'usulan_masuk' => $suggestion,
+                'usulan_disetujui' => $approved,
+                'pengguna_aktif' => $users
+            ],
+            200
+        );
     }
 
 }

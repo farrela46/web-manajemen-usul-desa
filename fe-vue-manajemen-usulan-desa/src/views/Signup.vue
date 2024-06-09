@@ -37,6 +37,9 @@ export default {
   beforeUnmount() {
     this.restorePage();
   },
+  mounted() {
+    this.getUser();
+  },
   methods: {
     validateForm() {
       if (!this.NIK || !this.nama || !this.email || !this.password) {
@@ -45,6 +48,25 @@ export default {
         this.validateNIK = true;
       } else {
         this.onSubmit();
+      }
+    },
+    async getUser() {
+      try {
+        const response = await axios.get(`${BASE_URL}/user`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+        this.user = response.data;
+        if (this.user.role === 'admin') {
+          this.$router.push('/admin/dashboard');
+        } else if (this.user.role === 'user') {
+          this.$router.push('/dashboard');
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     async onSubmit() {
@@ -138,8 +160,8 @@ export default {
             <div class="card-body">
               <form role="form" @submit.prevent="validateForm">
                 <argon-input class="mb-0" v-model="NIK" id="NIK" type="number" placeholder="NIK" aria-label="Name" />
-                <a  v-if="validateNIK" class="text-sm ms-2" style="color: red; font-size: 9px;"><i class="fas fa-info-circle"
-                    style="color: #ff0000;"></i> NIK HARUS 16 DIGIT</a>
+                <a v-if="validateNIK" class="text-sm ms-2" style="color: red; font-size: 9px;"><i
+                    class="fas fa-info-circle" style="color: #ff0000;"></i> NIK HARUS 16 DIGIT</a>
                 <argon-input class="mt-3" v-model="nama" id="name" type="text" placeholder="Name" aria-label="Name" />
                 <argon-input v-model="email" id="email" type="email" placeholder="Email" aria-label="Email" />
                 <argon-input v-model="password" id="password" type="password" placeholder="Password"

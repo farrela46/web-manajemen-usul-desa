@@ -34,15 +34,37 @@ export default {
   beforeUnmount() {
     this.restorePage();
   },
+  mounted() {
+    this.getUser();
+  },
   methods: {
     validateForm() {
       if (
         !this.username ||
-        !this.password 
+        !this.password
       ) {
         this.validate = true;
       } else {
         this.onSubmit();
+      }
+    },
+    async getUser() {
+      try {
+        const response = await axios.get(`${BASE_URL}/user`, {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem('access_token')
+          }
+        });
+        this.user = response.data;
+        if (this.user.role === 'admin') {
+          this.$router.push('/admin/dashboard');
+        } else if (this.user.role === 'user') {
+          this.$router.push('/dashboard');
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
       }
     },
     async onSubmit() {
@@ -161,15 +183,15 @@ export default {
         </div>
       </div>
       <v-dialog v-model="validate" max-width="400">
-          <v-card class="text-center">
-            <v-card-text>
-              <div class="p-2">
-                <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
-                <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+        <v-card class="text-center">
+          <v-card-text>
+            <div class="p-2">
+              <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
+              <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </main>
   <app-footer />

@@ -83,12 +83,12 @@ export default {
             Authorization: "Bearer " + localStorage.getItem('access_token'),
           }
         });
-        
+
         window.location.href = '/';
         localStorage.removeItem('access_token');
         localStorage.removeItem('username');
         // this.$router.push('/login');
-        
+
       } catch (error) {
         console.error('Logout failed:', error);
       }
@@ -142,10 +142,12 @@ export default {
                     Akun Tidak Terverifikasi
                   </v-chip>
                 </a>
-
-                <p class=" border-radius-md d-flex justify-content-center text-black">
+                <p class=" border-radius-md d-flex justify-content-start text-black text-sm">
                   NIK : {{ user.NIK }}
                 </p>
+                <a class=" border-radius-md d-flex justify-content-start text-black text-sm">
+                  Email : {{ user.email }}
+                </a>
               </li>
               <!-- <li class="mb-2">
                 <a class="dropdown-item border-radius-md" @click="goProfile">

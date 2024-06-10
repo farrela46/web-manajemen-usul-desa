@@ -84,7 +84,7 @@ export default {
           }
         });
         
-        window.location.href = '/login';
+        window.location.href = '/';
         localStorage.removeItem('access_token');
         localStorage.removeItem('username');
         // this.$router.push('/login');

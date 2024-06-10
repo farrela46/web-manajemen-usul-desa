@@ -191,7 +191,7 @@ export default {
             <v-card-text>
               <div class="p-2">
                 <v-icon color="blue" size="100">mdi-close-circle-outline</v-icon>
-                <h5>Form belum sepenuhnya terisi, silahkan cek kembali</h5>
+                <h5>Form belum sepenuhnya terisi atau pengguna telah terdaftar, silahkan cek kembali</h5>
               </div>
             </v-card-text>
           </v-card>

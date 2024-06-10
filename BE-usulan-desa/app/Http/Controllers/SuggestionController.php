@@ -117,10 +117,11 @@ class SuggestionController extends Controller
 
             // Query untuk mengambil data usulan beserta jumlah upvote dan downvote
             $suggestion = DB::table('suggestions as b')
-                ->select('a.id as id_user', 'b.id as id_suggestion', 'a.nama', 'b.suggestion as saran', 'b.description as deskripsi', 'b.created_at as tanggal', 'v.type as user_vote', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'))
+                ->select('a.id as id_user', 'b.id as id_suggestion', 'a.nama', 'b.suggestion as saran', 'b.description as deskripsi', 'b.created_at as tanggal', 'v.type as user_vote', DB::raw('IFNULL(u.upvotes, 0) as upvote'), DB::raw('IFNULL(d.downvotes, 0) as downvote'), DB::raw('IFNULL(c.comments, 0) as comment'))
                 ->leftJoin('users as a', 'a.id', '=', 'b.userID')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as upvotes FROM suggestions_votes WHERE type = "upvote" GROUP BY suggestionID) as u'), 'u.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as downvotes FROM suggestions_votes WHERE type = "downvote" GROUP BY suggestionID) as d'), 'd.suggestionID', '=', 'b.id')
+                ->leftJoin(DB::raw('(SELECT suggestionID, COUNT(*) as comments FROM comments GROUP BY suggestionID) as c'), 'c.suggestionID', '=', 'b.id')
                 ->leftJoin(DB::raw('(SELECT suggestionID, type FROM suggestions_votes WHERE userID = ' . $userID . ') as v'), 'v.suggestionID', '=', 'b.id')
                 ->where('b.id', $id)
                 ->first();

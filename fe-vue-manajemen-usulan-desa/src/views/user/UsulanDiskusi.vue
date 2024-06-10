@@ -50,7 +50,9 @@ export default {
     };
   },
   mounted() {
-    this.retrieveUsulan();
+    import('vuetify/styles').then(() => {
+      this.retrieveUsulan();
+    })
   },
   methods: {
     setupPage() {
@@ -111,7 +113,7 @@ export default {
     },
     async downvote(id) {
       try {
-        const response = await axios.get(`${BASE_URL}/suggestion/${id}/downvote`,  {
+        const response = await axios.get(`${BASE_URL}/suggestion/${id}/downvote`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
@@ -210,6 +212,10 @@ export default {
                                 :icon="usulan.user_vote === 'downvote' ? 'mdi-arrow-down-bold' : 'mdi-arrow-down-bold-outline'"
                                 start></v-icon>
                               {{ usulan.downvote }}
+                            </v-chip>
+                            <v-chip class="no-hover" style="width: auto; margin-left: 5px; cursor: pointer;">
+                              <v-icon icon="mdi-comment-multiple-outline" start></v-icon>
+                              {{ usulan.comment }}
                             </v-chip>
                           </div>
                         </div>

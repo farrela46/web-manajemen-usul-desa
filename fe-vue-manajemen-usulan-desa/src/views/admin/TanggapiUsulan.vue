@@ -118,13 +118,14 @@ export default {
             Authorization: "Bearer " + localStorage.getItem('access_token')
           }
         });
-        this.form = response.data.data;
+        this.form = response.data.data || { suggestion: '', description: '' }; // Default jika data null
       } catch (error) {
         console.error(error);
       } finally {
-        this.overlay = false
+        this.overlay = false;
       }
-    },
+    }
+
   },
 };
 </script>

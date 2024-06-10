@@ -142,6 +142,7 @@ export default {
           color: 'green'
         });
         console.log('response.data');
+        this.comment = null,
         this.retrieveUsulan();
       } catch (error) {
         console.error(error);

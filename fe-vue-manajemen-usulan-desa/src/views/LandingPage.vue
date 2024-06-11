@@ -90,7 +90,7 @@ export default {
     </div>
   </div>
   <div class="mx-3 mt-2 position-relative" :style="{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ) ,url(' + require('@/assets/img/desa.jpg') + ')',
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ) ,url(' + require('@/assets/img/background.png') + ')',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           height: '65vh',
@@ -231,7 +231,7 @@ export default {
                           </span>
                         </span>
                         <h5 class="font-weight-bolder mt-3">Keamanan</h5>
-                        <p class="pe-5">Kami akan mengusahakan data pengguna aman pada kami (semoga wkwk)</p>
+                        <p class="pe-5">Kami akan mengusahakan data pengguna aman pada kami </p>
                       </div>
                     </div>
                   </div>

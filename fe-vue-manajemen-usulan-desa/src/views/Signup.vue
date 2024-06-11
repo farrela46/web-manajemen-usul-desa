@@ -133,7 +133,7 @@ export default {
   <main class="main-content mt-0">
 
     <div class="mx-3 mt-2 position-relative" :style="{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ) ,url(' + require('@/assets/img/desa.jpg') + ')',
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ) ,url(' + require('@/assets/img/background.png') + ')',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           height: '65vh',

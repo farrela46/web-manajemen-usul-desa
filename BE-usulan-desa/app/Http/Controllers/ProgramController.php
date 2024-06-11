@@ -90,11 +90,11 @@ class ProgramController extends Controller
     public function dashboard()
     {
         try {
-            $totalUsulan = Suggestion::count();
+            $totalUsulan = Suggestion::whereNull('suggestions_id')->count();
             $totalProgram = Program::count();
             $usulanDisetujui = Suggestion::where('status', 'approved')->count();
             $usulanDitolak = Suggestion::where('status', 'rejected')->count();
-            $totalvote =  $usulanDitolak + $usulanDisetujui;
+            $totalvote = $usulanDitolak + $usulanDisetujui;
 
             $programs = Program::with([
                 'progresses' => function ($query) {
@@ -110,10 +110,10 @@ class ProgramController extends Controller
                     ];
                 });
 
-                $persetujuan = [
-                    'disetujui' => $usulanDisetujui /$totalvote * 100,
-                    'ditolak' => $usulanDitolak /$totalvote * 100
-                ];
+            $persetujuan = [
+                'disetujui' => $usulanDisetujui / $totalvote * 100,
+                'ditolak' => $usulanDitolak / $totalvote * 100
+            ];
 
             return response()->json([
                 'total_usulan' => $totalUsulan,

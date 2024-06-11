@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -19,6 +20,8 @@ class SuggestionSeeder extends Seeder
             'description' => 'Didasari oleh berkembangnya ranah Esports di Indonesia, saya rasa tidak ada salahnya kita menyalurkan bakat anak anak kampung kita dengan melalui pembuatan warnet gaming. Hal ini juga menurut saya dapat mewadahi talenta talenta muda kampung kita sehingga tidak kalah dengan kampung sebelah, selain itu ini dapat menghindarkan anak muda kampung kita terjerumus pada hal negatif.',
             'status' => 'approved',
             'date' => '2024-06-04',
+            'created_at' => Carbon::now(),
+            'updated_at'=> Carbon::now()
         ]);
 
         DB::table('suggestions')->insert([
@@ -27,6 +30,8 @@ class SuggestionSeeder extends Seeder
             'description' => 'Menyikapi Permintaan user Mayo 300 warga desa butuh tempat berak, apakah warga setuju?',
             'status' => 'rejected',
             'date' => '2024-06-04',
+            'created_at' => Carbon::now(),
+            'updated_at'=> Carbon::now()
         ]);
     }
 }

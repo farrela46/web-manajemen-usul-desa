@@ -72,7 +72,7 @@ export default {
     },
     validateForm() {
       if (!this.form.namaProgram || !this.form.deskripsi || !this.form.tanggalMulai
-        || !this.form.tanggalSelesai || !this.form.status || !this.form.target
+        || !this.form.tanggalSelesai || !this.form.target
       ) {
         this.validate = true;
       } else {

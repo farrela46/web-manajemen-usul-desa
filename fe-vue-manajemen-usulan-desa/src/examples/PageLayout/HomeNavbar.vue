@@ -59,7 +59,7 @@ defineProps({
                 aria-hidden="true"
                 :class="isBlur ? 'text-dark' : 'text-white'"
               ></i>
-              Dashboard
+              Home
             </router-link>
           </li>
           <li class="nav-item d-flex align-items-center">

@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     handleClick(action) {
-      if (this.user && this.user.status === 'unverified') {
+      if (this.user && this.user.status !== 'verified') {
         this.dialog = true;
         this.dialogMessage = 'Anda harus terverifikasi untuk mengakses fitur ini.';
       } else {

@@ -133,7 +133,7 @@ export default {
         <div class="card ps-3 pt-2">
           <div class="mb-3 row">
             <div class="col-sm-2">
-              <label for="nama program" class="col-form-label">Nama Program</label>
+              <label for="nama program" class="col-form-label">Nama Usulan</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
               <input type="text" class="form-control" v-model="form.saran">

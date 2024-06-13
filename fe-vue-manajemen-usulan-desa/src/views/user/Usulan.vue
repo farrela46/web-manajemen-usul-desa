@@ -46,6 +46,18 @@ export default {
   //   usulan: Array
   // },
   methods: {
+    mapStatus(status) {
+      switch (status) {
+        case 'pending':
+          return 'Pending';
+        case 'approved':
+          return 'Disetujui';
+        case 'rejected':
+          return 'Ditolak';
+        default:
+          return 'Tidak Diketahui';
+      }
+    },
     formatDate(date) {
       if (!date) return "";
       const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
@@ -174,6 +186,9 @@ export default {
                             <div class="mt-2">
                               <a class="text-black">{{ item.nama }}</a>
                               <a class="ms-3 text-black" style="font-size: 12px;">{{ formatDate(item.tanggal) }}</a>
+                              <v-chip class="mx-3">
+                                Status: {{ mapStatus(item.status) }}
+                              </v-chip>
                             </div>
                           </div>
                           <h4 class="mt-2">{{ item.saran }}</h4>

@@ -193,6 +193,7 @@ class SuggestionController extends Controller
                     'b.suggestion as saran',
                     'b.description as deskripsi',
                     'b.created_at as tanggal',
+                    'b.status as status',
                     'v.type as user_vote',
                     DB::raw('IFNULL(u.upvotes, 0) as upvote'),
                     DB::raw('IFNULL(d.downvotes, 0) as downvote'),

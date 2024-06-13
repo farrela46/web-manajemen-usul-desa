@@ -141,7 +141,7 @@ export default {
           </div>
           <div class="mb-3 row">
             <div class="col-sm-2">
-              <label for="deskripsi" class="ol-form-label">Deskripsi</label>
+              <label for="deskripsi" class="ol-form-label h5">Deskripsi</label>
             </div>
             <div class="col-sm-10" style="padding-right: 20px">
               <textarea class="form-control" rows="4" v-model="form.deskripsi"></textarea>
